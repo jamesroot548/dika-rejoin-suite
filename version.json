@@ -1,7 +1,7 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "release_date": "2026-09-02",
-  "download_url": "https://link-download-exe-anda.com/Dika_Rejoin_All_In_One.exe",
-  "changelog": "- Fitur Auto-Update Otomatis Aktif\n- Sistem Priority Target Pet Sorting\n- Integrasi Dual-Engine Scanner (AccOps + Zeke)",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.1/Dika_Rejoin_All_In_One.exe",
+  "changelog": "- Filter Device AccountOps Presisi 100% (Mendukung spesifik device seperti 'S 08 IndiBiz' & Grup)\n- Dukungan ZekeHub Session Cookie Universal (auth_session, auth_token, & Bearer token)\n- Prioritas Akun Pengirim Berdasarkan Urutan Target Pet\n- Sistem Auto-Update Otomatis & Pembaruan In-App Realtime",
   "mandatory": false
 }
