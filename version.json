@@ -1,7 +1,7 @@
 {
-  "version": "1.0.6",
+  "version": "1.0.7",
   "release_date": "2026-09-02",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.6/Dika_Rejoin_All_In_One.exe",
-  "changelog": "- Peningkatan Proteksi Lisensi: Enforced 100% Strict HWID Locking (Anti-Theft Protection)\n- Serial Key kini dapat di-bind langsung ke HWID komputer pembeli (DIKA-PRO-LIFE-[HWID]...)\n- File license.key terkunci permanen pada hardware ID PC dan otomatis ditolak jika dipindah ke PC lain\n- Update Generator Lisensi Admin dengan fitur pre-binding HWID real-time",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.7/Dika_Rejoin_All_In_One.exe",
+  "changelog": "- Fitur Baru: Auto-Detect HWID saat redeem lisensi & otomatis lock permanen ke PC tersebut\n- Fitur Baru Admin: Tab 'Reset HWID / Pindah PC' di Dika License Generator PRO\n- Kemudahan Pindah PC: Admin bisa langsung export 'license.key' baru atau generate key khusus PC baru\n- Fitur Pengguna: Tombol 'Reset Lisensi (Pindah PC)' dan 'Load File license.key dari Admin'\n- Tampilan dialog informasi lisensi lengkap dengan tombol salin HWID dan status enkripsi",
   "mandatory": false
 }
