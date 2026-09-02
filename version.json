@@ -1,7 +1,7 @@
 {
-  "version": "1.0.2",
+  "version": "1.0.3",
   "release_date": "2026-09-02",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.2/Dika_Rejoin_All_In_One.exe",
-  "changelog": "- Deteksi Inventory Gift dari Zeke (bukan hanya pet)\n- Kolom In-Game Scan sekarang menampilkan jumlah Gift (contoh: Gift: x21)\n- Log real-time saat bot memiliki Gift di inventory\n- Fix: version.json lokal otomatis diperbarui setelah update berhasil dipasang\n- Fix: Updater membaca versi yang terinstall secara dinamis (tidak hardcode)\n- Auto-Update semakin stabil: tidak lagi muncul popup update berulang setelah berhasil",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.3/Dika_Rejoin_All_In_One.exe",
+  "changelog": "- Dukungan penuh deteksi Gifts & Box (seperti 2D Box, Aberdeen Angus Box, dll) dari Zeke WS dan script in-game\n- Integrasi target items filter untuk Gifts & Box pada tabel In-Game Pets (Scan)\n- Perbaikan tampilan nama lengkap item di tabel tanpa terpotong\n- Sinkronisasi otomatis target_pets.json dan version.json lokal\n- Stabilitas sistem rotasi dan auto-update ke v1.0.3",
   "mandatory": false
 }
