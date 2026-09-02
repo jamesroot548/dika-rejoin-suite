@@ -1,7 +1,7 @@
 {
-  "version": "1.0.3",
+  "version": "1.0.4",
   "release_date": "2026-09-02",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.3/Dika_Rejoin_All_In_One.exe",
-  "changelog": "- Dukungan penuh deteksi Gifts & Box (seperti 2D Box, Aberdeen Angus Box, dll) dari Zeke WS dan script in-game\n- Integrasi target items filter untuk Gifts & Box pada tabel In-Game Pets (Scan)\n- Perbaikan tampilan nama lengkap item di tabel tanpa terpotong\n- Sinkronisasi otomatis target_pets.json dan version.json lokal\n- Stabilitas sistem rotasi dan auto-update ke v1.0.3",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.4/Dika_Rejoin_All_In_One.exe",
+  "changelog": "- Optimasi performa tinggi untuk 1000+ akun (UI super lancar, no lag / freeze)\n- Pembersihan & filter ketat: Sticker/Pin/Toy tidak lagi salah terdeteksi sebagai target pet\n- Pemindaian akurat 100% sinkron dengan dashboard Zeke (Pet murni vs Item Box/Gift)\n- Asynchronous background database save (bebas beban disk I/O di main thread)\n- Debounced fast table rendering & keepalive snapshot throttling",
   "mandatory": false
 }
