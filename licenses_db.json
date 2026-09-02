@@ -1,4 +1,12 @@
 {
   "_comment": "Dika Rejoin Suite PRO - Cloud License HWID Registry",
-  "licenses": {}
+  "licenses": {
+    "DIKA-PRO-EXP-20260909-B6DE-2CD2-6F79-59B2": {
+      "type": "EXP",
+      "expiry": "2026-09-09",
+      "bound_hwid": "DIKA-72A5-72B5-4514-C30C",
+      "activated_at": "2026-09-02 11:39:58",
+      "status": "LOCKED"
+    }
+  }
 }
