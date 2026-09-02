@@ -1,7 +1,7 @@
 {
-  "version": "1.0.9",
+  "version": "1.1.0",
   "release_date": "2026-09-02",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.9/Dika_Rejoin_All_In_One.exe",
-  "changelog": "- Integrasi Fitur Discord Webhook Notification PRO\n- Notifikasi Instan Target Pet Ditemukan ke Discord (Adopt Me Hunter Alert)\n- Notifikasi Otomatis Selesai Auto Accept Pertemanan (100% Sapu Bersih)\n- Notifikasi Laporan Batch Cookie Auto-Refresher\n- Modal Pengaturan Discord Webhook (Kustomisasi Event, Tag Mention & Tombol Test Koneksi)\n- Custom Application Icon Bulu Biru Resmi",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.0/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.1.0 (MAJOR SECURITY & AUTOMATION UPDATE)\n\n1. Cloud Real-Time Single-HWID Anti-Sharing Protection:\n   - Setiap Serial Key terkunci otomatis ke 1 HWID komputer pembeli di Cloud Server.\n   - Mencegah 1 lisensi digunakan bersamaan pada beberapa komputer/laptop.\n2. Background Heartbeat Security Enforcer:\n   - Pengawasan background real-time tiap 25 detik terhadap validitas lisensi.\n3. Master Preflight Locale English (US) Auto-Fix:\n   - Otomatis mengubah bahasa akun bot ke English (US) dengan bypass Cloudflare WAF.\n4. Discord Webhook Notification PRO:\n   - Notifikasi live temuan target pet, laporan 100% auto accept pertemanan, dan status cookie refresher.\n5. Dika License Generator PRO (Admin Cloud Sync):\n   - Fitur Reset HWID Cloud 1-Klik dan Inspector status lisensi real-time.",
   "mandatory": false
 }
