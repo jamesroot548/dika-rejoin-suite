@@ -1,7 +1,7 @@
 {
-  "version": "1.0.4",
+  "version": "1.0.5",
   "release_date": "2026-09-02",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.4/Dika_Rejoin_All_In_One.exe",
-  "changelog": "- Optimasi performa tinggi untuk 1000+ akun (UI super lancar, no lag / freeze)\n- Pembersihan & filter ketat: Sticker/Pin/Toy tidak lagi salah terdeteksi sebagai target pet\n- Pemindaian akurat 100% sinkron dengan dashboard Zeke (Pet murni vs Item Box/Gift)\n- Asynchronous background database save (bebas beban disk I/O di main thread)\n- Debounced fast table rendering & keepalive snapshot throttling",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.5/Dika_Rejoin_All_In_One.exe",
+  "changelog": "- Fitur Baru: Deteksi & Filter Pet Neon & Mega Neon di Zeke Hub & In-Game Scanner\n- Opsi 'neon_only': true / false per pet di target_pets.json & GUI Target Pet Manager\n- Checkbox '✨ Neon Saja' di bar filter Zeke Hub (Hanya cari akun dengan Pet Neon/Mega)\n- Label khusus [NEON] dan [MEGA] otomatis di tabel inventaris dan in-game scanner\n- Tombol '✨ TOGGLE NEON ONLY' di menu Kelola Target Pet",
   "mandatory": false
 }
