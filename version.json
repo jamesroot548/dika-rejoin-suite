@@ -1,7 +1,7 @@
 {
-  "version": "1.0.5",
+  "version": "1.0.6",
   "release_date": "2026-09-02",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.5/Dika_Rejoin_All_In_One.exe",
-  "changelog": "- Fitur Baru: Deteksi & Filter Pet Neon & Mega Neon di Zeke Hub & In-Game Scanner\n- Opsi 'neon_only': true / false per pet di target_pets.json & GUI Target Pet Manager\n- Checkbox '✨ Neon Saja' di bar filter Zeke Hub (Hanya cari akun dengan Pet Neon/Mega)\n- Label khusus [NEON] dan [MEGA] otomatis di tabel inventaris dan in-game scanner\n- Tombol '✨ TOGGLE NEON ONLY' di menu Kelola Target Pet",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.6/Dika_Rejoin_All_In_One.exe",
+  "changelog": "- Peningkatan Proteksi Lisensi: Enforced 100% Strict HWID Locking (Anti-Theft Protection)\n- Serial Key kini dapat di-bind langsung ke HWID komputer pembeli (DIKA-PRO-LIFE-[HWID]...)\n- File license.key terkunci permanen pada hardware ID PC dan otomatis ditolak jika dipindah ke PC lain\n- Update Generator Lisensi Admin dengan fitur pre-binding HWID real-time",
   "mandatory": false
 }
