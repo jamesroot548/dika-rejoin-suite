@@ -11,10 +11,9 @@
     "DIKA-PRO-EXP-20260909-4A57-0366-1E1A-46A0": {
       "type": "EXP",
       "expiry": "2026-09-09",
-      "bound_hwid": null,
-      "activated_at": "2026-09-02 12:02:00",
-      "status": "UNCLAIMED",
-      "reset_at": "2026-09-02 12:33:24"
+      "bound_hwid": "DIKA-6AE1-DE09-BC09-9831",
+      "activated_at": "2026-09-02 12:33:27",
+      "status": "LOCKED"
     }
   }
 }
