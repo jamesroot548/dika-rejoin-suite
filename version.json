@@ -1,7 +1,7 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "release_date": "2026-09-02",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.1/Dika_Rejoin_All_In_One.exe",
-  "changelog": "- Filter Device AccountOps Presisi 100% (Mendukung spesifik device seperti 'S 08 IndiBiz' & Grup)\n- Dukungan ZekeHub Session Cookie Universal (auth_session, auth_token, & Bearer token)\n- Prioritas Akun Pengirim Berdasarkan Urutan Target Pet\n- Sistem Auto-Update Otomatis & Pembaruan In-App Realtime",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.2/Dika_Rejoin_All_In_One.exe",
+  "changelog": "- Deteksi Inventory Gift dari Zeke (bukan hanya pet)\n- Kolom In-Game Scan sekarang menampilkan jumlah Gift (contoh: Gift: x21)\n- Log real-time saat bot memiliki Gift di inventory\n- Fix: version.json lokal otomatis diperbarui setelah update berhasil dipasang\n- Fix: Updater membaca versi yang terinstall secara dinamis (tidak hardcode)\n- Auto-Update semakin stabil: tidak lagi muncul popup update berulang setelah berhasil",
   "mandatory": false
 }
