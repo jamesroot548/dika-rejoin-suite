@@ -9,12 +9,11 @@
       "status": "LOCKED"
     },
     "DIKA-PRO-EXP-20260909-4A57-0366-1E1A-46A0": {
-      "type": "EXP (7 Hari)",
+      "type": "EXP",
       "expiry": "2026-09-09",
-      "bound_hwid": null,
-      "created_at": "2026-09-02 11:44:28",
-      "customer": "Pelanggan VIP #1",
-      "status": "UNCLAIMED"
+      "bound_hwid": "DIKA-72A5-72B5-4514-C30C",
+      "activated_at": "2026-09-02 11:45:24",
+      "status": "LOCKED"
     }
   }
 }
