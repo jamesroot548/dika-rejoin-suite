@@ -1,7 +1,7 @@
 {
-  "version": "1.0.8",
+  "version": "1.0.9",
   "release_date": "2026-09-02",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.8/Dika_Rejoin_All_In_One.exe",
-  "changelog": "- Peningkatan Keamanan Maksimal (Anti-Crack & Anti-Tamper Hardening)\n- Penghapusan seluruh celah backdoor & string plaintext rahasia\n- Integrasi Anti-Debugging Watchdog (Deteksi debugger & reverse engineering)\n- Multi-Point Runtime Integrity Watchdog (Pengecekan HWID berkala saat rotasi & teleport)\n- Enkripsi kunci HMAC dinamis multi-segment aman",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.0.9/Dika_Rejoin_All_In_One.exe",
+  "changelog": "- Integrasi Fitur Discord Webhook Notification PRO\n- Notifikasi Instan Target Pet Ditemukan ke Discord (Adopt Me Hunter Alert)\n- Notifikasi Otomatis Selesai Auto Accept Pertemanan (100% Sapu Bersih)\n- Notifikasi Laporan Batch Cookie Auto-Refresher\n- Modal Pengaturan Discord Webhook (Kustomisasi Event, Tag Mention & Tombol Test Koneksi)\n- Custom Application Icon Bulu Biru Resmi",
   "mandatory": false
 }
