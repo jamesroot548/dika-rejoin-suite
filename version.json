@@ -1,7 +1,7 @@
 {
-  "version": "1.1.0",
-  "release_date": "2026-09-02",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.0/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.1.0 (MAJOR SECURITY & AUTOMATION UPDATE)\n\n1. Cloud Real-Time Single-HWID Anti-Sharing Protection:\n   - Setiap Serial Key terkunci otomatis ke 1 HWID komputer pembeli di Cloud Server.\n   - Mencegah 1 lisensi digunakan bersamaan pada beberapa komputer/laptop.\n2. Background Heartbeat Security Enforcer:\n   - Pengawasan background real-time tiap 25 detik terhadap validitas lisensi.\n3. Master Preflight Locale English (US) Auto-Fix:\n   - Otomatis mengubah bahasa akun bot ke English (US) dengan bypass Cloudflare WAF.\n4. Discord Webhook Notification PRO:\n   - Notifikasi live temuan target pet, laporan 100% auto accept pertemanan, dan status cookie refresher.\n5. Dika License Generator PRO (Admin Cloud Sync):\n   - Fitur Reset HWID Cloud 1-Klik dan Inspector status lisensi real-time.",
+  "version": "1.1.1",
+  "release_date": "2026-09-04",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.1/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🚀 DIKA REJOIN SUITE PRO v1.1.1 (PERFORMANCE & STABILITY UPDATE)\n\n1. Background Async Engine & Debouncing:\n   - Mengatasi lag/freeze '(Not Responding)' pada PC berspesifikasi rendah saat mencentang opsi 'FG Saja' atau filter grup.\n   - Kalkulasi inventaris dipindahkan ke background thread dengan prapemrosesan cache yang sangat cepat.\n2. Discord Webhook Anti-Rate Limit PRO (Error 429 Fix):\n   - Penanganan otomatis HTTP 429 dengan dynamic backoff berbasis Retry-After sehingga semua notifikasi terkirim 100% tanpa ada yang terlewat.\n3. Friend Request Extended Timeout & Auto-Retry:\n   - Perpanjangan batas timeout ke 15s dengan proteksi retry saat server Roblox atau jaringan lambat.\n4. Stabilitas Jaringan WebSocket Zeke Hub:\n   - Penyesuaian interval heartbeat ping/pong untuk mencegah terputusnya koneksi socket.",
   "mandatory": false
 }
