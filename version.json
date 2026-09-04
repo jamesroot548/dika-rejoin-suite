@@ -1,7 +1,7 @@
 {
-  "version": "1.1.1",
+  "version": "1.1.2",
   "release_date": "2026-09-04",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.1/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🚀 DIKA REJOIN SUITE PRO v1.1.1 (PERFORMANCE & STABILITY UPDATE)\n\n1. Background Async Engine & Debouncing:\n   - Mengatasi lag/freeze '(Not Responding)' pada PC berspesifikasi rendah saat mencentang opsi 'FG Saja' atau filter grup.\n   - Kalkulasi inventaris dipindahkan ke background thread dengan prapemrosesan cache yang sangat cepat.\n2. Discord Webhook Anti-Rate Limit PRO (Error 429 Fix):\n   - Penanganan otomatis HTTP 429 dengan dynamic backoff berbasis Retry-After sehingga semua notifikasi terkirim 100% tanpa ada yang terlewat.\n3. Friend Request Extended Timeout & Auto-Retry:\n   - Perpanjangan batas timeout ke 15s dengan proteksi retry saat server Roblox atau jaringan lambat.\n4. Stabilitas Jaringan WebSocket Zeke Hub:\n   - Penyesuaian interval heartbeat ping/pong untuk mencegah terputusnya koneksi socket.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.2/Dika_Rejoin_All_In_One.exe",
+  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.1.2 (ULTRA SMOOTH STARTUP & LOW-SPEC OPTIMIZATION)\n\n1. Staggered Non-Blocking Startup Engine:\n   - Mengatasi freeze '(Not Responding)' saat pertama kali membuka aplikasi di PC berspesifikasi rendah.\n   - Jendela aplikasi langsung muncul instan dan background services dijalankan secara bertahap.\n2. Throttled WebSocket Snapshot Processor:\n   - Pemrosesan data bot, pet, dan inventaris dari Zeke WS digabungkan dalam 1 batch asinkron di background thread.\n3. Anti-Spam Treeview Redraw:\n   - Debouncing cerdas pada pembaruan tabel akun untuk mencegah beban CPU tinggi.\n4. Discord Webhook 429 Auto-Retry & Friend Request 15s Timeout.",
   "mandatory": false
 }
