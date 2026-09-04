@@ -1,7 +1,7 @@
 {
-  "version": "1.1.4",
+  "version": "1.1.5",
   "release_date": "2026-09-04",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.4/Dika_Rejoin_All_In_One.exe",
-  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.1.4 (INSTANT ZERO-LAG STARTUP & FAST IN-MEMORY FG FILTER)\n\n1. Sub-Millisecond Instant Startup (0.1ms Engine):\n   - Mengganti pemanggilan subprocess WMIC yang lambat dengan pembacaan langsung kernel registry Windows.\n   - Aplikasi terbuka seketika tanpa jeda/freeze di PC low-spec.\n2. In-Memory Dynamic Filter (Zero Lag '⭐ FG Saja'):\n   - Filter 'FG Saja' dan 'Neon Saja' kini diproses langsung di RAM secara asinkron dalam 2 milidetik.\n   - Tidak ada lagi lag/stuck, disk freeze, atau notifikasi berulang saat mencentang FG.\n3. Memoized O(N) Priority Sorter:\n   - Algoritma pemeringkatan akun dioptimalkan dengan memoization sehingga pembaruan tabel instan.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.5/Dika_Rejoin_All_In_One.exe",
+  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.1.5 (ANTI-SPAM DISCORD WEBHOOK & INTELLIGENT INVENTORY DEDUPLICATION)\n\n1. Anti-Spam Discord Webhook Queue:\n   - Menggunakan sistem antrean terpusat (Queue Worker) dengan proteksi jeda 1.2s antar pesan.\n   - Menghilangkan error 429 Rate Limited dan mencegah flood notifikasi ke channel Discord.\n2. Smart Inventory Signature Deduplication:\n   - Notifikasi pet target kini hanya dikirim 1x saat pet baru ditemukan atau saat isi target inventory bot berubah.\n   - Menghapus spam log berkala '[🐾] In-Game Inventory Scan' yang sebelumnya berulang setiap detik di konsol aplikasi.\n3. Zero-Spam Startup Memory Cache:\n   - Bot yang telah tersimpan di database tidak akan memicu spam notifikasi saat aplikasi baru dibuka.",
   "mandatory": false
 }
