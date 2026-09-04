@@ -21,6 +21,14 @@
       "bound_hwid": "DIKA-72A5-72B5-4514-C30C",
       "activated_at": "2026-09-02 12:34:20",
       "status": "LOCKED"
+    },
+    "DIKA-PRO-LIFE-99B5-2DBB-9FAD-F3C6": {
+      "type": "LIFETIME",
+      "expiry": "LIFETIME",
+      "bound_hwid": null,
+      "created_at": "2026-09-04 09:09:35",
+      "customer": "Pelanggan VIP #1",
+      "status": "UNCLAIMED"
     }
   }
 }
