@@ -1,7 +1,7 @@
 {
-  "version": "1.1.5",
-  "release_date": "2026-09-04",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.5/Dika_Rejoin_All_In_One.exe",
-  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.1.5 (ANTI-SPAM DISCORD WEBHOOK & INTELLIGENT INVENTORY DEDUPLICATION)\n\n1. Anti-Spam Discord Webhook Queue:\n   - Menggunakan sistem antrean terpusat (Queue Worker) dengan proteksi jeda 1.2s antar pesan.\n   - Menghilangkan error 429 Rate Limited dan mencegah flood notifikasi ke channel Discord.\n2. Smart Inventory Signature Deduplication:\n   - Notifikasi pet target kini hanya dikirim 1x saat pet baru ditemukan atau saat isi target inventory bot berubah.\n   - Menghapus spam log berkala '[🐾] In-Game Inventory Scan' yang sebelumnya berulang setiap detik di konsol aplikasi.\n3. Zero-Spam Startup Memory Cache:\n   - Bot yang telah tersimpan di database tidak akan memicu spam notifikasi saat aplikasi baru dibuka.",
+  "version": "1.1.6",
+  "release_date": "2026-09-10",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.6/Dika_Rejoin_All_In_One.exe",
+  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.1.6 (PER-TARGET PET FULL GROWN CONFIGURATION)\n\n1. Konfigurasi Full Grown Per-Pet:\n   - Pengaturan Full Grown (FG) kini diatur secara fleksibel per target pet di target_pets.json dan Modal UI Target Pets.\n   - Opsi fullgrown_only=false memungkinkan bot mendeteksi akun dengan pet usia apa pun (Newborn, Junior, Pre-Teen, Teen, Post-Teen, Full Grown).\n2. Peningkatan Antarmuka UI:\n   - Menghapus checkbox Full Grown global dari bar scanner utama agar pencarian tidak dibatasi secara kaku.\n   - Menambahkan kolom status usia & tombol toggle Full Grown instan di modal Target Pets.\n3. Optimalisasi Scanner & Data Processing:\n   - Memastikan bot inventory filter dan inventory scan bekerja akurat sesuai preferensi usia per jenis pet.",
   "mandatory": false
 }
