@@ -1,0 +1,100 @@
+[
+  {
+    "keyword": "strawberry tortle",
+    "name": "🍓 Strawberry Tortle",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "dragonfruit",
+    "name": "🦊 Dragonfruit Fox",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "dango",
+    "name": "🍡 Dango Penguins",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "huntsman robin",
+    "name": "🏹 Huntsman Robin",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "three blind mice",
+    "name": "🐭 Three Blind Mice",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "sushi penguin",
+    "name": "🐧 Sushi Penguin",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "kiwi",
+    "name": "🥝 Kiwi Kiwi",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "chihuahua",
+    "name": "🐕 Chihuahua",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "little lamb",
+    "name": "🐑 Little Lamb",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "purrowl",
+    "name": "🐱 Purrowl",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "2d box",
+    "name": "📦 2D Box",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "aberdeen",
+    "name": "🐄 Aberdeen Angus Box",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "emberlight",
+    "name": "🔥 Emberlight",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "gorilla",
+    "name": "🦍 Silverback Gorilla",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  }
+]
