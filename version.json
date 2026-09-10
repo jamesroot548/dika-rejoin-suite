@@ -1,7 +1,7 @@
 {
-  "version": "1.1.6",
+  "version": "1.1.7",
   "release_date": "2026-09-10",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.6/Dika_Rejoin_All_In_One.exe",
-  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.1.6 (PER-TARGET PET FULL GROWN CONFIGURATION)\n\n1. Konfigurasi Full Grown Per-Pet:\n   - Pengaturan Full Grown (FG) kini diatur secara fleksibel per target pet di target_pets.json dan Modal UI Target Pets.\n   - Opsi fullgrown_only=false memungkinkan bot mendeteksi akun dengan pet usia apa pun (Newborn, Junior, Pre-Teen, Teen, Post-Teen, Full Grown).\n2. Peningkatan Antarmuka UI:\n   - Menghapus checkbox Full Grown global dari bar scanner utama agar pencarian tidak dibatasi secara kaku.\n   - Menambahkan kolom status usia & tombol toggle Full Grown instan di modal Target Pets.\n3. Optimalisasi Scanner & Data Processing:\n   - Memastikan bot inventory filter dan inventory scan bekerja akurat sesuai preferensi usia per jenis pet.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.7/Dika_Rejoin_All_In_One.exe",
+  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.1.7 (FULL GROWN PER-PET & SEAMLESS AUTO-UPDATE)\n\n1. Konfigurasi Full Grown Per Target Pet:\n   - Pengaturan Full Grown (FG) kini dapat disesuaikan per jenis pet pada target_pets.json maupun Modal UI Target Pets.\n   - Opsi fullgrown_only=false memungkinkan bot menjaring akun dengan pet usia muda (Newborn, Junior, dll).\n2. Pembersihan UI & Tombol Cepat:\n   - Checkbox Full Grown global di bar scanner utama dihilangkan.\n   - Penambahan kolom status usia dan tombol toggle cepat di modal Target Pets.\n3. Pembaruan Versi & Sinkronisasi Sistem:\n   - Sinkronisasi internal APP_VERSION v1.1.7 dan manifest pembaruan cloud.",
   "mandatory": false
 }
