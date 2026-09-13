@@ -1,7 +1,7 @@
 {
-  "version": "1.1.9",
+  "version": "1.2.0",
   "release_date": "2026-09-13",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.9/Dika_Rejoin_All_In_One.exe",
-  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.1.9 (AUTO-START WINDOWS & FAST CACHE-BUSTING)\n\n1. Fitur Auto-Start Windows:\n   - Dukungan skrip startup otomatis (AutoStart_Dika_Potassium.vbs) untuk membuka Executor Potassium dan Dika Rejoin PRO secara berurutan dan hening saat PC menyala.\n2. Bypass Cache Pembaruan Instan (Cache-Busting):\n   - Peningkatan mekanisme pengecekan update dengan header anti-cache agar rilis baru di GitHub langsung terdeteksi tanpa jeda cache CDN.\n3. Optimalisasi Kinerja & Stabilitas Bot:\n   - Konsolidasi perbaikan deteksi Egg & Box (Admin Abuse Box/Egg & 2D Box), eliminasi lag WebSocket, dan pembersihan log spam konsol.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.2.0/Dika_Rejoin_All_In_One.exe",
+  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.2.0 (INTEGRATED SCREEN TIME NO LIMIT MANAGER)\n\n1. Fitur Baru: Roblox Screen Time No Limit Manager PRO:\n   - Terintegrasi langsung di menu utama (Header) & bagian Preflight Tab 1 Dika Rejoin Suite PRO.\n   - Otomatis memeriksa dan mengubah Daily Screen Time Limit ke 'No Limit' (1440 menit / Unlimited) untuk ribuan akun sekaligus.\n   - Terintegrasi penuh ke dalam Master Preflight (Langkah 1-5): akun 13+ otomatis diatur ke Screen Time No Limit sebelum rotasi.\n   - Deteksi akun <13 / Parental PIN Protection secara otomatis.\n   - Multi-Threaded Engine berkecepatan tinggi dengan ekspor laporan hasil (TXT/CSV).\n2. Peningkatan Performa & Stabilitas:\n   - Sinkronisasi engine antar-modul dan pembaruan sistem auto-update GitHub.",
   "mandatory": false
 }
