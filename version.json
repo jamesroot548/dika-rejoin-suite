@@ -1,7 +1,7 @@
 {
-  "version": "1.1.7",
-  "release_date": "2026-09-10",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.7/Dika_Rejoin_All_In_One.exe",
-  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.1.7 (FULL GROWN PER-PET & SEAMLESS AUTO-UPDATE)\n\n1. Konfigurasi Full Grown Per Target Pet:\n   - Pengaturan Full Grown (FG) kini dapat disesuaikan per jenis pet pada target_pets.json maupun Modal UI Target Pets.\n   - Opsi fullgrown_only=false memungkinkan bot menjaring akun dengan pet usia muda (Newborn, Junior, dll).\n2. Pembersihan UI & Tombol Cepat:\n   - Checkbox Full Grown global di bar scanner utama dihilangkan.\n   - Penambahan kolom status usia dan tombol toggle cepat di modal Target Pets.\n3. Pembaruan Versi & Sinkronisasi Sistem:\n   - Sinkronisasi internal APP_VERSION v1.1.7 dan manifest pembaruan cloud.",
+  "version": "1.1.8",
+  "release_date": "2026-09-13",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.1.8/Dika_Rejoin_All_In_One.exe",
+  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.1.8 (EGG & BOX DETECTION, ANTI-LAG & WS CLEANUP)\n\n1. Dukungan Penuh Deteksi Egg & Box/Gift:\n   - Core Keyword Matching cerdas (seperti 'Admin Abuse Egg' otomatis mencocokkan item in-game 'Admin Abuse Box').\n   - Bypass otomatis syarat usia (Full Grown) & status Neon untuk seluruh item bertipe Box, Gift, Egg, Chest, dan Bag.\n   - Mengatasi silent crash NameError: filter_fg pada background scanning thread.\n2. Eliminasi Lag & Optimasi Performa Ekstrem:\n   - Menghentikan banjir request database inventori berlebih saat bot terhubung/terputus ke ZekeHub.\n   - Menghapus infinite redraw loop 80ms pada tabel UI dan menggantinya dengan debounced redraw yang hemat CPU.\n   - Proteksi mutex lock concurrency pada thread pemrosesan inventori.\n3. Pembersihan Log Spam:\n   - Menghilangkan log flood bot online/offline/reconnecting sehingga log konsol bersih dan fokus pada aktivitas penting.\n4. Pembaruan Versi & Sinkronisasi Sistem:\n   - Sinkronisasi internal APP_VERSION v1.1.8 dan manifest pembaruan cloud.",
   "mandatory": false
 }
