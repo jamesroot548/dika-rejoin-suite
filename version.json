@@ -1,7 +1,7 @@
 {
-  "version": "1.3.4",
+  "version": "1.3.5",
   "release_date": "2026-09-15",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.3.4/Dika_Rejoin_All_In_One.exe",
-  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.3.4 (SPEED BOOST PRESENCE API 1800X LEBIH CEPAT)\n\n1. Optimasi Ekstrem Pemeriksaan Roblox Presence API (759+ Akun dalam 0.7 Detik):\n   - Memperbaiki bug lookup UID berulang pada username yang invalid/banned, mencegah ribuan panggilan HTTP sinkron (mengurangi waktu tunggu dari 22 menit menjadi 0.7 detik).\n   - Multi-Worker Parallel Precache & Presence (10 thread paralel) untuk memproses ratusan bot target secara instan.\n   - Reverse Mapping O(1) Cache: Menghilangkan loop iterasi bertingkat pada ribuan akun di RAM.\n   - Pemeriksaan presence kini hanya dijalankan saat filter In-Game/Online aktif.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.3.5/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.3.5 (PERBAIKAN MASTER PREFLIGHT & PARALEL LOGGING)\n\n1. Kunci User ID Akun Target Otomatis dari Cookie Session:\n   - User ID resmi akun Main/Target kini diekstrak langsung dari endpoint otentikasi resmi Roblox (/v1/users/authenticated).\n   - Mencegah kegagalan lookup nama / spasi akun yang menyebabkan Tahap 4 (Add Friend) terlewati dalam 0 detik.\n\n2. Eksekusi Friend Request Bot <13 100% Akurat:\n   - Memastikan seluruh bot <13 berhasil mengirimkan Friend Request ke semua akun Main tanpa ada yang terlewat.\n   - Akun Main dipastikan menerima dan meng-ACC pertemanan secara menyeluruh (0 tertinggal).\n\n3. Pembersihan & Perapihan Log Multi-Thread (Anti-Spam Tumpang Tindih):\n   - Menghilangkan banjir log recheck paralel yang saling bertumpuk di detik yang sama pada Tahap 5 & 6.\n   - Tampilan log terminal GUI menjadi jauh lebih bersih, rapi, dan mudah dipantau.\n\n4. Batching Pengecekan Status Pertemanan (100 UID per Request):\n   - Pengecekan status pertemanan mutual bot <13 kini dibatch hingga 100 akun per panggilan API (sangat cepat dan anti-rate limit).",
   "mandatory": false
 }
