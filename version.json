@@ -1,7 +1,7 @@
 {
-  "version": "1.3.7",
-  "release_date": "2026-09-15",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.3.7/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🎯 DIKA REJOIN SUITE PRO v1.3.7 (PERBAIKAN RESOLUSI USER ID & ZERO WARNING)\n\n1. Perbaikan Peringatan Gagal menemukan User ID:\n   - Menyimpan User ID resmi akun Main secara otomatis sejak otentikasi awal.\n   - Menghilangkan bug cache poisoning di mana rate limit Roblox (429) sempat menandai akun valid sebagai None.\n\n2. Mekanisme Retry & Throttling Cerdas:\n   - Batch precache username kini dilengkapi retry hingga 3x dengan backoff otomatis.\n   - Concurrency dibatasi agar API Roblox tidak memicu rate limit.\n\n3. Verifikasi Pertemanan Akurat Bot <13:\n   - Status proteksi join bot <13 kini 100% mendeteksi User ID kedua belah pihak tanpa peringatan gagal.",
+  "version": "1.3.8",
+  "release_date": "2026-09-16",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.3.8/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🎯 DIKA REJOIN SUITE PRO v1.3.8 (DETEKSI AKUN <13 PRESENCE & MULTI-LAYER IN-GAME VERIFIER)\n\n1. Deteksi Mutlak Akun <13 (Age Group 9-12):\n   - Berdasarkan menu PrivateServerPrivacy: Jika opsi 'Everyone' tidak ada / ditolak Roblox (hanya ada 'Friends'), akun mutlak dikategorikan sebagai <13.\n   - Otomatis masuk antrean Add Friend & Auto-Accept agar Main tidak terkena Error 524.\n\n2. Multi-Layer Live Presence Verification (Anti-Ghosting 100% Akurat):\n   - Layer 1: Health Ping Sesi Bot Langsung (skip jika cookie 401 / logout).\n   - Layer 2: Real-time Presence Type Check (userPresenceType == 2).\n   - Layer 3: Place ID Verification (mencegah nyasar di game berbeda).\n   - Layer 4: Job ID & Debounce Double-Sample (anti-ghosting / anti-stuck di loading screen).",
   "mandatory": false
 }
