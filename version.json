@@ -1,7 +1,7 @@
 {
-  "version": "1.3.1",
-  "release_date": "2026-09-14",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.3.1/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.3.1 (HOTFIX BANNED ACCOUNT DETECTION)\n\n1. Perbaikan Kritis Deteksi Akun Banned (Master Preflight Langkah 3 & Auto-Unfriend Banned):\n   - Memperbaiki bug di mana akun banned tidak terdeteksi (0 akun terdeteksi) akibat perubahan respon API Roblox v1/users (tidak menyertakan isBanned: True).\n   - Sekarang mendeteksi akun banned dan terminated dengan metode excludeBannedUsers=True ganda yang 100% akurat.\n   - Seluruh akun banned dan deleted langsung teridentifikasi dengan nama akun aslinya dan dibersihkan dari friend list Akun Main secara otomatis.\n2. Peningkatan Efisiensi Pembersihan Teman:\n   - Filter otomatis ID negatif / placeholder -1 pada indeks database Roblox yang tidak valid.\n   - Sinkronisasi instan dengan bot <13 AccOps agar slot friend list akun main selalu steril untuk pertemanan bot.",
+  "version": "1.3.2",
+  "release_date": "2026-09-15",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.3.2/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🚀 DIKA REJOIN SUITE PRO v1.3.2 (UPDATE MAJOR: ANTI-LAG 60 FPS & INSTANCE JOIN)\n\n1. Peningkatan Kritis Akun Online / In-Game Saja:\n   - Integrasi langsung dengan Roblox Presence API Real-Time untuk memvalidasi status bot (PlaceId & JobId Server) langsung dari server Roblox.\n   - Direct Server Instance Join (RequestGameJob): Akun Main dijamin 100% masuk ke server instance (JobId) yang sama persis dengan bot, mengatasi masalah bot tidak ada saat Main tiba.\n   - Live Presence Preflight Guard: Bot offline/crash otomatis dilewati (skip) sesaat sebelum giliran peluncuran, mencegah Main masuk ke server kosong.\n2. Optimasi Ekstrem Performa GUI (Bebas Lag & Anti Freeze):\n   - Eliminasi freeze/lag saat membuka tools, berpindah tab, atau mengganti filter dengan RAM Cache Lookup (1,39 mikrodetik per bot).\n   - Indeks O(1) Hash Map Lowercase untuk database bot inventory (0,42 mikrodetik per akun).\n   - Diff-Based Treeview Rendering & Background Request Throttling: Menghilangkan infinite loop dan rendering berulang di UI thread.",
   "mandatory": false
 }
