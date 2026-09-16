@@ -1,7 +1,7 @@
 {
-  "version": "1.4.6",
+  "version": "1.4.7",
   "release_date": "2026-09-16",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.4.6/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.4.6 (FIX TABLE CRASH & ENHANCE ACCOUNT RENDERING)\n\n1. Perbaikan Bug Kritis NameError 'pres' di Tabel:\n   - Memperbaiki variabel presensi ('pres', 'is_ingame', 'is_online') yang sempat menyebabkan fungsi rendering tabel Treeview crash dan membeku tanpa menampilkan baris akun.\n   - Tabel kini 100% lancar merender seluruh akun yang ada di kotak Clone Accounts.\n\n2. Optimasi Tampilan Seluruh Akun Clone & Impor Device:\n   - Menghilangkan pemblokiran filter target pet dan filter grup pada daftar akun yang sengaja dimasukkan pengguna ke kotak Clone Accounts.\n   - Seluruh akun impor dari AccountOps, device, maupun clipboard kini langsung tampil di tabel lengkap dengan info role, status cookie, dan device.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.4.7/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.4.7 (RELIABLE AUTO-START ROTATOR & ZERO-COOKIE BOT SUPPORT)\n\n1. Perbaikan Bug Auto-Start Rotator Tidak Berjalan Sendiri:\n   - Memperbaiki validasi bot clone di mana sebelumnya sistem keliru mensyaratkan cookie pada mode 'Main Join Bot PS' (di mana bot di game sebenarnya tidak butuh cookie, hanya akun Main yang butuh).\n   - Menghilangkan issue reset timer countdown berulang akibat banjir paket WebSocket/Scanner, sehingga hitung mundur 5 detik kini 100% tuntas meluncurkan rotator secara otomatis.\n\n2. Trigger Otomatis di Seluruh Alur Deteksi Target:\n   - Auto-start kini otomatis aktif saat target pet terdeteksi dari Zeke WebSocket maupun In-Game Scanner, baik saat akun baru masuk maupun akun sudah ada di daftar.\n   - Mendukung peluncuran otomatis langsung saat mengimpor akun dari Device/Grup atau mengaktifkan kembali checkbox Auto-Start.",
   "mandatory": false
 }
