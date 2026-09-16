@@ -1,7 +1,7 @@
 {
-  "version": "1.4.1",
+  "version": "1.4.2",
   "release_date": "2026-09-16",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.4.1/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🎯 DIKA REJOIN SUITE PRO v1.4.1 (FULL EMOJI RENDERING & COLORIZED LOG CONSOLE)\n\n1. Full Support Emoji Glyph di Log Console:\n   - Mengatasi masalah emoji yang sebelumnya muncul sebagai simbol aneh / kotak kosong (seperti ⌂ atau ⚇).\n   - Mengintegrasikan font 'Segoe UI Emoji' secara cerdas dan adaptif sehingga seluruh emoji (🔓, 👶, 🧹, 🗑️, 🤝, ⚠️, ✅, 🚀, dsb.) tampil dengan gambar/ikon yang tajam, presisi, dan sempurna!\n\n2. Pewarnaan Cerdas Log (High Visibility):\n   - Ikon gembok 13+ (🔓) berwarna hijau neon menyala.\n   - Ikon bayi <13 (👶) berwarna emas/kuning cerah.\n   - Ikon sapu pembersihan (🧹) berwarna cyan.\n   - Ikon tong sampah unfriend (🗑️) berwarna coral red.\n   - Ikon jabat tangan pertemanan (🤝) berwarna ungu/violet.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.4.2/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🎯 DIKA REJOIN SUITE PRO v1.4.2 (NATIVE FULL-COLOR GRAPHICAL EMOJI LOG CONSOLE)\n\n1. Full-Color Inline Graphical Emoji di Log Console:\n   - Mengatasi limitasi GDI Windows/Tkinter yang merender emoji sebagai wireframe/outline kuning satu warna.\n   - Sekarang seluruh emoji (🐾, 🐑, 🐭, 🦉, 🔓, 👶, 🧹, 🗑️, 🤝, ⚠️, ✅, 🚀, dll.) dirender langsung menggunakan layer grafis 3D/warna asli (COLR/CPAL) dari Windows secara otomatis & presisi!\n\n2. Teks Log Super Tajam & Rapi:\n   - Teks log kembali menggunakan font Segoe UI native berkualitas tinggi tanpa distorsi garis.\n   - Simbol navigasi tanda panah (➔), centang (✓), dan bullet (•) tetap tajam dan serasi dengan warna tag status.",
   "mandatory": false
 }
