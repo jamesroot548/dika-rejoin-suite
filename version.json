@@ -1,7 +1,7 @@
 {
-  "version": "1.4.5",
+  "version": "1.4.6",
   "release_date": "2026-09-16",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.4.5/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.4.5 (FIX DATA MUNCUL & TOTAL DECOUPLING ZEKE WS)\n\n1. Perbaikan Tabel Kosong (Data Ga Muncul):\n   - Menghapus filter status internal yang memblokir akun ZekeHub sebelum presensi Roblox selesai dimuat.\n   - Menghapus dropdown Status di bar ZekeHub agar seluruh akun dan pet dari ZekeHub maupun AccountOps langsung muncul 100% lengkap di tabel.\n\n2. Pembersihan Total Log & Status Zeke WS ('Masih Ada'):\n   - Menghapus seluruh log 'Bot Online di Game' dan 'Bot Disconnect -> Status diset OFFLINE' dari Zeke WebSocket.\n   - ZekeHub WS kini murni 100% pasif untuk streaming inventori pet (pets:data) dan penangkapan Server Job ID tanpa mencampuri presensi Roblox.\n\n3. Verifikasi In-Game Rotator Tetap Optimal:\n   - Pengecekan bot in-game Roblox dijalankan secara otomatis saat Rotator dimulai dan sesaat sebelum Main diluncurkan.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.4.6/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.4.6 (FIX TABLE CRASH & ENHANCE ACCOUNT RENDERING)\n\n1. Perbaikan Bug Kritis NameError 'pres' di Tabel:\n   - Memperbaiki variabel presensi ('pres', 'is_ingame', 'is_online') yang sempat menyebabkan fungsi rendering tabel Treeview crash dan membeku tanpa menampilkan baris akun.\n   - Tabel kini 100% lancar merender seluruh akun yang ada di kotak Clone Accounts.\n\n2. Optimasi Tampilan Seluruh Akun Clone & Impor Device:\n   - Menghilangkan pemblokiran filter target pet dan filter grup pada daftar akun yang sengaja dimasukkan pengguna ke kotak Clone Accounts.\n   - Seluruh akun impor dari AccountOps, device, maupun clipboard kini langsung tampil di tabel lengkap dengan info role, status cookie, dan device.",
   "mandatory": false
 }
