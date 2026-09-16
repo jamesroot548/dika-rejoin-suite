@@ -1,7 +1,7 @@
 {
-  "version": "1.4.4",
+  "version": "1.4.5",
   "release_date": "2026-09-16",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.4.4/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.4.4 (PURE ROBLOX PRESENCE & DECOUPLED ZEKE WS)\n\n1. Pemisahan Total Status Online/Offline ZekeHub WS:\n   - Status Online/Offline dan In-Game bot kini 100% murni dikendalikan oleh Roblox Official Presence API.\n   - Status koneksi WebSocket ZekeHub (flapping/disconnect/reconnect) tidak lagi mencampuri atau memblokir bot yang sebenarnya masih aktif di Roblox.\n   - ZekeHub WS tetap difungsikan secara optimal untuk streaming data inventori real-time (pets:data) dan tracking Job ID server tanpa risiko 'false offline'.\n\n2. Preservasi Proteksi Anti-Ghost & Smart Cooldown:\n   - Layer 0 Live Inventory Check: Memastikan Main tidak join bot yang target pet-nya sudah habis (0).\n   - 60s Post-Trade Cooldown: Mencegah Main bergabung kembali sebelum server Roblox selesai memperbarui status pasca-trade.\n   - RAM Cache Sync: Sinkronisasi instan lower-case cache untuk eliminasi desync data pet.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.4.5/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.4.5 (FIX DATA MUNCUL & TOTAL DECOUPLING ZEKE WS)\n\n1. Perbaikan Tabel Kosong (Data Ga Muncul):\n   - Menghapus filter status internal yang memblokir akun ZekeHub sebelum presensi Roblox selesai dimuat.\n   - Menghapus dropdown Status di bar ZekeHub agar seluruh akun dan pet dari ZekeHub maupun AccountOps langsung muncul 100% lengkap di tabel.\n\n2. Pembersihan Total Log & Status Zeke WS ('Masih Ada'):\n   - Menghapus seluruh log 'Bot Online di Game' dan 'Bot Disconnect -> Status diset OFFLINE' dari Zeke WebSocket.\n   - ZekeHub WS kini murni 100% pasif untuk streaming inventori pet (pets:data) dan penangkapan Server Job ID tanpa mencampuri presensi Roblox.\n\n3. Verifikasi In-Game Rotator Tetap Optimal:\n   - Pengecekan bot in-game Roblox dijalankan secara otomatis saat Rotator dimulai dan sesaat sebelum Main diluncurkan.",
   "mandatory": false
 }
