@@ -1,7 +1,7 @@
 {
-  "version": "1.4.8",
+  "version": "1.4.9",
   "release_date": "2026-09-16",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.4.8/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.4.8 (FIX ROTATOR STUCK ON PRESENCE API & INSTANT WAVE LAUNCH)\n\n1. Perbaikan Kritis Rotator Stuck / Membeku di Presence API:\n   - Menghapus pemblokiran kueri presensi massal (800+ akun sekaligus) di awal start rotator yang sebelumnya menyebabkan thread membeku dan terkena rate limit Roblox API 429.\n   - Memperbaiki bug _resolve_target_user_id di mana akun yang tidak ditemukan di Roblox menyebabkan pengulangan request HTTP berulang-ulang tanpa henti.\n\n2. Peluncuran Wave Rotator Instan (0.5 Detik):\n   - Rotator kini langsung memulai Wave #1 dalam hitungan detik tanpa jeda atau freeze.\n   - Verifikasi presensi bot dilakukan secara Just-In-Time (JIT) hanya untuk bot yang sedang akan dikunjungi di wave tersebut.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.4.9/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.4.9 (SMART BOT IN-GAME SCANNER & CONTINUOUS SEARCH)\n\n1. Pencarian Bot In-Game Otomatis (Cari Sampai Dapat):\n   - Rotator tidak lagi mengambil bot secara buta yang menyebabkan akun Main idle jika bot offline.\n   - Sistem secara otomatis memindai antrean bot per-batch (15 bot) sampai seluruh slot Main (misal 8/8) terpenuhi dengan bot yang terkonfirmasi sedang IN-GAME.\n\n2. Skip Bot Inaktif Tanpa Menghilangkan Antrean:\n   - Bot yang offline atau sedang di menu Roblox akan dilewati pada wave saat ini tanpa dimasukkan ke daftar 'visited' permanen.\n   - Ketika emulator meluncurkan bot tersebut ke dalam game pada wave berikutnya, rotator akan langsung mendeteksi dan mengunjunginya secara otomatis.\n\n3. Mode Siaga Aman (Safe Standby):\n   - Jika seluruh bot dalam antrean sedang offline/loading, rotator masuk ke mode siaga aman 15 detik dan mengecek kembali secara otomatis tanpa membuang-buang peluncuran akun Main.",
   "mandatory": false
 }
