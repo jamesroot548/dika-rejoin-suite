@@ -1,7 +1,7 @@
 {
-  "version": "1.3.9",
+  "version": "1.4.0",
   "release_date": "2026-09-16",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.3.9/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🎯 DIKA REJOIN SUITE PRO v1.3.9 (SMART SYNC & FILTER DEVICE / GRUP ACCOPS)\n\n1. Seleksi & Sinkronisasi Akun per Device / per Grup:\n   - Sekarang Anda bisa memilih hanya menyinkronkan atau merotasi akun dari perangkat / VPS tertentu saja (contoh: 'S 08 IndiBiz', 'A 01 MyRep', dsb) atau seluruh grup (contoh: 'Grup ADIT SERVER', 'Grup SERVER').\n   - Tombol Baru: '📥 IMPOR AKUN DEVICE' - otomatis mengisi daftar Clone Accounts rotator hanya dengan akun dari device/grup yang sedang dipilih.\n\n2. Smart Filter Tabel Inventori:\n   - Memilih filter device langsung menyaring daftar akun di tabel inventori secara real-time.\n   - Tombol 'Mulai Rotasi' akan fokus memutar akun-akun yang terdaftar pada device yang dipilih.\n\n3. Kestabilan & Optimasi Multi-VPS:\n   - Sangat ideal untuk multi-device farming / VPS terpisah tanpa perlu saling berebut atau mencampur ribuan akun.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.4.0/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🎯 DIKA REJOIN SUITE PRO v1.4.0 (AUTO-UNFRIEND TEMAN BUKAN DI DEVICE ACCOPS)\n\n1. Pembersihan Friend List Akun Main Khusus Device AccOps:\n   - Sekarang jika ada akun di friend list Akun Main yang TIDAK ADA di Device AccOps terpilih (atau di luar antrean bot rotasi saat ini), tools akan langsung mendeteksi dan menghapusnya (Auto-Unfriend)!\n   - Menjaga slot teman akun Main tetap bersih dan steril, hanya berteman dengan bot yang aktif di device tersebut.\n\n2. Opsi Pengaturan Baru di Tab 2:\n   - Checkbox: '🗑️ Auto-Unfriend Teman Bukan di Device AccOps (Hapus Luar Device)' (Aktif secara default).\n   - Terintegrasi penuh dengan Preflight Tahap 3 otomatis maupun tombol manual '🧹 BERSIHKAN TEMAN MAIN'.",
   "mandatory": false
 }
