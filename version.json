@@ -1,7 +1,7 @@
 {
-  "version": "1.5.2",
+  "version": "1.5.3",
   "release_date": "2026-09-16",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.5.2/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.5.2 (PERBAIKAN PRIVASI PRIVATE SERVER BOT <13 KE FRIENDS)\n\n1. Privasi Private Server Akun <13 Wajib 'Friends' (Bukan 'No one' / None):\n   - Menyelesaikan masalah akun bot Under 13 (<13 seperti RhicoJay182) yang sebelumnya terjebak pada opsi 'No one' di menu Private servers sehingga bot/main tidak bisa join.\n   - Menambahkan integrasi header dan cookie Roblox Browser Tracker ID (rbx-browser-tracker-id & browserTrackerId) untuk mencegah penolakan HTTP 400.\n   - Mengirim update privasi secara sekuensial (single payload per request) untuk menghindari kegagalan internal server Roblox (HTTP 500).\n   - Otomatis men-set 'privateServerPrivacy' ke 'Friends', 'whoCanJoinMeInExperiences' ke 'Friends', dan 'whoCanSeeMyOnlineStatus' ke 'Friends' baik di Preflight Tunggal maupun Master Preflight Tahap 2.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.5.3/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.5.3 (EKSEKUSI PREFLIGHT BERTAHAP 200 AKUN & JEDA RANDOM 20-30S)\n\n1. Pemrosesan Bertahap Master Preflight (Batch 200 Akun):\n   - Menyelesaikan kendala rate limit Roblox (HTTP 429 Too Many Requests & Timeout) saat memproses ribuan bot target secara serentak.\n   - Master Preflight (Tahap 1 Ubah Bahasa & Tahap 2 Cek Usia/Privasi) kini dijalankan bertahap per batch berukuran 200 akun.\n\n2. Jeda Acak Aman 20 - 30 Detik Antar Batch:\n   - Di antara setiap batch 200 akun, sistem otomatis memberikan jeda acak 20 s/d 30 detik untuk me-reset jendela kuota request Roblox sehingga seluruh akun target (misal 1065 bot) diproses tuntas 100% tanpa ada yang terlewat.",
   "mandatory": false
 }
