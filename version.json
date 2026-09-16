@@ -1,7 +1,7 @@
 {
-  "version": "1.4.0",
+  "version": "1.4.1",
   "release_date": "2026-09-16",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.4.0/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🎯 DIKA REJOIN SUITE PRO v1.4.0 (AUTO-UNFRIEND TEMAN BUKAN DI DEVICE ACCOPS)\n\n1. Pembersihan Friend List Akun Main Khusus Device AccOps:\n   - Sekarang jika ada akun di friend list Akun Main yang TIDAK ADA di Device AccOps terpilih (atau di luar antrean bot rotasi saat ini), tools akan langsung mendeteksi dan menghapusnya (Auto-Unfriend)!\n   - Menjaga slot teman akun Main tetap bersih dan steril, hanya berteman dengan bot yang aktif di device tersebut.\n\n2. Opsi Pengaturan Baru di Tab 2:\n   - Checkbox: '🗑️ Auto-Unfriend Teman Bukan di Device AccOps (Hapus Luar Device)' (Aktif secara default).\n   - Terintegrasi penuh dengan Preflight Tahap 3 otomatis maupun tombol manual '🧹 BERSIHKAN TEMAN MAIN'.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.4.1/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🎯 DIKA REJOIN SUITE PRO v1.4.1 (FULL EMOJI RENDERING & COLORIZED LOG CONSOLE)\n\n1. Full Support Emoji Glyph di Log Console:\n   - Mengatasi masalah emoji yang sebelumnya muncul sebagai simbol aneh / kotak kosong (seperti ⌂ atau ⚇).\n   - Mengintegrasikan font 'Segoe UI Emoji' secara cerdas dan adaptif sehingga seluruh emoji (🔓, 👶, 🧹, 🗑️, 🤝, ⚠️, ✅, 🚀, dsb.) tampil dengan gambar/ikon yang tajam, presisi, dan sempurna!\n\n2. Pewarnaan Cerdas Log (High Visibility):\n   - Ikon gembok 13+ (🔓) berwarna hijau neon menyala.\n   - Ikon bayi <13 (👶) berwarna emas/kuning cerah.\n   - Ikon sapu pembersihan (🧹) berwarna cyan.\n   - Ikon tong sampah unfriend (🗑️) berwarna coral red.\n   - Ikon jabat tangan pertemanan (🤝) berwarna ungu/violet.",
   "mandatory": false
 }
