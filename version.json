@@ -1,7 +1,7 @@
 {
-  "version": "1.5.4",
-  "release_date": "2026-09-17",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.5.4/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.5.4 (PERBAIKAN FILTER TARGET PET & DETEKSI IN-GAME SCANNER)\n\n1. Perbaikan Filter Checkbox 'Hanya Akun Yang Memiliki Target Pet (> 0)':\n   - Memperbaiki bug di mana akun dengan 0 target pet (bertanda '-') tetap muncul di tabel.\n   - Kini baris akun tanpa target pet langsung disembunyikan seketika saat checkbox dicentang.\n\n2. Pemurnian Tampilan Kolom 'In-Game Pets (Scan)':\n   - Menghapus fallback yang menampilkan daftar gift biasa (Massive Gift, Big Gift, dll) ketika pet kosong.\n   - Kolom pet kini murni menampilkan Target Pet yang sesuai dengan konfigurasi target_pets.json.\n\n3. Sinkronisasi Config & Script Lua Scanner:\n   - Memperbarui setting Little Lamb ke non-neon agar Little Lamb Full Grown terdeteksi akurat.\n   - Membersihkan keyword gift umum pada scanner in-game agar tidak menghitung gift biasa sebagai target item.",
-  "mandatory": false
+    "version": "1.5.5",
+    "release_date": "2026-09-17",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.5.5/Dika_Rejoin_All_In_One.exe",
+    "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.5.5 (INTEGRASI ENGINE SERVERGEN & AUTO PRIVATE SERVER FIX)\n\n1. Integrasi Lengkap Engine Roblox ServerGen:\n   - Mengadopsi arsitektur dari tools servergen dengan penanganan otomatis 403 CSRF token retry dan 429 rate limit backoff.\n   - Menggunakan Universe ID Adopt Me yang valid (383310974) untuk pembuatan Private Server baru.\n   - Mengambil link Private Server yang sudah dimiliki tanpa regenerate (newJoinCode=False) untuk efisiensi instan.\n   - Otomatis memperbarui subscription status dan mengaktifkan izin teman (friendsAllowed: True).\n\n2. Penanganan Masalah '[⚠️ SKIP NO PS]' pada Rotator:\n   - Rotator kini otomatis menyelesaikan cookie bot melalui sinkronisasi cerdas dari seluruh database cookie disk.\n   - Bot in-game yang belum memiliki Private Server Link akan langsung dibuatkan/diambilkan link PS secara on-the-fly tanpa dilewati/skip.\n\n3. Sinkronisasi Database links.txt Multi-Folder:\n   - Hasil pembuatan Private Server otomatis tersimpan ke seluruh folder: Suite PRO, ServerGen Archive, Siap Kirim, dan Rejoin Emu.\n   - Tombol '[🏰 SYNC / AMBIL PS BOT]' kini berjalan paralel dengan 3 worker multi-threaded berkecepatan tinggi.",
+    "mandatory": false
 }
