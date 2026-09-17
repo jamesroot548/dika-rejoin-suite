@@ -1,7 +1,7 @@
 {
-  "version": "1.5.3",
-  "release_date": "2026-09-16",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.5.3/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.5.3 (EKSEKUSI PREFLIGHT BERTAHAP 200 AKUN & JEDA RANDOM 20-30S)\n\n1. Pemrosesan Bertahap Master Preflight (Batch 200 Akun):\n   - Menyelesaikan kendala rate limit Roblox (HTTP 429 Too Many Requests & Timeout) saat memproses ribuan bot target secara serentak.\n   - Master Preflight (Tahap 1 Ubah Bahasa & Tahap 2 Cek Usia/Privasi) kini dijalankan bertahap per batch berukuran 200 akun.\n\n2. Jeda Acak Aman 20 - 30 Detik Antar Batch:\n   - Di antara setiap batch 200 akun, sistem otomatis memberikan jeda acak 20 s/d 30 detik untuk me-reset jendela kuota request Roblox sehingga seluruh akun target (misal 1065 bot) diproses tuntas 100% tanpa ada yang terlewat.",
+  "version": "1.5.4",
+  "release_date": "2026-09-17",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.5.4/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.5.4 (PERBAIKAN FILTER TARGET PET & DETEKSI IN-GAME SCANNER)\n\n1. Perbaikan Filter Checkbox 'Hanya Akun Yang Memiliki Target Pet (> 0)':\n   - Memperbaiki bug di mana akun dengan 0 target pet (bertanda '-') tetap muncul di tabel.\n   - Kini baris akun tanpa target pet langsung disembunyikan seketika saat checkbox dicentang.\n\n2. Pemurnian Tampilan Kolom 'In-Game Pets (Scan)':\n   - Menghapus fallback yang menampilkan daftar gift biasa (Massive Gift, Big Gift, dll) ketika pet kosong.\n   - Kolom pet kini murni menampilkan Target Pet yang sesuai dengan konfigurasi target_pets.json.\n\n3. Sinkronisasi Config & Script Lua Scanner:\n   - Memperbarui setting Little Lamb ke non-neon agar Little Lamb Full Grown terdeteksi akurat.\n   - Membersihkan keyword gift umum pada scanner in-game agar tidak menghitung gift biasa sebagai target item.",
   "mandatory": false
 }
