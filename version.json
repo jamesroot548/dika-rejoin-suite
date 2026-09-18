@@ -1,7 +1,7 @@
 {
-  "version": "1.6.8",
+  "version": "1.6.9",
   "release_date": "2026-09-18",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.6.8/Dika_Rejoin_All_In_One.exe",
-  "changelog": "- Penambahan fitur otomatis MultiBloxy pada saat membuka tools (Multi-Instance Roblox aktif).\n- Bundling MultiBloxy.exe (72 KB) langsung ke dalam paket distribusi.\n- Penambahan menu manual Buka MultiBloxy di menu Tindakan & Tools Tambahan.\n- Integrasi pengecekan MultiBloxy di launcher JALANKAN_DIKA_REJOIN.bat.\n- Peningkatan sinkronisasi real-time akun trade & clearing pet Zeke Hub.",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.6.9/Dika_Rejoin_All_In_One.exe",
+  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.6.9 (ZEKE REAL-TIME IN-GAME ACCURACY & MULTIBLOXY AUTO-INTEGRATION)\n\n1. 🎮 Auto-Launch & Integrasi Penuh MultiBloxy:\n   - Utilitas MultiBloxy.exe kini tertanam langsung dan dijalankan otomatis saat aplikasi dibuka.\n   - Deteksi pintar proses sistem Windows untuk mencegah duplikasi instance.\n   - Menu manual '🎮 Buka MultiBloxy (Multi-Roblox)' tersedia di dropdown Tindakan & Tools Tambahan.\n   - File launcher batch JALANKAN_DIKA_REJOIN.bat otomatis memastikan MultiBloxy aktif.\n\n2. 🎯 Sinkronisasi Akurat Status Live In-Game Zeke Hub:\n   - Eliminasi total ghost in-game: data event pets:data tidak lagi memalsukan status game bot.\n   - Perbaikan kebocoran memori cache jobId: otomatis mem-purge jobId saat bot offline atau disconnect.\n   - Tampilan badge tabel akurat: bot aktif di Zeke tanpa server Roblox ditampilkan sebagai ONLINE (kuning), hanya bot dengan jobId aktif yang berstatus IN-GAME (hijau).\n   - Auto-wipe cache RAM saat koneksi WebSocket reconnect agar data pra-restart tidak tersisa.\n\n3. 🧹 Wording Log Antrean vs In-Game yang Lebih Jelas:\n   - Log preflight dan rotator membedakan dengan tegas antara bot terdaftar di antrean vs bot yang terverifikasi in-game.\n\n4. 🛡️ Seluruh Script Rotator, Preflight 6-Step, Multi-Account Trade, dan Lisensi 100% Utuh & Aman.",
   "mandatory": false
 }
