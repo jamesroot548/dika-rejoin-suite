@@ -1,7 +1,7 @@
 {
-    "version": "1.6.7",
-    "release_date": "2026-09-18",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.6.7/Dika_Rejoin_All_In_One.exe",
-    "changelog": "⚡ DIKA REJOIN SUITE PRO v1.6.7 (ZERO-LAG ENGINE & FULL PET INVENTORY RESOLUTION)\n\n1. ⚡ Zero-Lag Instant Inventory Engine:\n   - Pemrosesan kamus data pet 1.745 bot kini berjalan instan (~1.05 ms) tanpa sleep artifisial.\n   - Mengeliminasi total loop penjadwalan berulang ('Memproses bertahap... %') yang sebelumnya menyebabkan freeze setiap detik.\n   - Cooldown pengaman 10 detik aktif untuk mencegah rescan beruntun yang tidak perlu.\n   - Menghapus trigger get:pets otomatis pada handler accounts:refresh yang tidak relevan.\n\n2. 🐾 Resolusi Penuh Deteksi Pet (100% Full Data):\n   - Seluruh target pet bot kini disimpan lengkap ke bot_inventories pada fase ingestion tanpa pemfilteran dini.\n   - Filter '✨ Neon Saja' dan '⭐ Full Grown Saja' diterapkan secara dinamis saat render tampilan tabel.\n   - Default zeke_neon_only diubah menjadi false sehingga semua pet langsung terdeteksi.\n   - Penanganan cache inventaris otomatis di-invalidate saat data atau filter berubah.\n\n3. 🧹 Tampilan Log Bersih & Akurat:\n   - Pembersihan log snapshot dan loading progress Zeke Hub agar konsol tetap bersih dan stabil.\n\n4. 🛡️ Seluruh Script Rotator, Preflight, Friend Syncing, dan Verifikasi Akun 100% Utuh & Terjaga.",
-    "mandatory": false
+  "version": "1.6.8",
+  "release_date": "2026-09-18",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.6.8/Dika_Rejoin_All_In_One.exe",
+  "changelog": "- Penambahan fitur otomatis MultiBloxy pada saat membuka tools (Multi-Instance Roblox aktif).\n- Bundling MultiBloxy.exe (72 KB) langsung ke dalam paket distribusi.\n- Penambahan menu manual Buka MultiBloxy di menu Tindakan & Tools Tambahan.\n- Integrasi pengecekan MultiBloxy di launcher JALANKAN_DIKA_REJOIN.bat.\n- Peningkatan sinkronisasi real-time akun trade & clearing pet Zeke Hub.",
+  "mandatory": false
 }
