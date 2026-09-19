@@ -1,7 +1,6 @@
 {
-  "version": "1.7.3",
-  "release_date": "2026-09-18",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.7.3/Dika_Rejoin_All_In_One.exe",
-  "mandatory": false,
-  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.7.3\n\n1. 🚀 Ultra-Fast Zero Lag & Instant Startup:\n   - Mengatasi freeze & stuck Not Responding saat memuat ribuan akun bot (optimasi disk I/O ke RAM indexing 16.000x lebih cepat).\n   - Pre-indexing cookie database ke RAM saat startup (0.001 detik lookup).\n   - Persistent memory caching untuk Servergen links & Private Server links.\n\n2. 🔑 Auto-Detect Zeke Hub Bot Cookies:\n   - Bot Zeke Hub otomatis terdeteksi cookie lokalnya & menampilkan password.\n\n3. 🎮 Native Live Job ID Join & Multi-Main Whitelist:\n   - Main account langsung masuk server bot secara instan menggunakan Roblox RequestGameJob jika bot in-game tanpa private server link."
+  "version": "1.7.4",
+  "release_date": "2026-09-19",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.7.4/Dika_Rejoin_All_In_One.exe",
+  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.7.4\n\n1. 🛡️ Fix Rotator Infinite Wave Loop & HTTP 403:\n   - Memperbaiki bug rotator macet looping terus-menerus karena HTTP 403 ping cookie bot.\n   - Menambahkan cooldown 3 menit otomatis pada bot yang dilewati agar wave langsung rotasi ke ratusan bot lainnya tanpa stuck.\n\n2. 🚀 Ultra-Fast Zero Lag & Instant Startup:\n   - Mengatasi freeze & stuck Not Responding saat memuat ribuan akun bot (optimasi disk I/O ke RAM indexing 16.000x lebih cepat).\n   - Pre-indexing cookie database ke RAM saat startup (0.001 detik lookup).\n   - Persistent memory caching untuk Servergen links & Private Server links.\n\n3. 🔑 Auto-Detect Zeke Hub Bot Cookies:\n   - Bot Zeke Hub otomatis terdeteksi cookie lokalnya & menampilkan password.\n\n4. 🎮 Native Live Job ID Join & Multi-Main Whitelist:\n   - Main account langsung masuk server bot secara instan menggunakan Roblox RequestGameJob jika bot in-game tanpa private server link."
 }
