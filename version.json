@@ -1,6 +1,6 @@
 {
-  "version": "1.8.6",
+  "version": "1.8.7",
   "release_date": "2026-09-20",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.8.6/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.8.6 (ANTI-ZOMBIE TAB & PROCESS-LOCK CLOSE)\n\n1. ⚡ Direct Process ID (PID) Capture saat Launch:\n   - Sistem langsung mendeteksi dan mengunci PID proses RobloxPlayerBeta baru dalam 0.5 detik via Windows Process Snapshot.\n   - Tracking PID 100% akurat tanpa terpengaruh loading lama atau reset judul jendela.\n\n2. 🚪 Penutupan Bersih & Tuntas (Anti-Home Screen Leak):\n   - Saat akun selesai trade / auto-kick, sistem mengirim sinyal WM_CLOSE dan langsung mematikan proses PID tersebut.\n   - Mencegah Roblox terdampar atau kabur ke Roblox Desktop App Home Screen.\n\n3. 🧹 Auto-Cleaner Tab Zombie / Orphan:\n   - Sistem secara otomatis membersihkan tab Roblox zombie / sisa Home Screen yang tidak aktif sebelum dan sesudah rotasi.\n   - Jumlah tab di taskbar dijamin tidak akan pernah menumpuk melebihi batas Tab / Batch!"
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.8.7/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.8.7 (FIX: ISOLASI PENUTUPAN TAB - HANYA TAB SELESAI)\n\n1. 🎯 Isolasi Penutupan Tab Tunggal (Single Account Close):\n   - Memperbaiki bug di mana fungsi orphan cleaner secara keliru menutup tab lain yang sedang loading/in-game.\n   - Saat satu akun selesai (misal: 'sonic1079'), sistem HANYA dan HANYA menutup tab milik akun tersebut berdasarkan PID resminya.\n   - Akun-akun Main lain (seperti 'FarmerJon', 'gocowb0ys', 'parwez') 100% aman dan tetap berjalan normal tanpa terganggu sama sekali!\n\n2. ⚡ Direct PID Tracking Tetap Aktif:\n   - Memastikan tab yang selesai langsung tertutup bersih tanpa kabur ke Home Screen."
 }
