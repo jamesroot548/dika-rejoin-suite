@@ -327,14 +327,14 @@ task.spawn(function()
     -- Deteksi Khusus Adopt Me: Tunggu sampai "LOADING SAVE..." benar-benar selesai!
     print("[DIKA REJOIN] ⏳ Mendeteksi Loading Save Adopt Me... Menunggu hingga selesai loading...")
     local load_timeout = 0
-    while load_timeout < 75 do
+    while load_timeout < 120 do
         local still_loading = false
 
-        -- Cek apakah ada GUI loading atau teks "loading save"
+        -- Cek apakah ada GUI loading atau teks "loading save" / "loading house"
         for _, gui in ipairs(pGui:GetChildren()) do
             if gui:IsA("ScreenGui") and gui.Enabled then
                 local gname = string.lower(gui.Name)
-                if string.find(gname, "loading") then
+                if string.find(gname, "loading") or string.find(gname, "loadingsave") then
                     still_loading = true
                     break
                 end
@@ -351,10 +351,13 @@ task.spawn(function()
             end
         end
 
-        -- Cek apakah GUI utama in-game Adopt Me sudah muncul
-        local has_ingame_gui = pGui:FindFirstChild("BottomBarApp") or pGui:FindFirstChild("DialogApp") or pGui:FindFirstChild("NewsApp") or pGui:FindFirstChild("RoleChooserApp")
-        if not still_loading or has_ingame_gui then
-            break
+        -- Jika MASIH LOADING, dilarang keras selesai! Tetap tunggu sampai teks loading hilang
+        if not still_loading then
+            -- Pastikan GUI in-game nyata (bukan DialogApp pop-up) sudah ada
+            local has_ingame_gui = pGui:FindFirstChild("BottomBarApp") or pGui:FindFirstChild("RoleChooserApp") or pGui:FindFirstChild("NewsApp")
+            if has_ingame_gui or load_timeout >= 30 then
+                break
+            end
         end
 
         task.wait(1)
