@@ -1,6 +1,6 @@
 {
-  "version": "1.8.1",
+  "version": "1.8.2",
   "release_date": "2026-09-20",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.8.1/Dika_Rejoin_All_In_One.exe",
-  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.8.1 (STREAMING MULTI-MAIN ASINKRON - ZERO IDLE)\n\n1. 🚀 Multi-Main Asinkron Independen (Worker Pool):\n   - Setiap Akun Main kini berjalan di jalur (worker thread) mandiri tanpa terikat satu sama lain!\n   - Begitu suatu akun Main (misal 'parwez') selesai 25s auto-kick dan tabnya tertutup, akun tersebut TIDAK PERLU menunggu akun Main lain.\n   - Akun tersebut LANGSUNG mencari bot berikutnya yang sedang IN-GAME, mengklaim link Private Server (PS), dan langsung join seketika!\n\n2. 🔄 Zero Idle Time & Utilisasi 100%:\n   - Tidak ada lagi status 'Menunggu tab lain di grup ini selesai'.\n   - Seluruh akun Main terus berputar tanpa henti (continuous streaming), meningkatkan kecepatan rotasi dan farming berkali-kali lipat."
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.8.2/Dika_Rejoin_All_In_One.exe",
+  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.8.2 (DETEKSI LOADING SAVE ADOPT ME & AUTO-KICK 30S)\n\n1. ⏳ Proteksi Layar 'LOADING SAVE...' (Adopt Me):\n   - Timer auto-kick dan rotasi TIDAK AKAN berjalan saat game masih berada di layar 'LOADING SAVE...'.\n   - Sistem secara cerdas menunggu hingga seluruh save house & inventori selesai dimuat dan antarmuka utama Adopt Me (BottomBarApp/DialogApp) siap.\n   - Begitu loading selesai, sinyal in-game dikirim ke Suite dan timer 30 detik baru mulai dihitung mundur.\n\n2. ⏱️ Default Auto-Kick 30 Detik:\n   - Durasi auto-kick default diperbarui menjadi 30 detik untuk memberikan waktu trade yang stabil dan sempurna."
 }
