@@ -1,6 +1,6 @@
 {
-  "version": "1.9.0",
-  "release_date": "2026-09-20",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.9.0/Dika_Rejoin_All_In_One.exe",
-  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.9.0 (FIX: AKUN SUDAH IN-GAME TAPI TIDAK TER-KICK)\n\n1. 🎯 Perbaikan Deteksi In-Game Adopt Me (Seketika Terdeteksi):\n   - Memperbaiki bug fatal di mana script Lua mengira akun masih 'loading' terus-menerus karena mencocokkan nama ScreenGui 'LoadingApp' yang selalu ada di Adopt Me.\n   - Deteksi in-game kini langsung aktif saat pemain masuk ke dalam rumah (BottomBarApp, HouseApp, atau HumanoidRootPart terdeteksi aktif) dan hanya menganggap loading jika teks 'loading save' benar-benar tampil (Visible) di layar.\n\n2. ⏱️ Timer Auto-Kick Langsung Aktif Saat Masuk Rumah:\n   - Begitu pemain muncul di dalam rumah, status in-game seketika dikirim ke tools dan timer auto-kick (25s) langsung berjalan normal.\n   - Tidak ada lagi akun yang diam di dalam rumah selama 120 detik tanpa ter-kick.\n\n3. 🌐 1-Line Loadstring Auto-Update:\n   - Gunakan tombol 'SALIN 1-LINE LOADSTRING' di menu Script Lua agar executor Anda selalu mengambil script versi terbaru dari GitHub secara otomatis!"
+    "version": "1.9.1",
+    "release_date": "2026-09-20",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.9.1/Dika_Rejoin_All_In_One.exe",
+    "mandatory": false
 }
