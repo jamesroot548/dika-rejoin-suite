@@ -1,6 +1,6 @@
 {
-  "version": "1.8.0",
+  "version": "1.8.1",
   "release_date": "2026-09-20",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.8.0/Dika_Rejoin_All_In_One.exe",
-  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.8.0 (AUTO-KICK 25S & ROTASI INSTAN)\n\n1. ⏱️ Auto-Kick 25 Detik In-Game (Auto_Close_Kick.lua):\n   - Script Lua kini dilengkapi timer otomatis 25 detik setelah in-game.\n   - Begitu 25 detik tercapai, bot otomatis mengirim sinyal trade selesai ke Suite dan melakukan kick/close tab secara mandiri.\n\n2. ⚡ Rotasi Instan Main Account (Zero Wait):\n   - Main Account TIDAK PERLU menunggu sisa durasi in-game (185 detik) habis jika bot target sudah auto-kick / selesai trade.\n   - Hitungan mundur durasi langsung diinterupsi seketika, tab Main ditutup, dan Suite langsung mencari bot berikutnya yang sedang IN-GAME, mengambil link Private Server (PS), lalu join tanpa jeda."
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.8.1/Dika_Rejoin_All_In_One.exe",
+  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.8.1 (STREAMING MULTI-MAIN ASINKRON - ZERO IDLE)\n\n1. 🚀 Multi-Main Asinkron Independen (Worker Pool):\n   - Setiap Akun Main kini berjalan di jalur (worker thread) mandiri tanpa terikat satu sama lain!\n   - Begitu suatu akun Main (misal 'parwez') selesai 25s auto-kick dan tabnya tertutup, akun tersebut TIDAK PERLU menunggu akun Main lain.\n   - Akun tersebut LANGSUNG mencari bot berikutnya yang sedang IN-GAME, mengklaim link Private Server (PS), dan langsung join seketika!\n\n2. 🔄 Zero Idle Time & Utilisasi 100%:\n   - Tidak ada lagi status 'Menunggu tab lain di grup ini selesai'.\n   - Seluruh akun Main terus berputar tanpa henti (continuous streaming), meningkatkan kecepatan rotasi dan farming berkali-kali lipat."
 }
