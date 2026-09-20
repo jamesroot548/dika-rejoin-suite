@@ -1,6 +1,6 @@
 {
-  "version": "1.7.9",
-  "release_date": "2026-09-19",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.7.9/Dika_Rejoin_All_In_One.exe",
-  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.7.9 (ZERO LAG & SMART THROTTLING)\n\n1. 🛡️ Anti-Lag WebSocket & Smart Throttling:\n   - Membatasi keepalive snapshot dari 60 detik menjadi 120 detik dengan jeda antar request agar tidak membanjiri antrean GUI.\n   - Cooldown 30 detik pada event 'accounts:refresh' untuk mencegah server trigger badai request berulang-ulang.\n\n2. ⚡ Signature Hashing (Skip Data Identik):\n   - Pengecekan signature cerdas pada accounts:data, pets:data, dan inventory:data sehingga snapshot data yang tidak berubah langsung di-skip 100% tanpa reprocess CPU.\n\n3. 🚀 Fast Bot Fingerprint Caching:\n   - Bot yang isi inventory pet/item-nya tidak berubah langsung di-bypass secara instan (0 ms), mengurangi waktu scan 1.600+ bot dari 1.5 detik menjadi <10 ms.\n\n4. ⏱️ Thread-Safe Debouncing:\n   - Redraw tabel dan sinkronisasi antrean kini menggunakan target-time debouncer dengan batas minimal 2.000 ms untuk event latar belakang, mencegah pembekuan (freeze) antarmuka."
+  "version": "1.8.0",
+  "release_date": "2026-09-20",
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.8.0/Dika_Rejoin_All_In_One.exe",
+  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.8.0 (AUTO-KICK 25S & ROTASI INSTAN)\n\n1. ⏱️ Auto-Kick 25 Detik In-Game (Auto_Close_Kick.lua):\n   - Script Lua kini dilengkapi timer otomatis 25 detik setelah in-game.\n   - Begitu 25 detik tercapai, bot otomatis mengirim sinyal trade selesai ke Suite dan melakukan kick/close tab secara mandiri.\n\n2. ⚡ Rotasi Instan Main Account (Zero Wait):\n   - Main Account TIDAK PERLU menunggu sisa durasi in-game (185 detik) habis jika bot target sudah auto-kick / selesai trade.\n   - Hitungan mundur durasi langsung diinterupsi seketika, tab Main ditutup, dan Suite langsung mencari bot berikutnya yang sedang IN-GAME, mengambil link Private Server (PS), lalu join tanpa jeda."
 }
