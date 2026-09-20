@@ -39,6 +39,57 @@ local function send_webhook(endpoint, payload)
     end)
 end
 
+-- Helper Sinkronisasi Otomatis Durasi dari Dika Rejoin Suite
+local function sync_config_from_suite()
+    local synced = false
+    pcall(function()
+        local req = (syn and syn.request) or (http and http.request) or http_request or request or (fluxus and fluxus.request)
+        if req then
+            local res = req({
+                Url = "http://127.0.0.1:19999/get_config",
+                Method = "GET",
+                Headers = {["Content-Type"] = "application/json"},
+                Timeout = 2,
+                timeout = 2
+            })
+            if res and (res.StatusCode == 200 or res.Status == 200) and res.Body then
+                local data = HttpService:JSONDecode(res.Body)
+                if data and data.auto_kick_seconds then
+                    local val = tonumber(data.auto_kick_seconds)
+                    if val and val > 0 then
+                        AUTO_KICK_SECONDS = val
+                        synced = true
+                        print("[DIKA REJOIN] 🔄 Config tersinkron dari Tools: AUTO_KICK_SECONDS = " .. tostring(AUTO_KICK_SECONDS) .. " detik")
+                    end
+                end
+            end
+        end
+    end)
+
+    if not synced then
+        pcall(function()
+            local body = game:HttpGet("http://127.0.0.1:19999/get_config", true)
+            if body and #body > 0 then
+                local data = HttpService:JSONDecode(body)
+                if data and data.auto_kick_seconds then
+                    local val = tonumber(data.auto_kick_seconds)
+                    if val and val > 0 then
+                        AUTO_KICK_SECONDS = val
+                        synced = true
+                        print("[DIKA REJOIN] 🔄 Config tersinkron dari Tools (HttpGet): AUTO_KICK_SECONDS = " .. tostring(AUTO_KICK_SECONDS) .. " detik")
+                    end
+                end
+            end
+        end)
+    end
+    return synced
+end
+
+-- Ambil config saat startup secara async
+task.spawn(function()
+    sync_config_from_suite()
+end)
+
 -- ------------------------------------------------------------------------------
 -- 0. SINKRONISASI TAB AKTIF KE DIKA REJOIN (DETACHED THREAD)
 -- ------------------------------------------------------------------------------
@@ -316,6 +367,9 @@ task.spawn(function()
         username = lp.Name,
         userId = tostring(lp.UserId)
     })
+
+    -- Sinkronisasi ulang config tepat sebelum timer countdown dimulai agar selalu up-to-date dengan GUI
+    sync_config_from_suite()
 
     print("[DIKA REJOIN] ⏱️ Timer Auto-Kick " .. tostring(AUTO_KICK_SECONDS) .. " Detik In-Game Dimulai!")
 
