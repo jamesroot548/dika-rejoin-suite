@@ -1,6 +1,6 @@
 {
-  "version": "1.8.2",
+  "version": "1.8.3",
   "release_date": "2026-09-20",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.8.2/Dika_Rejoin_All_In_One.exe",
-  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.8.2 (DETEKSI LOADING SAVE ADOPT ME & AUTO-KICK 30S)\n\n1. ⏳ Proteksi Layar 'LOADING SAVE...' (Adopt Me):\n   - Timer auto-kick dan rotasi TIDAK AKAN berjalan saat game masih berada di layar 'LOADING SAVE...'.\n   - Sistem secara cerdas menunggu hingga seluruh save house & inventori selesai dimuat dan antarmuka utama Adopt Me (BottomBarApp/DialogApp) siap.\n   - Begitu loading selesai, sinyal in-game dikirim ke Suite dan timer 30 detik baru mulai dihitung mundur.\n\n2. ⏱️ Default Auto-Kick 30 Detik:\n   - Durasi auto-kick default diperbarui menjadi 30 detik untuk memberikan waktu trade yang stabil dan sempurna."
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.8.3/Dika_Rejoin_All_In_One.exe",
+  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.8.3 (SINKRONISASI CONFIG DURASI LUA & GUI OTOMATIS)\n\n1. 🎛️ Konfigurasi Durasi Terpadu (Satu Pintu):\n   - Cukup ubah angka 'Durasi / Auto-Kick (dtk)' di Tab 1 Pengaturan aplikasi (contoh: 24 atau 30 detik).\n   - Nilai tersebut otomatis tersinkronisasi ke seluruh sistem: rotasi aplikasi dan timer script Lua.\n\n2. 🔄 Sinkronisasi Real-Time Script Lua via Local API (/get_config):\n   - Script Lua (Auto_Close_Kick.lua) otomatis mengambil durasi in-game langsung dari aplikasi saat startup dan saat selesai loading save.\n   - Pengguna TIDAK PERLU lagi mengedit file .lua secara manual di Notepad!\n\n3. 💾 Auto-Regenerate File & Clipboard:\n   - Menyimpan pengaturan atau menekan tombol 'Salin Script Auto-Close (Lua)' akan otomatis memperbarui file Auto_Close_Kick.lua di disk dengan durasi terkini."
 }
