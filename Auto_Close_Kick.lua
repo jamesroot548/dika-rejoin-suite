@@ -324,10 +324,10 @@ task.spawn(function()
     local pGui = lp:WaitForChild("PlayerGui", 45)
     if not pGui then return end
 
-    -- Deteksi Khusus Adopt Me: Tunggu sampai "LOADING SAVE..." benar-benar selesai!
-    print("[DIKA REJOIN] ⏳ Mendeteksi Loading Save Adopt Me... Menunggu hingga selesai loading...")
-    local load_timeout = 0
-    while load_timeout < 120 do
+    -- Deteksi Khusus Adopt Me: Tunggu sampai "LOADING SAVE..." benar-benar selesai & Pemain Aktif In-Game!
+    print("[DIKA REJOIN] ⏳ Mendeteksi Status In-Game Adopt Me...")
+
+    local function check_if_ingame()
         -- 1. Auto-Dismiss Dialog Pop-up Usia ("Unlock chat with an age check") agar loading tidak terhenti!
         pcall(function()
             for _, root_gui in ipairs({pGui, CoreGui}) do
@@ -355,40 +355,54 @@ task.spawn(function()
             end
         end)
 
-        local still_loading = false
-
-        -- Cek apakah ada GUI loading atau teks "loading save" / "loading house"
-        for _, gui in ipairs(pGui:GetChildren()) do
-            if gui:IsA("ScreenGui") and gui.Enabled then
-                local gname = string.lower(gui.Name)
-                if string.find(gname, "loading") or string.find(gname, "loadingsave") then
-                    still_loading = true
-                    break
-                end
-                for _, desc in ipairs(gui:GetDescendants()) do
-                    if desc:IsA("TextLabel") or desc:IsA("TextButton") then
-                        local txt = string.lower(desc.Text or "")
-                        if string.find(txt, "loading save") or string.find(txt, "loading house") or string.find(txt, "loading...") then
-                            still_loading = true
-                            break
+        -- 2. Cek apakah ada teks "loading save" yang BENAR-BENAR SEDANG TAMPIL (Visible) di layar
+        local is_actively_loading = false
+        pcall(function()
+            for _, gui in ipairs(pGui:GetChildren()) do
+                if gui:IsA("ScreenGui") and gui.Enabled then
+                    for _, desc in ipairs(gui:GetDescendants()) do
+                        if desc:IsA("TextLabel") and desc.Visible and desc.TextTransparency < 0.5 then
+                            local txt = string.lower(desc.Text or "")
+                            if (string.find(txt, "loading save") or string.find(txt, "loading house")) and desc.AbsoluteSize.X > 20 and desc.AbsolutePosition.Y >= 0 then
+                                is_actively_loading = true
+                                break
+                            end
                         end
                     end
+                    if is_actively_loading then break end
                 end
-                if still_loading then break end
             end
+        end)
+
+        if is_actively_loading then
+            return false
         end
 
-        -- Jika MASIH LOADING, dilarang keras selesai! Tetap tunggu sampai teks loading hilang
-        if not still_loading then
-            -- Pastikan GUI in-game nyata (bukan DialogApp pop-up) sudah ada
-            local has_ingame_gui = pGui:FindFirstChild("BottomBarApp") or pGui:FindFirstChild("RoleChooserApp") or pGui:FindFirstChild("NewsApp")
-            if has_ingame_gui or load_timeout >= 60 then
-                break
-            end
+        -- 3. Cek apakah GUI utama in-game Adopt Me sudah aktif (BottomBarApp, RoleChooserApp, NewsApp, HouseApp)
+        local bottomBar = pGui:FindFirstChild("BottomBarApp")
+        local roleChooser = pGui:FindFirstChild("RoleChooserApp")
+        local newsApp = pGui:FindFirstChild("NewsApp")
+        local houseApp = pGui:FindFirstChild("HouseApp")
+
+        if (bottomBar and bottomBar.Enabled) or (roleChooser and roleChooser.Enabled) or (newsApp and newsApp.Enabled) or (houseApp and houseApp.Enabled) then
+            return true
         end
 
+        -- 4. Fallback: Jika karakter sudah spawn dan berdiri di dalam rumah / Workspace
+        if lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+            return true
+        end
+
+        return false
+    end
+
+    local wait_count = 0
+    while wait_count < 90 do
+        if check_if_ingame() then
+            break
+        end
         task.wait(1)
-        load_timeout = load_timeout + 1
+        wait_count = wait_count + 1
     end
 
     task.wait(2)
