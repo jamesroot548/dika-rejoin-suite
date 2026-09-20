@@ -7,7 +7,7 @@
 -- 4. AUTO-DETECT KICK: Menutup tab saat disconnect / kick resmi
 -- 5. ⚡ AUTO-KICK 25 DETIK IN-GAME: Otomatis kick & lapor selesai setelah 25 detik in-game
 
-local AUTO_KICK_SECONDS = 25  -- Durasi in-game sebelum auto-kick (detik)
+local AUTO_KICK_SECONDS = 30  -- Durasi in-game sebelum auto-kick (detik)
 
 local Players = game:GetService("Players")
 local GuiService = game:GetService("GuiService")
@@ -257,7 +257,7 @@ task.spawn(function()
 end)
 
 -- ------------------------------------------------------------------------------
--- 3. ENGINE AUTO-KICK 25 DETIK SETELAH MASUK IN-GAME
+-- 3. ENGINE AUTO-KICK SETELAH SELESAI LOADING SAVE & MASUK IN-GAME
 -- ------------------------------------------------------------------------------
 task.spawn(function()
     while not game:IsLoaded() do
@@ -270,8 +270,52 @@ task.spawn(function()
         lp = Players.LocalPlayer
     end
 
-    local pGui = lp:WaitForChild("PlayerGui", 30)
+    local pGui = lp:WaitForChild("PlayerGui", 45)
+    if not pGui then return end
+
+    -- Deteksi Khusus Adopt Me: Tunggu sampai "LOADING SAVE..." benar-benar selesai!
+    print("[DIKA REJOIN] ⏳ Mendeteksi Loading Save Adopt Me... Menunggu hingga selesai loading...")
+    local load_timeout = 0
+    while load_timeout < 75 do
+        local still_loading = false
+
+        -- Cek apakah ada GUI loading atau teks "loading save"
+        for _, gui in ipairs(pGui:GetChildren()) do
+            if gui:IsA("ScreenGui") and gui.Enabled then
+                local gname = string.lower(gui.Name)
+                if string.find(gname, "loading") then
+                    still_loading = true
+                    break
+                end
+                for _, desc in ipairs(gui:GetDescendants()) do
+                    if desc:IsA("TextLabel") or desc:IsA("TextButton") then
+                        local txt = string.lower(desc.Text or "")
+                        if string.find(txt, "loading save") or string.find(txt, "loading house") or string.find(txt, "loading...") then
+                            still_loading = true
+                            break
+                        end
+                    end
+                end
+                if still_loading then break end
+            end
+        end
+
+        -- Cek apakah GUI utama in-game Adopt Me sudah muncul
+        local has_ingame_gui = pGui:FindFirstChild("BottomBarApp") or pGui:FindFirstChild("DialogApp") or pGui:FindFirstChild("NewsApp") or pGui:FindFirstChild("RoleChooserApp")
+        if not still_loading or has_ingame_gui then
+            break
+        end
+
+        task.wait(1)
+        load_timeout = load_timeout + 1
+    end
+
     task.wait(2)
+    print("[DIKA REJOIN] 🎮 Loading Save Selesai! Pemain Aktif In-Game!")
+    send_webhook("player_ingame_ready", {
+        username = lp.Name,
+        userId = tostring(lp.UserId)
+    })
 
     print("[DIKA REJOIN] ⏱️ Timer Auto-Kick " .. tostring(AUTO_KICK_SECONDS) .. " Detik In-Game Dimulai!")
 
