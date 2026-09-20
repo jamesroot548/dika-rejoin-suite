@@ -1,6 +1,6 @@
 {
-  "version": "1.8.5",
+  "version": "1.8.6",
   "release_date": "2026-09-20",
-  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.8.5/Dika_Rejoin_All_In_One.exe",
-  "changelog": "⚡ DIKA REJOIN SUITE PRO v1.8.5 (BATCH STATUS QUERY & ZERO RATE LIMIT 429)\n\n1. ⚡ Batch Status Query (Tahap 4 Preflight):\n   - Pengecekan status pertemanan bot <13 ke SEMUA akun Target kini dilakukan dalam 1 REQUEST TUNGGAL (bukan 1-by-1).\n   - Menghemat hingga 87.5% request HTTP ke Roblox API dan 100% BEBAS DARI RATE LIMIT 429.\n   - Pengecekan puluhan bot ke seluruh akun Main selesai dalam sekejap mata.\n\n2. 🧠 In-Memory Friendship Cache (Rotasi 0ms):\n   - Pasangan Main dan Bot yang sudah terverifikasi berteman otomatis disimpan dalam memori RAM.\n   - Selama rotasi in-game berjalan, pengecekan pertemanan instan 0.00001 detik tanpa jeda network!"
+  "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.8.6/Dika_Rejoin_All_In_One.exe",
+  "changelog": "🛡️ DIKA REJOIN SUITE PRO v1.8.6 (ANTI-ZOMBIE TAB & PROCESS-LOCK CLOSE)\n\n1. ⚡ Direct Process ID (PID) Capture saat Launch:\n   - Sistem langsung mendeteksi dan mengunci PID proses RobloxPlayerBeta baru dalam 0.5 detik via Windows Process Snapshot.\n   - Tracking PID 100% akurat tanpa terpengaruh loading lama atau reset judul jendela.\n\n2. 🚪 Penutupan Bersih & Tuntas (Anti-Home Screen Leak):\n   - Saat akun selesai trade / auto-kick, sistem mengirim sinyal WM_CLOSE dan langsung mematikan proses PID tersebut.\n   - Mencegah Roblox terdampar atau kabur ke Roblox Desktop App Home Screen.\n\n3. 🧹 Auto-Cleaner Tab Zombie / Orphan:\n   - Sistem secara otomatis membersihkan tab Roblox zombie / sisa Home Screen yang tidak aktif sebelum dan sesudah rotasi.\n   - Jumlah tab di taskbar dijamin tidak akan pernah menumpuk melebihi batas Tab / Batch!"
 }
