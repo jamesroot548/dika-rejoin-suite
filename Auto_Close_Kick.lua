@@ -328,6 +328,33 @@ task.spawn(function()
     print("[DIKA REJOIN] ⏳ Mendeteksi Loading Save Adopt Me... Menunggu hingga selesai loading...")
     local load_timeout = 0
     while load_timeout < 120 do
+        -- 1. Auto-Dismiss Dialog Pop-up Usia ("Unlock chat with an age check") agar loading tidak terhenti!
+        pcall(function()
+            for _, root_gui in ipairs({pGui, CoreGui}) do
+                if root_gui then
+                    for _, desc in ipairs(root_gui:GetDescendants()) do
+                        if desc:IsA("TextLabel") or desc:IsA("TextButton") then
+                            local txt = string.lower(desc.Text or "")
+                            if string.find(txt, "age check") or string.find(txt, "verify your age") or string.find(txt, "unlock chat") then
+                                local parent = desc.Parent
+                                if parent then
+                                    for _, b in ipairs(parent:GetDescendants()) do
+                                        if b:IsA("GuiButton") and b.Visible then
+                                            local btxt = string.lower(b.Text or "")
+                                            local bname = string.lower(b.Name or "")
+                                            if string.find(btxt, "cancel") or string.find(btxt, "batal") or string.find(btxt, "later") or string.find(bname, "cancel") or string.find(bname, "close") then
+                                                force_click_button(b)
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+
         local still_loading = false
 
         -- Cek apakah ada GUI loading atau teks "loading save" / "loading house"
@@ -355,7 +382,7 @@ task.spawn(function()
         if not still_loading then
             -- Pastikan GUI in-game nyata (bukan DialogApp pop-up) sudah ada
             local has_ingame_gui = pGui:FindFirstChild("BottomBarApp") or pGui:FindFirstChild("RoleChooserApp") or pGui:FindFirstChild("NewsApp")
-            if has_ingame_gui or load_timeout >= 30 then
+            if has_ingame_gui or load_timeout >= 60 then
                 break
             end
         end
