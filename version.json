@@ -1,7 +1,7 @@
 {
-    "version": "1.9.9",
+    "version": "2.0.0",
     "release_date": "2026-09-22",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.9.9/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.0/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v1.9.9: Rotasi Cepat Anti-Macet (Stuck loading dipangkas dari 300s ke 60s, auto-cooldown 3 menit untuk bot yang bermasalah, eliminasi delay 5 menit)."
+    "changelog": "v2.0.0: Jeda Dinamis Random 4-6s Antar Launch Main Account (Mencegah lonjakan koneksi/CPU & anti-rate limit Roblox, rotasi lancar tanpa timeout)."
 }
