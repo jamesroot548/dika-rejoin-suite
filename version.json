@@ -1,7 +1,7 @@
 {
-    "version": "2.0.0",
+    "version": "2.0.1",
     "release_date": "2026-09-22",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.0/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.1/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v2.0.0: Jeda Dinamis Random 4-6s Antar Launch Main Account (Mencegah lonjakan koneksi/CPU & anti-rate limit Roblox, rotasi lancar tanpa timeout)."
+    "changelog": "v2.0.1: Perbaikan Kritis Launch Tab (Auto-Ensure MultiBloxy sebelum launch, peluncuran langsung via launcher binary independen, perlindungan Watchdog agar tidak mematikan Roblox/Weblauncher saat inisialisasi)."
 }
