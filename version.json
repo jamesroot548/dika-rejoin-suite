@@ -1,7 +1,7 @@
 {
-    "version": "1.9.4",
+    "version": "1.9.5",
     "release_date": "2026-09-22",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.9.4/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.9.5/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v1.9.4: Auto-detect & auto-close tab Roblox yang terdampar di Home Screen ('Roblox'), perbaikan penutupan instan setelah trade selesai, sinkronisasi PID & HWND real-time, dan tombol manual bersihkan tab home screen."
+    "changelog": "v1.9.5: Eliminasi error weblauncher (Not Responding), auto-watchdog hung & crashed Roblox/weblauncher windows, direct launch fallback RobloxPlayerBeta, dan auto-optimasi konfigurasi weblauncher (0 delay, nonaktifkan CDN update freeze)."
 }
