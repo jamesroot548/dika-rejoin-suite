@@ -139,8 +139,14 @@ local function force_click_button(btn)
 
     -- B. Direct Signal Fire
     pcall(function()
-        if btn.Activated then btn.Activated:Fire() clicked = true end
-        if btn.MouseButton1Click then btn.MouseButton1Click:Fire() clicked = true end
+        if btn.Activated then
+            btn.Activated:Fire()
+            clicked = true
+        end
+        if btn.MouseButton1Click then
+            btn.MouseButton1Click:Fire()
+            clicked = true
+        end
     end)
 
     -- C. Virtual User / Input Click (Simulasi Sentuhan Layar Asli)
