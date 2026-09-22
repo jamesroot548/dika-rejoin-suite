@@ -1,11 +1,15 @@
 -- ==============================================================================
---    DIKA AUTO-DETECT KICK, LIVE TAB SYNC, AUTO-ACCEPT & AUTO-KICK 25S (LUA)
+--    DIKA AUTO-DETECT KICK, LIVE TAB SYNC, AUTO-ACCEPT & AUTO-CONFIRM TRADE PRO
 -- ==============================================================================
 -- 1. 100% NON-BLOCKING: Startup instan & tidak pernah menahan loading save
 -- 2. ASYNC TIMEOUT WEBHOOK: Tidak pernah hang di emulator Android / PC
--- 3. AUTO-ACCEPT TRADE REQUEST ONLY: Otomatis menerima permintaan trade masuk dari Main
+-- 3. AUTO-ACCEPT & AUTO-CONFIRM TRADE SAMPAI SELESAI:
+--    - Menerima permintaan trade masuk (Trade Request)
+--    - Menerima tawaran trade (Accept Negotiation)
+--    - Konfirmasi trade (Confirm Trade) setelah countdown selesai
+--    - Deteksi otomatis saat trade sukses selesai & lapor ke tools untuk rotasi instan!
 -- 4. AUTO-DETECT KICK: Menutup tab saat disconnect / kick resmi
--- 5. ⚡ AUTO-KICK 25 DETIK IN-GAME: Otomatis kick & lapor selesai setelah 25 detik in-game
+-- 5. ⚡ AUTO-KICK 30 DETIK IN-GAME: Fallback kick jika tidak ada trade
 
 local AUTO_KICK_SECONDS = 30  -- Durasi in-game sebelum auto-kick (detik)
 
@@ -119,8 +123,33 @@ task.spawn(function()
     end
 end)
 
+-- Helper Fungsi Exit & Webhook Notifikasi
+local function notify_tool_and_exit(reason)
+    print("[DIKA REJOIN] Disconnect / Kick / Trade Selesai (" .. tostring(reason) .. "). Mengirim sinyal...")
+    local lp = Players.LocalPlayer
+    local uName = lp and lp.Name or "Unknown"
+    local uId = lp and tostring(lp.UserId) or ""
+    send_webhook("trade_completed", {
+        username = uName,
+        userId = uId,
+        reason = tostring(reason)
+    })
+    task.wait(0.3)
+    pcall(function()
+        if type(killprocess) == "function" then
+            killprocess()
+        elseif type(getgenv) == "function" and type(getgenv().killprocess) == "function" then
+            getgenv().killprocess()
+        elseif type(getgenv) == "function" and type(getgenv().kill_process) == "function" then
+            getgenv().kill_process()
+        elseif game.Shutdown then
+            game:Shutdown()
+        end
+    end)
+end
+
 -- ------------------------------------------------------------------------------
--- 1. ENGINE AUTO-ACCEPT TRADE REQUEST MASUK (HANYA TERIMA PERMINTAAN TRADE)
+-- 1. ENGINE AUTO-TRADE PRO: AUTO-ACCEPT REQUEST, NEGOTIATION & CONFIRM SAMPAI SELESAI
 -- ------------------------------------------------------------------------------
 local function force_click_button(btn)
     if not btn then return false end
@@ -172,6 +201,18 @@ local function force_click_button(btn)
     return clicked
 end
 
+-- Helper aman memanggil RemoteFunction / RemoteEvent Adopt Me
+local function safe_call_remote(remote, ...)
+    if not remote then return false end
+    local ok, res = false, nil
+    if remote:IsA("RemoteFunction") then
+        ok, res = pcall(function(...) return remote:InvokeServer(...) end, ...)
+    elseif remote:IsA("RemoteEvent") then
+        ok, res = pcall(function(...) return remote:FireServer(...) end, ...)
+    end
+    return ok, res
+end
+
 task.spawn(function()
     local lp = Players.LocalPlayer
     while not lp do
@@ -186,36 +227,40 @@ task.spawn(function()
     -- Beri jeda 4 detik agar game stabil
     task.wait(4)
 
-    print("[DIKA REJOIN] 🤝 Auto-Accept Trade Request Engine Siap & Aktif!")
+    print("[DIKA REJOIN] 🤝 Auto-Accept & Auto-Confirm Trade Engine Siap & Aktif!")
 
-    -- Loop Khusus Auto-Accept Permintaan Trade Masuk (0.25 detik)
-    while task.wait(0.25) do
+    local is_in_trade = false
+    local trade_has_confirmed = false
+    local last_confirm_time = 0
+
+    -- Loop Khusus Auto-Trade (0.2 detik agar respon instan & gesit)
+    while task.wait(0.2) do
         pcall(function()
             local API = ReplicatedStorage:FindFirstChild("API")
 
-            -- A. PANGGIL REMOTE ACCEPT TRADE REQUEST SECARA ASYNC
+            -- ==========================================================
+            -- A. TAHAP 0: AUTO-ACCEPT PERMINTAAN TRADE MASUK (REQUEST)
+            -- ==========================================================
             if API then
                 local reqRemote = API:FindFirstChild("TradeAPI/AcceptOrDeclineTradeRequest")
                 if reqRemote then
                     for _, player in ipairs(Players:GetPlayers()) do
                         if player ~= lp then
                             task.spawn(function()
-                                pcall(function()
-                                    reqRemote:InvokeServer(player, true)
-                                end)
+                                safe_call_remote(reqRemote, player, true)
                             end)
                         end
                     end
                 end
             end
 
-            -- B. AUTO-CLICK TOMBOL ACCEPT DI POP-UP DIALOG TRADE (DialogApp)
+            -- Pop-up Dialog Masuk (DialogApp)
             local dialogApp = pGui:FindFirstChild("DialogApp")
             if dialogApp and dialogApp.Enabled then
                 for _, desc in ipairs(dialogApp:GetDescendants()) do
                     if desc:IsA("TextLabel") or desc:IsA("TextButton") then
                         local txt = string.lower(desc.Text or "")
-                        if string.find(txt, "accept") or string.find(txt, "yes") or string.find(txt, "terima") then
+                        if string.find(txt, "accept") or string.find(txt, "yes") or string.find(txt, "terima") or string.find(txt, "agree") or string.find(txt, "understand") then
                             local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
                             if btn and btn.Visible then
                                 force_click_button(btn)
@@ -225,10 +270,96 @@ task.spawn(function()
 
                     if desc:IsA("GuiButton") and desc.Visible then
                         local name = string.lower(desc.Name or "")
-                        if name == "acceptbutton" or name == "greenbutton" then
+                        if name == "acceptbutton" or name == "greenbutton" or name == "yesbutton" then
                             force_click_button(desc)
                         end
                     end
+                end
+            end
+
+            -- ==========================================================
+            -- B. TAHAP 1 & 2: AUTO-ACCEPT NEGOTIATION & AUTO-CONFIRM TRADE
+            -- ==========================================================
+            local tradeApp = pGui:FindFirstChild("TradeApp")
+            if tradeApp and tradeApp.Enabled then
+                is_in_trade = true
+
+                -- 1. Panggil Remote Resmi Adopt Me (Direct API Layer)
+                if API then
+                    local acceptNegRemote = API:FindFirstChild("TradeAPI/AcceptNegotiation")
+                    if acceptNegRemote then
+                        task.spawn(function()
+                            safe_call_remote(acceptNegRemote)
+                        end)
+                    end
+
+                    local confirmTrdRemote = API:FindFirstChild("TradeAPI/ConfirmTrade")
+                    if confirmTrdRemote then
+                        task.spawn(function()
+                            safe_call_remote(confirmTrdRemote)
+                        end)
+                    end
+                end
+
+                -- 2. GUI Layer: Traversal tombol di dalam TradeApp
+                for _, desc in ipairs(tradeApp:GetDescendants()) do
+                    -- Deteksi tombol berdasarkan Text
+                    if desc:IsA("TextLabel") or desc:IsA("TextButton") then
+                        local txt = string.lower(desc.Text or "")
+
+                        -- Tahap 1: Accept Negotiation (Tombol Accept)
+                        if string.find(txt, "accept") or string.find(txt, "terima") then
+                            local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
+                            if btn and btn.Visible then
+                                force_click_button(btn)
+                            end
+                        end
+
+                        -- Tahap 2: Confirm Trade (Tombol Confirm - tunggu countdown selesai)
+                        if (string.find(txt, "confirm") or string.find(txt, "konfirmasi")) and not string.find(txt, "wait") then
+                            local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
+                            if btn and btn.Visible then
+                                force_click_button(btn)
+                                trade_has_confirmed = true
+                                last_confirm_time = tick()
+                            end
+                        end
+
+                        -- Pop-up Peringatan Unbalanced Trade (misal: Main menerima pet gratis dari Bot)
+                        if string.find(txt, "understand") or string.find(txt, "trade anyway") or string.find(txt, "proceed") or string.find(txt, "paham") then
+                            local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
+                            if btn and btn.Visible then
+                                force_click_button(btn)
+                            end
+                        end
+                    end
+
+                    -- Deteksi tombol berdasarkan Nama Objek
+                    if desc:IsA("GuiButton") and desc.Visible then
+                        local name = string.lower(desc.Name or "")
+                        if name == "acceptbutton" or name == "actionbutton" or name == "greenbutton" then
+                            force_click_button(desc)
+                        elseif name == "confirmbutton" then
+                            force_click_button(desc)
+                            trade_has_confirmed = true
+                            last_confirm_time = tick()
+                        elseif string.find(name, "checkbox") or string.find(name, "agree") or string.find(name, "understand") then
+                            force_click_button(desc)
+                        end
+                    end
+                end
+            else
+                -- Jika jendela TradeApp baru saja tertutup (Trade telah usai / selesai)
+                if is_in_trade then
+                    is_in_trade = false
+                    -- Jika sebelumnya sudah ter-Confirm dalam 10 detik terakhir
+                    if trade_has_confirmed and (tick() - last_confirm_time < 10) then
+                        print("[DIKA REJOIN] 🎉 TRADE SELESAI SEPENUHNYA! (Auto-Confirm Sukses)")
+                        task.spawn(function()
+                            notify_tool_and_exit("Trade Sukses Selesai (Auto-Confirm Complete)")
+                        end)
+                    end
+                    trade_has_confirmed = false
                 end
             end
         end)
@@ -238,29 +369,6 @@ end)
 -- ------------------------------------------------------------------------------
 -- 2. ENGINE AUTO-DETECT KICK & CLOSE TAB
 -- ------------------------------------------------------------------------------
-local function notify_tool_and_exit(reason)
-    print("[DIKA REJOIN] Disconnect / Kick / Trade Selesai (" .. tostring(reason) .. "). Mengirim sinyal...")
-    local lp = Players.LocalPlayer
-    local uName = lp and lp.Name or "Unknown"
-    local uId = lp and tostring(lp.UserId) or ""
-    send_webhook("trade_completed", {
-        username = uName,
-        userId = uId,
-        reason = tostring(reason)
-    })
-    task.wait(0.3)
-    pcall(function()
-        if type(killprocess) == "function" then
-            killprocess()
-        elseif type(getgenv) == "function" and type(getgenv().killprocess) == "function" then
-            getgenv().killprocess()
-        elseif type(getgenv) == "function" and type(getgenv().kill_process) == "function" then
-            getgenv().kill_process()
-        elseif game.Shutdown then
-            game:Shutdown()
-        end
-    end)
-end
 
 local function is_real_kick_or_disconnect(txt)
     if not txt or type(txt) ~= "string" or #txt == 0 then return false end
@@ -442,4 +550,4 @@ task.spawn(function()
     end)
 end)
 
-print("[DIKA REJOIN] Auto-Detect Kick, Live Tab Sync, Auto-Accept & Auto-Kick " .. tostring(AUTO_KICK_SECONDS) .. "s Aktif!")
+print("[DIKA REJOIN] Auto-Detect Kick, Live Tab Sync, Auto-Accept & Auto-Confirm Trade Pro Aktif!")
