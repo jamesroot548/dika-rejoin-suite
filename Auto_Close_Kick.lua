@@ -7,7 +7,7 @@
 -- 4. AUTO-DETECT KICK: Menutup tab saat disconnect / kick resmi
 -- 5. ⚡ AUTO-KICK 25 DETIK IN-GAME: Otomatis kick & lapor selesai setelah 25 detik in-game
 
-local AUTO_KICK_SECONDS = 30  -- Durasi in-game sebelum auto-kick (detik)
+local AUTO_KICK_SECONDS = 80  -- Durasi in-game sebelum auto-kick (detik)
 
 local Players = game:GetService("Players")
 local GuiService = game:GetService("GuiService")
