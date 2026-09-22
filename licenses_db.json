@@ -95,6 +95,14 @@
       "activated_at": "2026-09-20 11:50:41",
       "status": "UNCLAIMED",
       "reset_at": "2026-09-22 20:44:20"
+    },
+    "DIKA-PRO-EXP-20261221-35DB-2ABF-22C6-371F": {
+      "type": "EXP (90 Hari)",
+      "expiry": "2026-12-21",
+      "bound_hwid": null,
+      "created_at": "2026-09-22 20:48:20",
+      "customer": "Pelanggan VIP #1",
+      "status": "UNCLAIMED"
     }
   }
 }
