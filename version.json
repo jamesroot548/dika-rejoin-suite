@@ -1,7 +1,7 @@
 {
-    "version": "2.0.1",
+    "version": "2.0.2",
     "release_date": "2026-09-22",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.1/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.2/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v2.0.1: Perbaikan Kritis Launch Tab (Auto-Ensure MultiBloxy sebelum launch, peluncuran langsung via launcher binary independen, perlindungan Watchdog agar tidak mematikan Roblox/Weblauncher saat inisialisasi)."
+    "changelog": "v2.0.2: Overhaul Total Launch Engine menyamai arsitektur Roblox Account Manager (RAM): Perbaikan bug Win32 collision ROBLOX_singletonEvent (penyebab crash di PC baru), peluncuran via OS Shell protocol instan non-blocking tanpa delay 15 detik, perbaikan parameter browser tracker & InApp, peluncuran tab sekuensial dengan tiket fresh umur 0 detik (jeda 2s persis RAM), serta perlindungan Watchdog 90 detik & nonaktifkan auto-kill Home Screen tab saat booting."
 }
