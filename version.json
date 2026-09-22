@@ -1,7 +1,7 @@
 {
-    "version": "1.9.8",
+    "version": "1.9.9",
     "release_date": "2026-09-22",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.9.8/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.9.9/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v1.9.8: Optimasi Preflight Tahap 2/6 (Persistent preflight_cache.json ke disk agar cek usia & privacy instan 0.001s tanpa kena limit 429, concurrency metered 8 workers, auto-save batch)."
+    "changelog": "v1.9.9: Rotasi Cepat Anti-Macet (Stuck loading dipangkas dari 300s ke 60s, auto-cooldown 3 menit untuk bot yang bermasalah, eliminasi delay 5 menit)."
 }
