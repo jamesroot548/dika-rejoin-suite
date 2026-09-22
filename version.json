@@ -1,6 +1,7 @@
 {
-    "version": "1.9.3",
+    "version": "1.9.4",
     "release_date": "2026-09-22",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.9.3/Dika_Rejoin_All_In_One.exe",
-    "mandatory": false
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v1.9.4/Dika_Rejoin_All_In_One.exe",
+    "mandatory": false,
+    "changelog": "v1.9.4: Auto-detect & auto-close tab Roblox yang terdampar di Home Screen ('Roblox'), perbaikan penutupan instan setelah trade selesai, sinkronisasi PID & HWND real-time, dan tombol manual bersihkan tab home screen."
 }
