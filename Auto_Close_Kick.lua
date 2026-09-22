@@ -7,7 +7,7 @@
 -- 4. AUTO-DETECT KICK: Menutup tab saat disconnect / kick resmi
 -- 5. ⚡ AUTO-KICK 25 DETIK IN-GAME: Otomatis kick & lapor selesai setelah 25 detik in-game
 
-local AUTO_KICK_SECONDS = 80  -- Durasi in-game sebelum auto-kick (detik)
+local AUTO_KICK_SECONDS = 30  -- Durasi in-game sebelum auto-kick (detik)
 
 local Players = game:GetService("Players")
 local GuiService = game:GetService("GuiService")
@@ -242,10 +242,14 @@ local function notify_tool_and_exit(reason)
         userId = uId,
         reason = tostring(reason)
     })
-    task.wait(1.5)
+    task.wait(0.3)
     pcall(function()
-        if getgenv().killprocess or killprocess then
-            (getgenv().killprocess or killprocess)()
+        if type(killprocess) == "function" then
+            killprocess()
+        elseif type(getgenv) == "function" and type(getgenv().killprocess) == "function" then
+            getgenv().killprocess()
+        elseif type(getgenv) == "function" and type(getgenv().kill_process) == "function" then
+            getgenv().kill_process()
         elseif game.Shutdown then
             game:Shutdown()
         end
