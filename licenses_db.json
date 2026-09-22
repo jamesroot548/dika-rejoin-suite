@@ -91,9 +91,10 @@
     "DIKA-PRO-EXP-20261219-9952-F48B-98FE-8D94": {
       "type": "EXP",
       "expiry": "2026-12-19",
-      "bound_hwid": "DIKA-D1B9-3319-2C93-805E",
+      "bound_hwid": null,
       "activated_at": "2026-09-20 11:50:41",
-      "status": "LOCKED"
+      "status": "UNCLAIMED",
+      "reset_at": "2026-09-22 20:44:20"
     }
   }
 }
