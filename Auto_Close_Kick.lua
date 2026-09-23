@@ -354,10 +354,7 @@ task.spawn(function()
                     is_in_trade = false
                     -- Jika sebelumnya sudah ter-Confirm dalam 10 detik terakhir
                     if trade_has_confirmed and (tick() - last_confirm_time < 10) then
-                        print("[DIKA REJOIN] 🎉 TRADE SELESAI SEPENUHNYA! (Auto-Confirm Sukses)")
-                        task.spawn(function()
-                            notify_tool_and_exit("Trade Sukses Selesai (Auto-Confirm Complete)")
-                        end)
+                        print("[DIKA REJOIN] 🎉 Trade Selesai Terkonfirmasi! Tetap aktif in-game sampai timer (" .. tostring(AUTO_KICK_SECONDS) .. " detik) selesai.")
                     end
                     trade_has_confirmed = false
                 end
