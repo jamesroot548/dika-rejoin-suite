@@ -1,7 +1,7 @@
 {
-    "version": "2.0.3",
-    "release_date": "2026-09-22",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.3/Dika_Rejoin_All_In_One.exe",
+    "version": "2.0.4",
+    "release_date": "2026-09-23",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.4/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v2.0.3: Fitur Auto-Confirm Trade sampai selesai di Auto_Close_Kick.lua (Tahap Request, Tahap Negotiation, Tahap Confirmation 5s countdown, bypass Unbalanced Trade popup, serta auto-kick / rotasi seketika saat trade complete)."
+    "changelog": "v2.0.4: Perbaikan tuntas siklus Standby Sleep & restart otomatis saat bot in-game selesai (tidak stuck di MENCARI BOT IN-GAME), auto-close instan 8s tab Roblox yang terdampar di Home Screen, force-kill seluruh tab saat masuk sleep, serta koreksi counter HUD ASINKRON."
 }
