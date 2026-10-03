@@ -1,7 +1,7 @@
 {
-    "version": "2.0.6",
-    "release_date": "2026-09-24",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.6/Dika_Rejoin_All_In_One.exe",
-    "mandatory": false,
-    "changelog": "v2.0.6: Fitur Auto-Backup Otomatis saat Buka Tools & Sync AccOps. Seluruh data akun (User, Pass, Cookie, Device) otomatis dicadangkan ke folder 'BACKUP_DATA_AKUN' (replace file lama otomatis) dengan proteksi anti-hapus jika data server kosong, serta tombol 'BUKA FOLDER BACKUP' di GUI."
+    "version": "2.0.7",
+    "release_date": "2026-10-04",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.7/Dika_Rejoin_All_In_One.exe",
+    "changelog": "v2.0.7: 1. Fix BSOD KMODE_EXCEPTION_NOT_HANDLED (0xC000010A) pada rotasi & kill Roblox via safe kernel synchronization. 2. Fix akurasi scan inventory target pet: pemisahan akurat Full Grown (FG) vs Normal, filter ketat neon_only/fg_only, dan sinkronisasi filter status in-game vs snapshot.",
+    "mandatory": false
 }
