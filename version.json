@@ -1,7 +1,7 @@
 {
-    "version": "2.2.7",
+    "version": "2.2.8",
     "release_date": "2026-10-05",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.2.7/Dika_Rejoin_All_In_One.exe",
-    "mandatory": false,
-    "changelog": "v2.2.7 Update:\n- Active Headless Zombie & Crash Hunter: Membersihkan icon tray dan menumpas proses RobloxPlayerBeta.exe yang menggantung/crash di latar belakang tanpa jendela aktif (>8 detik) secara otomatis tanpa perlu sentuhan mouse pengguna.\n- Terminasi Pohon Proses (/T Unconditional): Memastikan taskkill selalu dieksekusi dengan flag /F /T baik saat OpenProcess berhasil maupun gagal, menumpas RobloxCrashHandler.exe dan seluruh child process seketika.\n- Peningkatan Responsivitas Zombie Sweeper: Memperketat threshold pendeteksian zombie di background loop dari 25-60 detik menjadi 8-15 detik dengan pembersihan tray berkala (force_sweep=True).\n- Integrasi NIM_DELETE & TB_DELETEBUTTON Real-Time: Tombol tray dari proses yang hang langsung dibasmi dari Explorer dan disapu kursor hardware mikro pada titik koordinat tombol secara otomatis."
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.2.8/Dika_Rejoin_All_In_One.exe",
+    "mandatory": true,
+    "changelog": "v2.2.8 Emergency Hotfix:\n- Perbaikan Kritis BSOD KMODE_EXCEPTION_NOT_HANDLED: Menghapus flag /T pada terminasi proses Roblox dan mengisolasi eksekusi terminate hanya melalui mutex lock terpusat (_safe_terminate_roblox_pid) agar tidak bertabrakan dengan driver Anti-Cheat Hyperion.\n- Pembersihan Tray Aman via Direct Window Messaging: Menghapus eksekusi taskkill dari modul clean_ghost_tray_icons dan menggantinya dengan pengiriman sinyal internal WM_MOUSEMOVE langsung ke HWND ToolbarWindow32 di koordinat tombol serta NIM_DELETE & TB_DELETEBUTTON, membersihkan icon proses mati secara instan dan 100% stabil tanpa sentuhan kursor pengguna.\n- Stabilisasi Background Watchdog: Menyesuaikan threshold grace period peluncuran agar proses Roblox tidak ditutup mendadak saat driver anti-cheat masih inisialisasi."
 }
