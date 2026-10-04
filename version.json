@@ -1,7 +1,7 @@
 {
-    "version": "2.1.2",
+    "version": "2.1.3",
     "release_date": "2026-10-04",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.2/Dika_Rejoin_All_In_One.exe",
-    "changelog": "v2.1.2: 1. Auto-Kick Multi-Bot Scaling: Skrip Lua Auto_Close_Kick.lua otomatis mendeteksi jumlah bot di server selain akun kita. Jika biasanya 1 bot (misal 40 detik), jika terdeteksi 2 bot atau lebih maka durasi in-game otomatis bertambah menjadi 2x lipat (80 detik) atau n-kali lipat secara dinamis dan real-time. 2. Real-Time Join Detector: Jika bot kedua masuk di tengah-tengah countdown, timer otomatis langsung diperpanjang.",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.3/Dika_Rejoin_All_In_One.exe",
+    "changelog": "v2.1.3: 1. Auto-Kick Multi-Bot Scaling: Skrip Lua Auto_Close_Kick.lua otomatis mendeteksi jumlah bot di server selain kita. Jika biasanya 1 bot (misal 40 detik), jika terdeteksi 2 bot atau lebih maka durasi in-game otomatis bertambah menjadi 2x lipat (80 detik) atau n-kali lipat secara dinamis dan real-time. 2. Real-Time Join Detector: Jika bot kedua masuk di tengah countdown, timer otomatis langsung diperpanjang. 3. Integrasi AccOps API Key bawaan dan peningkatan stabilitas update binary.",
     "mandatory": false
 }
