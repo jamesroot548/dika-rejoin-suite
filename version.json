@@ -1,7 +1,7 @@
 {
-    "version": "2.1.9",
+    "version": "2.2.0",
     "release_date": "2026-10-04",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.9/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.2.0/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v2.1.9 Update:\n- Fitur Pembersih Otomatis Ikon Hantu (Auto-Clean Ghost Tray Icons): Mengatasi tuntas ikon Roblox yang menumpuk berjejer di taskbar Windows / system tray pojok kanan.\n- Windows System Tray Auto-Refresh: Tools secara otomatis mengirim sinyal refresh ke Windows Taskbar setiap kali Roblox ditutup / rotasi dan berkala di background, sehingga seluruh ikon hantu Roblox langsung lenyap seketika tanpa perlu diusap pakai mouse secara manual.\n- Auto-Killer RobloxCrashHandler.exe: Otomatis membasmi proses crash handler yang menggantung di RAM dan menahan ikon di taskbar.\n- Integrasi tombol Bersihkan Cache: Ditambahkan auto-clean ghost tray icons saat pengguna mengklik tombol Bersihkan Cache di GUI.\n- Fitur v2.1.8 (Auto-Delivery & Cloud Sync Auto_Close_Kick.lua) tetap aktif penuh."
+    "changelog": "v2.2.0 Update:\n- Auto-Dismiss & Auto-Kill Error Popups (Authentication Error & Ratelimited): Memperbaiki tuntas masalah popup 'Authentication Error: Ratelimited' yang membuat Roblox gagal launch dan PID proses menggantung tidak ter-kill.\n- Watchdog kini secara agresif mendeteksi jendela error modal (#32770, Authentication Error, Ratelimit, Crash), menutup popup seketika (klik OK otomatis), dan mematikan PID zombie dalam 1 detik tanpa menunggu grace period 90 detik.\n- Isolasi Jendela Error: Memastikan dialog error tidak pernah dianggap sebagai jendela game aktif Roblox.\n- Auto-Cooldown Rate Limit: Saat terdeteksi ratelimit dari server Roblox, tools otomatis memberikan jeda pendinginan aman sebelum akun berikutnya diluncurkan agar tidak kena ratelimit berturut-turut.\n- Pembersihan Ghost Tray Icons otomatis setelah popup error ditutup."
 }
