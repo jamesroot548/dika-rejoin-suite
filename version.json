@@ -1,7 +1,7 @@
 {
-    "version": "2.1.7",
+    "version": "2.1.8",
     "release_date": "2026-10-04",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.7/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.8/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v2.1.7 Update:\n- Optimasi Auto_Close_Kick.lua (Zero Micro-Freeze & Fast Load): Menghilangkan micro-freeze saat join server dan loading masuk Adopt Me.\n- Deteksi Targeted UI (0.002ms): Menghapus traversal puluhan ribu objek CoreGui/PlayerGui agar FPS tetap 60 stabil tanpa frame drop.\n- 100% Async Non-Blocking HTTP: Request konfigurasi dan webhook dijalankan di background thread terpisah (task.spawn) sehingga engine game tidak pernah terhenti (hang/freeze).\n- Event-Driven Auto-Trade: Request trade hanya dieksekusi saat UI dialog muncul, membebaskan network queue untuk loading streaming asset dan save data game Adopt Me.\n- Menjaga seluruh fungsionalitas auto-accept, auto-confirm trade, auto-scaling durasi multi-bot (2+ bot = 2x durasi), dan auto-kick."
+    "changelog": "v2.1.8 Update:\n- Otomatisasi Distribusi Auto_Close_Kick.lua: Memastikan seluruh pengguna lain otomatis memiliki file Auto_Close_Kick.lua di folder mereka saat tools dijalankan tanpa perlu unduh manual.\n- Auto-Extract & Cloud Sync: Biner aplikasi kini otomatis mengekstrak script Lua terbaru dari internal executable saat startup dan melakukan sinkronisasi otomatis dengan server GitHub jika file belum ada atau masih versi lama.\n- Pembaruan Script Embedded Fallback: Script bawaan di dalam tools diperbarui 100% selaras dengan versi terbaru (Zero Micro-Freeze, Non-Blocking HTTP, & Fast Loading Adopt Me).\n- Fitur Lengkap: Auto-Accept Trade Request, Auto-Accept Negotiation, Auto-Confirm Trade, Multi-Bot Dynamic Scaling, & Auto-Kick aktif sempurna."
 }
