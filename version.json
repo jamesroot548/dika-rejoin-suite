@@ -1,7 +1,7 @@
 {
-    "version": "2.1.4",
+    "version": "2.1.5",
     "release_date": "2026-10-04",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.4/Dika_Rejoin_All_In_One.exe",
-    "changelog": "v2.1.4: 1. Global Inter-Launch Throttle: Enforced jeda acak 3-5 detik antar-peluncuran Roblox pada semua mode (Multi-Worker Main accounts, Rotator multi-tab batch, dan Manual launch) untuk mencegah CPU/RAM spike dan crash pada Windows. 2. Pacing antrean otomatis: Menjamin tidak ada dua instance Roblox yang dibuka secara bersamaan.",
-    "mandatory": false
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.5/Dika_Rejoin_All_In_One.exe",
+    "mandatory": false,
+    "changelog": "v2.1.5 Update:\n- Perbaikan status presence: Akun offline di Zeke/AccOps tidak lagi tertampil IN-GAME / Job ID basi.\n- Pembersihan Server Link: Bot offline tidak lagi menampilkan Job ID basi.\n- Penyesuaian lebar kolom tabel & centering Device (mencegah teks terpotong).\n- Penambahan opsi 'Tampilkan Password' (masking ••••••••).\n- Penambahan Menu Klik Kanan Tabel (Salin Username, Password, Cookie, Server Link, & Direct Play).\n- Konfigurasi Jeda Peluncuran Roblox (Jeda Launch Min & Max 3-5 detik) di Tab 2 GUI & config.json.\n- Peningkatan integrasi live API AccountOps dengan API Key aktif."
 }
