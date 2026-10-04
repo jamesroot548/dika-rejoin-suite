@@ -1,7 +1,7 @@
 {
-    "version": "2.2.0",
+    "version": "2.2.1",
     "release_date": "2026-10-04",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.2.0/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.2.1/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v2.2.0 Update:\n- Auto-Dismiss & Auto-Kill Error Popups (Authentication Error & Ratelimited): Memperbaiki tuntas masalah popup 'Authentication Error: Ratelimited' yang membuat Roblox gagal launch dan PID proses menggantung tidak ter-kill.\n- Watchdog kini secara agresif mendeteksi jendela error modal (#32770, Authentication Error, Ratelimit, Crash), menutup popup seketika (klik OK otomatis), dan mematikan PID zombie dalam 1 detik tanpa menunggu grace period 90 detik.\n- Isolasi Jendela Error: Memastikan dialog error tidak pernah dianggap sebagai jendela game aktif Roblox.\n- Auto-Cooldown Rate Limit: Saat terdeteksi ratelimit dari server Roblox, tools otomatis memberikan jeda pendinginan aman sebelum akun berikutnya diluncurkan agar tidak kena ratelimit berturut-turut.\n- Pembersihan Ghost Tray Icons otomatis setelah popup error ditutup."
+    "changelog": "v2.2.1 Update:\n- Auto-Accept Permintaan Trade Masuk (Multi-Hit Retry 2-3x): Memperbaiki masalah permintaan trade Adopt Me yang tidak ter-accept atau hanya ter-accept di awal spawn saja.\n- Multi-Hit Retry 2-3x: Saat terdeteksi notifikasi permintaan trade yang belum ter-accept, script otomatis mengeksekusi 2-3x percobaan accept beruntun (Remote Direct API & GUI click) dengan jeda 120ms sampai trade terbuka.\n- Scanning Pop-up Menyeluruh: Mendeteksi sticky note trade di NotificationsApp, NotificationApp, DialogApp, dan PlayerGui.\n- Trade Monitoring Continuous: Sistem memantau dan menerima permintaan trade secara aktif sepanjang seluruh sesi in-game tanpa henti.\n- Loop Ultra-Responsif (0.25 detik): Deteksi instan tanpa delay dengan konsumsi CPU 0% (stabil 60 FPS).\n- Sinkronisasi Otomatis: Auto_Close_Kick.lua di PC pengguna otomatis ter-update ke versi terbaru saat tools dijalankan."
 }
