@@ -1,7 +1,7 @@
 {
-    "version": "2.0.7",
+    "version": "2.0.8",
     "release_date": "2026-10-04",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.7/Dika_Rejoin_All_In_One.exe",
-    "changelog": "v2.0.7: 1. Fix BSOD KMODE_EXCEPTION_NOT_HANDLED (0xC000010A) pada rotasi & kill Roblox via safe kernel synchronization. 2. Fix akurasi scan inventory target pet: pemisahan akurat Full Grown (FG) vs Normal, filter ketat neon_only/fg_only, dan sinkronisasi filter status in-game vs snapshot.",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.8/Dika_Rejoin_All_In_One.exe",
+    "changelog": "v2.0.8: 1. Bypass Arkose Captcha Akun Main: Join bot otomatis menggunakan Follow Teman (RequestFollowUser) persis seperti klik Join Teman di Roblox Home tanpa popup Security Challenge. 2. Auto-Mutual Friendship saat Follow Join aktif untuk memastikan Main dapat langsung join bot ke private server. 3. Opsi toggle Bypass Captcha Follow Teman di UI Rotator.",
     "mandatory": false
 }
