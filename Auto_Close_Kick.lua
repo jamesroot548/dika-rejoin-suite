@@ -9,9 +9,14 @@
 --    - Konfirmasi trade (Confirm Trade) setelah countdown selesai
 --    - Deteksi otomatis saat trade sukses selesai & lapor ke tools untuk rotasi instan!
 -- 4. AUTO-DETECT KICK: Menutup tab saat disconnect / kick resmi
--- 5. ⚡ AUTO-KICK 30 DETIK IN-GAME: Fallback kick jika tidak ada trade
+-- 5. ⚡ AUTO-KICK DINAMIS (MULTI-BOT DETECT):
+--    - Jika 1 bot: Durasi normal (1x, misal 40 detik)
+--    - Jika 2 bot: Otomatis bertambah 2x lipat (80 detik)
+--    - Jika n bot: Otomatis diskalakan (n x durasi) agar semua bot sempat trade!
 
-local AUTO_KICK_SECONDS = 30  -- Durasi in-game sebelum auto-kick (detik)
+local AUTO_KICK_SECONDS = 30  -- Durasi dasar in-game sebelum auto-kick (detik)
+local CURRENT_TARGET_DURATION = AUTO_KICK_SECONDS
+local CURRENT_BOTS_DETECTED = 1
 
 local Players = game:GetService("Players")
 local GuiService = game:GetService("GuiService")
@@ -23,6 +28,18 @@ local VirtualInputManager = nil
 
 pcall(function() VirtualUser = game:GetService("VirtualUser") end)
 pcall(function() VirtualInputManager = game:GetService("VirtualInputManager") end)
+
+-- Helper Menghitung Jumlah Bot / Pemain Lain di Server Selain Kita (LocalPlayer)
+local function get_other_players_count()
+    local count = 0
+    local lp = Players.LocalPlayer
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= lp then
+            count = count + 1
+        end
+    end
+    return count
+end
 
 -- Helper Webhook Non-Blocking (Async & Timeout 1 detik)
 local function send_webhook(endpoint, payload)
@@ -62,8 +79,9 @@ local function sync_config_from_suite()
                     local val = tonumber(data.auto_kick_seconds)
                     if val and val > 0 then
                         AUTO_KICK_SECONDS = val
+                        CURRENT_TARGET_DURATION = AUTO_KICK_SECONDS * math.max(1, CURRENT_BOTS_DETECTED)
                         synced = true
-                        print("[DIKA REJOIN] 🔄 Config tersinkron dari Tools: AUTO_KICK_SECONDS = " .. tostring(AUTO_KICK_SECONDS) .. " detik")
+                        print("[DIKA REJOIN] 🔄 Config tersinkron dari Tools: AUTO_KICK_SECONDS = " .. tostring(AUTO_KICK_SECONDS) .. " detik (Base)")
                     end
                 end
             end
@@ -79,8 +97,9 @@ local function sync_config_from_suite()
                     local val = tonumber(data.auto_kick_seconds)
                     if val and val > 0 then
                         AUTO_KICK_SECONDS = val
+                        CURRENT_TARGET_DURATION = AUTO_KICK_SECONDS * math.max(1, CURRENT_BOTS_DETECTED)
                         synced = true
-                        print("[DIKA REJOIN] 🔄 Config tersinkron dari Tools (HttpGet): AUTO_KICK_SECONDS = " .. tostring(AUTO_KICK_SECONDS) .. " detik")
+                        print("[DIKA REJOIN] 🔄 Config tersinkron dari Tools (HttpGet): AUTO_KICK_SECONDS = " .. tostring(AUTO_KICK_SECONDS) .. " detik (Base)")
                     end
                 end
             end
@@ -354,7 +373,7 @@ task.spawn(function()
                     is_in_trade = false
                     -- Jika sebelumnya sudah ter-Confirm dalam 10 detik terakhir
                     if trade_has_confirmed and (tick() - last_confirm_time < 10) then
-                        print("[DIKA REJOIN] 🎉 Trade Selesai Terkonfirmasi! Tetap aktif in-game sampai timer (" .. tostring(AUTO_KICK_SECONDS) .. " detik) selesai.")
+                        print("[DIKA REJOIN] 🎉 Trade Selesai Terkonfirmasi! Tetap aktif in-game sampai timer (" .. tostring(CURRENT_TARGET_DURATION) .. " detik) selesai.")
                     end
                     trade_has_confirmed = false
                 end
@@ -530,20 +549,73 @@ task.spawn(function()
     -- Sinkronisasi ulang config tepat sebelum timer countdown dimulai agar selalu up-to-date dengan GUI
     sync_config_from_suite()
 
-    print("[DIKA REJOIN] ⏱️ Timer Auto-Kick " .. tostring(AUTO_KICK_SECONDS) .. " Detik In-Game Dimulai!")
+    -- ==============================================================================
+    -- AUTO-DETECT MULTI-BOT DYNAMIC TIMER (AUTO-SCALING 2x / nx)
+    -- ==============================================================================
+    -- Normal 1 bot -> 1x lipat (misal 40s)
+    -- Jika ada 2 bot atau lebih -> otomatis bertambah 2x lipat (40s -> 80s, dst)
+    local base_duration = AUTO_KICK_SECONDS
+    local initial_bots = get_other_players_count()
+    CURRENT_BOTS_DETECTED = math.max(1, initial_bots)
+    CURRENT_TARGET_DURATION = base_duration * CURRENT_BOTS_DETECTED
 
-    for i = AUTO_KICK_SECONDS, 1, -1 do
-        task.wait(1)
-        if i % 5 == 0 or i <= 3 then
-            print("[DIKA REJOIN] ⏱️ Auto-Kick dalam: " .. tostring(i) .. " detik...")
-        end
+    if CURRENT_BOTS_DETECTED >= 2 then
+        print(string.format("[DIKA REJOIN] 👥 Terdeteksi %d Bot di server selain kita! Waktu in-game otomatis bertambah menjadi %dx lipat (%d detik).", CURRENT_BOTS_DETECTED, CURRENT_BOTS_DETECTED, CURRENT_TARGET_DURATION))
+    else
+        print(string.format("[DIKA REJOIN] ⏱️ Terdeteksi %d Bot di server. Waktu in-game normal: %d detik.", CURRENT_BOTS_DETECTED, CURRENT_TARGET_DURATION))
     end
 
-    print("[DIKA REJOIN] 🚪 Waktu " .. tostring(AUTO_KICK_SECONDS) .. " detik in-game tercapai! Menjalankan Auto-Kick...")
-    notify_tool_and_exit("Auto-Kick " .. tostring(AUTO_KICK_SECONDS) .. "s In-Game Selesai")
+    send_webhook("player_ingame_ready", {
+        username = lp.Name,
+        userId = tostring(lp.UserId),
+        bot_count = CURRENT_BOTS_DETECTED,
+        kick_duration = CURRENT_TARGET_DURATION
+    })
+
+    -- Deteksi dinamis real-time jika ada bot baru yang masuk ke server di tengah countdown
+    local conn_player_added = Players.PlayerAdded:Connect(function(new_p)
+        if new_p ~= lp then
+            task.wait(0.5)
+            local cur_bots = get_other_players_count()
+            if cur_bots > CURRENT_BOTS_DETECTED then
+                local old_dur = CURRENT_TARGET_DURATION
+                CURRENT_BOTS_DETECTED = cur_bots
+                CURRENT_TARGET_DURATION = base_duration * CURRENT_BOTS_DETECTED
+                print(string.format("[DIKA REJOIN] ➕ Bot baru bergabung ('%s')! Total terdeteksi %d Bot. Durasi otomatis diperpanjang dari %ds -> %ds (%dx lipat)!", new_p.Name, CURRENT_BOTS_DETECTED, old_dur, CURRENT_TARGET_DURATION, CURRENT_BOTS_DETECTED))
+            end
+        end
+    end)
+
+    local start_tick = tick()
+    while true do
+        local elapsed = math.floor(tick() - start_tick)
+        local remaining = CURRENT_TARGET_DURATION - elapsed
+
+        if remaining <= 0 then
+            break
+        end
+
+        -- Cetak countdown berkala (setiap 5 detik atau saat mendekati akhir)
+        if remaining % 5 == 0 or remaining <= 3 then
+            local live_bots = get_other_players_count()
+            local bot_info = live_bots >= 2 and string.format(" [%d Bot - %dx Durasi]", live_bots, CURRENT_BOTS_DETECTED) or ""
+            print(string.format("[DIKA REJOIN] ⏱️ Auto-Kick dalam: %d detik...%s", remaining, bot_info))
+        end
+
+        task.wait(1)
+    end
 
     pcall(function()
-        lp:Kick("[DIKA REJOIN] Selesai Sesi Trade (Auto-Kick " .. tostring(AUTO_KICK_SECONDS) .. "s)")
+        if conn_player_added then
+            conn_player_added:Disconnect()
+        end
+    end)
+
+    print(string.format("[DIKA REJOIN] 🚪 Waktu %d detik in-game (%d Bot) tercapai! Menjalankan Auto-Kick...", CURRENT_TARGET_DURATION, CURRENT_BOTS_DETECTED))
+    notify_tool_and_exit(string.format("Auto-Kick %ds (%d Bot) In-Game Selesai", CURRENT_TARGET_DURATION, CURRENT_BOTS_DETECTED))
+
+    pcall(function()
+        lp:Kick(string.format("[DIKA REJOIN] Selesai Sesi Trade (Auto-Kick %ds - %d Bot)", CURRENT_TARGET_DURATION, CURRENT_BOTS_DETECTED))
     end)
 end)
 
