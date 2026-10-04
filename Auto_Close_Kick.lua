@@ -228,8 +228,8 @@ task.spawn(function()
     local trade_has_confirmed = false
     local last_confirm_time = 0
 
-    -- Loop Auto-Trade Event-Driven (Ringan & Cepat: 0.25 detik)
-    while task.wait(0.25) do
+    -- Loop Auto-Trade Event-Driven (Ringan & Cepat: 0.9 detik)
+    while task.wait(0.9) do
         pcall(function()
             local API = ReplicatedStorage:FindFirstChild("API")
 
