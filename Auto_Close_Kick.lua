@@ -20,6 +20,22 @@ local AUTO_KICK_SECONDS = 80  -- Durasi dasar in-game sebelum auto-kick (detik)
 local CURRENT_TARGET_DURATION = AUTO_KICK_SECONDS
 local CURRENT_BOTS_DETECTED = 1
 
+local my_pid = nil
+pcall(function()
+    if type(getpid) == "function" then
+        my_pid = getpid()
+    elseif type(get_pid) == "function" then
+        my_pid = get_pid()
+    elseif type(getgenv) == "function" then
+        local genv = getgenv()
+        if type(genv.getpid) == "function" then
+            my_pid = genv.getpid()
+        elseif type(genv.get_pid) == "function" then
+            my_pid = genv.get_pid()
+        end
+    end
+end)
+
 local Players = game:GetService("Players")
 local GuiService = game:GetService("GuiService")
 local CoreGui = game:GetService("CoreGui")
@@ -47,6 +63,9 @@ end
 local function send_webhook(endpoint, payload)
     task.spawn(function()
         pcall(function()
+            if type(payload) == "table" and my_pid and not payload.pid then
+                payload.pid = my_pid
+            end
             local req = (syn and syn.request) or (http and http.request) or http_request or request or (fluxus and fluxus.request)
             if req then
                 req({
@@ -653,6 +672,8 @@ task.spawn(function()
     print(string.format("[DIKA REJOIN] 🚪 Waktu %d detik in-game (%d Bot) tercapai! Menjalankan Auto-Kick...", CURRENT_TARGET_DURATION, CURRENT_BOTS_DETECTED))
     notify_tool_and_exit(string.format("Auto-Kick %ds (%d Bot) In-Game Selesai", CURRENT_TARGET_DURATION, CURRENT_BOTS_DETECTED))
 
+    -- Beri jeda 0.5s agar Python menyelesaikan penutupan proses secara mulus tanpa menampilkan pop-up Disconnected
+    task.wait(0.5)
     pcall(function()
         lp:Kick(string.format("[DIKA REJOIN] Selesai Sesi Trade (Auto-Kick %ds - %d Bot)", CURRENT_TARGET_DURATION, CURRENT_BOTS_DETECTED))
     end)
