@@ -1,7 +1,7 @@
 {
-    "version": "2.2.2",
+    "version": "2.2.3",
     "release_date": "2026-10-05",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.2.2/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.2.3/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v2.2.2 Update:\n- Perbaikan Tuntas Modal Dialog 'Authentication Error: Ratelimited': Dialog error kini ditutup seketika (BM_CLICK OK, WM_COMMAND, WM_CLOSE, dan ShowWindow SW_HIDE) serta proses yang memunculkannya langsung dimatikan tanpa menahan antrian rotasi.\n- Zombie & Orphan Process Sweeper: Otomatis mendeteksi dan membasmi semua proses RobloxPlayerBeta dan RobloxCrashHandler yang menggantung di latar belakang tanpa jendela in-game aktif atau heartbeat, menghentikan penumpukan proses liar di RAM/CPU.\n- Pembersihan Ikon Tray Roblox (Windows 10 & Windows 11): Setiap kali proses Roblox ditutup atau mati, sistem langsung memicu refresh tray instan di taskbar dan overflow area sehingga ikon Roblox di pojok kanan bawah langsung lenyap seketika tanpa perlu diarahkan mouse secara manual.\n- Proteksi PID Menyeluruh: Mendukung terminasi RobloxPlayerLauncher, RobloxCrashHandler, dan RobloxPlayerBeta tanpa terblokir filter keamanan."
+    "changelog": "v2.2.3 Update:\n- 3-Layer Ghost Tray Icons Cleaner: Mengatasi penumpukan belasan ikon Roblox di pojok kanan bawah (System Tray & menu panah overflow) pada Windows 10 & Windows 11. Menggunakan pemindaian memori toolbar langsung (Direct Memory Deletion), pesan Win32 refresh, serta hardware micro-sweep kursor 10-15ms yang otomatis mengembalikan posisi kursor seketika tanpa mengganggu pengguna.\n- Otomatis Bersih di Setiap Event: Pembersihan ikon tray otomatis terpicu seketika saat proses ditutup, saat rotasi akun, watchdog background, tombol [🧹 Bersihkan Sekarang], maupun [❌ FORCE CLOSE].\n- Zombie Sweeper Dipercepat: Memperketat waktu deteksi proses Roblox liar tak bertuan dari 75s menjadi 45s untuk mencegah penumpukan proses di latar belakang."
 }
