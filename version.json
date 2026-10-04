@@ -1,7 +1,7 @@
 {
-    "version": "2.1.3",
+    "version": "2.1.4",
     "release_date": "2026-10-04",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.3/Dika_Rejoin_All_In_One.exe",
-    "changelog": "v2.1.3: 1. Auto-Kick Multi-Bot Scaling: Skrip Lua Auto_Close_Kick.lua otomatis mendeteksi jumlah bot di server selain kita. Jika biasanya 1 bot (misal 40 detik), jika terdeteksi 2 bot atau lebih maka durasi in-game otomatis bertambah menjadi 2x lipat (80 detik) atau n-kali lipat secara dinamis dan real-time. 2. Real-Time Join Detector: Jika bot kedua masuk di tengah countdown, timer otomatis langsung diperpanjang. 3. Integrasi AccOps API Key bawaan dan peningkatan stabilitas update binary.",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.4/Dika_Rejoin_All_In_One.exe",
+    "changelog": "v2.1.4: 1. Global Inter-Launch Throttle: Enforced jeda acak 3-5 detik antar-peluncuran Roblox pada semua mode (Multi-Worker Main accounts, Rotator multi-tab batch, dan Manual launch) untuk mencegah CPU/RAM spike dan crash pada Windows. 2. Pacing antrean otomatis: Menjamin tidak ada dua instance Roblox yang dibuka secara bersamaan.",
     "mandatory": false
 }
