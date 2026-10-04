@@ -1,7 +1,7 @@
 {
-    "version": "2.1.0",
+    "version": "2.1.1",
     "release_date": "2026-10-04",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.0/Dika_Rejoin_All_In_One.exe",
-    "changelog": "v2.1.0: 1. Fix Proteksi Pertemanan Follow Join: Akun bot 13+ otomatis di-skip dan TIDAK PERLU di-add pertemanan lagi oleh akun Main (karena Privacy Everyone sudah aktif). 2. Khusus akun bot <13 yang secara regulasi Roblox membatasi join hanya untuk teman, otomatis tetap di-add & di-accept dua arah. 3. Optimalisasi cache usia bot (RAM cache & preflight cache) agar proses launch instan tanpa overhead request API berlebih.",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.1/Dika_Rejoin_All_In_One.exe",
+    "changelog": "v2.1.1: 1. Fix Log Console Scroll Lock: Log tidak akan lagi otomatis terpental ke bawah saat pengguna scroll ke atas untuk meneliti riwayat log (Smart Auto-Scroll). 2. Tambah tombol [📌 Auto-Scroll] & [⬇ Ke Bawah], serta buffer ditingkatkan dari 250 ke 3.000 baris. 3. Fix Not Permission: Otomatis memastikan setelan privasi Everyone aktif pada bot 13+ saat launch sehingga akun Main tidak terhalang 'not permission' saat join follow user.",
     "mandatory": false
 }
