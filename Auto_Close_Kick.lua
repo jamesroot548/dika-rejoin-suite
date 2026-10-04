@@ -14,7 +14,7 @@
 --    - Jika 2 bot: Otomatis bertambah 2x lipat (80 detik)
 --    - Jika n bot: Otomatis diskalakan (n x durasi) agar semua bot sempat trade!
 
-local AUTO_KICK_SECONDS = 30  -- Durasi dasar in-game sebelum auto-kick (detik)
+local AUTO_KICK_SECONDS = 80  -- Durasi dasar in-game sebelum auto-kick (detik)
 local CURRENT_TARGET_DURATION = AUTO_KICK_SECONDS
 local CURRENT_BOTS_DETECTED = 1
 
