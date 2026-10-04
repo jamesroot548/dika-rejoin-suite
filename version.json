@@ -1,7 +1,7 @@
 {
-    "version": "2.2.1",
-    "release_date": "2026-10-04",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.2.1/Dika_Rejoin_All_In_One.exe",
+    "version": "2.2.2",
+    "release_date": "2026-10-05",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.2.2/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v2.2.1 Update:\n- Auto-Accept Permintaan Trade Masuk (Multi-Hit Retry 2-3x): Memperbaiki masalah permintaan trade Adopt Me yang tidak ter-accept atau hanya ter-accept di awal spawn saja.\n- Multi-Hit Retry 2-3x: Saat terdeteksi notifikasi permintaan trade yang belum ter-accept, script otomatis mengeksekusi 2-3x percobaan accept beruntun (Remote Direct API & GUI click) dengan jeda 120ms sampai trade terbuka.\n- Scanning Pop-up Menyeluruh: Mendeteksi sticky note trade di NotificationsApp, NotificationApp, DialogApp, dan PlayerGui.\n- Trade Monitoring Continuous: Sistem memantau dan menerima permintaan trade secara aktif sepanjang seluruh sesi in-game tanpa henti.\n- Loop Ultra-Responsif (0.25 detik): Deteksi instan tanpa delay dengan konsumsi CPU 0% (stabil 60 FPS).\n- Sinkronisasi Otomatis: Auto_Close_Kick.lua di PC pengguna otomatis ter-update ke versi terbaru saat tools dijalankan."
+    "changelog": "v2.2.2 Update:\n- Perbaikan Tuntas Modal Dialog 'Authentication Error: Ratelimited': Dialog error kini ditutup seketika (BM_CLICK OK, WM_COMMAND, WM_CLOSE, dan ShowWindow SW_HIDE) serta proses yang memunculkannya langsung dimatikan tanpa menahan antrian rotasi.\n- Zombie & Orphan Process Sweeper: Otomatis mendeteksi dan membasmi semua proses RobloxPlayerBeta dan RobloxCrashHandler yang menggantung di latar belakang tanpa jendela in-game aktif atau heartbeat, menghentikan penumpukan proses liar di RAM/CPU.\n- Pembersihan Ikon Tray Roblox (Windows 10 & Windows 11): Setiap kali proses Roblox ditutup atau mati, sistem langsung memicu refresh tray instan di taskbar dan overflow area sehingga ikon Roblox di pojok kanan bawah langsung lenyap seketika tanpa perlu diarahkan mouse secara manual.\n- Proteksi PID Menyeluruh: Mendukung terminasi RobloxPlayerLauncher, RobloxCrashHandler, dan RobloxPlayerBeta tanpa terblokir filter keamanan."
 }
