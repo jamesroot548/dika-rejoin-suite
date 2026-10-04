@@ -1,7 +1,7 @@
 {
-    "version": "2.2.3",
+    "version": "2.2.4",
     "release_date": "2026-10-05",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.2.3/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.2.4/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v2.2.3 Update:\n- 3-Layer Ghost Tray Icons Cleaner: Mengatasi penumpukan belasan ikon Roblox di pojok kanan bawah (System Tray & menu panah overflow) pada Windows 10 & Windows 11. Menggunakan pemindaian memori toolbar langsung (Direct Memory Deletion), pesan Win32 refresh, serta hardware micro-sweep kursor 10-15ms yang otomatis mengembalikan posisi kursor seketika tanpa mengganggu pengguna.\n- Otomatis Bersih di Setiap Event: Pembersihan ikon tray otomatis terpicu seketika saat proses ditutup, saat rotasi akun, watchdog background, tombol [🧹 Bersihkan Sekarang], maupun [❌ FORCE CLOSE].\n- Zombie Sweeper Dipercepat: Memperketat waktu deteksi proses Roblox liar tak bertuan dari 75s menjadi 45s untuk mencegah penumpukan proses di latar belakang."
+    "changelog": "v2.2.4 Update:\n- Perbaikan Fundamental Zombie Process Sweeper (Native Win32): Membasmi bug dependensi modul sehingga proses zombie Roblox (RobloxPlayerBeta & RobloxCrashHandler) tanpa jendela in-game kini 100% otomatis dibasmi tuntas secara mandiri menggunakan Win32 Toolhelp & GetProcessTimes murni.\n- Eliminasi Total Ghost PID & Ikon Tray: Proses terminasi diperkuat dengan force kill beruntun (TerminateProcess + taskkill /F + deferred sweep 0.8s) sehingga jendela SystrayIcon dan tombol taskbar/tray benar-benar musnah tanpa perlu diarahkan mouse secara manual.\n- Multi-Monitor & Multi-Taskbar Auto-Sweep: Pembersihan ikon hantu kini menyisir seluruh monitor (Shell_TrayWnd & Shell_SecondaryTrayWnd) serta jendela overflow.\n- Penutupan Tuntas Popup Modal 'Authentication Error': Mencegah dialog error memblokir antrian rotasi dan memastikan proses induk serta child Roblox langsung di-kill seketika."
 }
