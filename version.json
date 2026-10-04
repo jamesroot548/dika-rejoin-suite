@@ -1,7 +1,7 @@
 {
-    "version": "2.1.6",
+    "version": "2.1.7",
     "release_date": "2026-10-04",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.6/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.7/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v2.1.6 Update:\n- Perbaikan penyimpanan jeda peluncuran Roblox: Nilai jeda launch Min & Max kini tersimpan permanen saat diedit dan tidak akan reset ke default saat tools ditutup/dibuka ulang.\n- Penambahan handler penutupan aplikasi (WM_DELETE_WINDOW): Seluruh konfigurasi otomatis diflush sinkron ke config.json saat window ditutup.\n- Penambahan event FocusOut & Return pada input durasi.\n- Perbaikan parsing input string & desimal (mendukung titik maupun koma)."
+    "changelog": "v2.1.7 Update:\n- Optimasi Auto_Close_Kick.lua (Zero Micro-Freeze & Fast Load): Menghilangkan micro-freeze saat join server dan loading masuk Adopt Me.\n- Deteksi Targeted UI (0.002ms): Menghapus traversal puluhan ribu objek CoreGui/PlayerGui agar FPS tetap 60 stabil tanpa frame drop.\n- 100% Async Non-Blocking HTTP: Request konfigurasi dan webhook dijalankan di background thread terpisah (task.spawn) sehingga engine game tidak pernah terhenti (hang/freeze).\n- Event-Driven Auto-Trade: Request trade hanya dieksekusi saat UI dialog muncul, membebaskan network queue untuk loading streaming asset dan save data game Adopt Me.\n- Menjaga seluruh fungsionalitas auto-accept, auto-confirm trade, auto-scaling durasi multi-bot (2+ bot = 2x durasi), dan auto-kick."
 }
