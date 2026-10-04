@@ -1,7 +1,7 @@
 {
-    "version": "2.0.8",
+    "version": "2.0.9",
     "release_date": "2026-10-04",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.8/Dika_Rejoin_All_In_One.exe",
-    "changelog": "v2.0.8: 1. Bypass Arkose Captcha Akun Main: Join bot otomatis menggunakan Follow Teman (RequestFollowUser) persis seperti klik Join Teman di Roblox Home tanpa popup Security Challenge. 2. Auto-Mutual Friendship saat Follow Join aktif untuk memastikan Main dapat langsung join bot ke private server. 3. Opsi toggle Bypass Captcha Follow Teman di UI Rotator.",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.9/Dika_Rejoin_All_In_One.exe",
+    "changelog": "v2.0.9: 1. Fix Akun Main salah masuk ke Server Public: Cegah klaim bot offline/stale (wajib terverifikasi presence_type == 2 in-game resmi Roblox). 2. Pre-Launch Safety Gate: Verifikasi real-time sebelum client Roblox meluncur, otomatis membatalkan peluncuran jika bot terdeteksi offline agar akun Main tidak terlempar ke server public. 3. Optimalisasi timeout dan multi-key mapping pada query Presence API batch.",
     "mandatory": false
 }
