@@ -1,7 +1,7 @@
 {
-    "version": "2.0.9",
+    "version": "2.1.0",
     "release_date": "2026-10-04",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.0.9/Dika_Rejoin_All_In_One.exe",
-    "changelog": "v2.0.9: 1. Fix Akun Main salah masuk ke Server Public: Cegah klaim bot offline/stale (wajib terverifikasi presence_type == 2 in-game resmi Roblox). 2. Pre-Launch Safety Gate: Verifikasi real-time sebelum client Roblox meluncur, otomatis membatalkan peluncuran jika bot terdeteksi offline agar akun Main tidak terlempar ke server public. 3. Optimalisasi timeout dan multi-key mapping pada query Presence API batch.",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.0/Dika_Rejoin_All_In_One.exe",
+    "changelog": "v2.1.0: 1. Fix Proteksi Pertemanan Follow Join: Akun bot 13+ otomatis di-skip dan TIDAK PERLU di-add pertemanan lagi oleh akun Main (karena Privacy Everyone sudah aktif). 2. Khusus akun bot <13 yang secara regulasi Roblox membatasi join hanya untuk teman, otomatis tetap di-add & di-accept dua arah. 3. Optimalisasi cache usia bot (RAM cache & preflight cache) agar proses launch instan tanpa overhead request API berlebih.",
     "mandatory": false
 }
