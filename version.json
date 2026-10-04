@@ -1,7 +1,7 @@
 {
-    "version": "2.1.8",
+    "version": "2.1.9",
     "release_date": "2026-10-04",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.8/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.1.9/Dika_Rejoin_All_In_One.exe",
     "mandatory": false,
-    "changelog": "v2.1.8 Update:\n- Otomatisasi Distribusi Auto_Close_Kick.lua: Memastikan seluruh pengguna lain otomatis memiliki file Auto_Close_Kick.lua di folder mereka saat tools dijalankan tanpa perlu unduh manual.\n- Auto-Extract & Cloud Sync: Biner aplikasi kini otomatis mengekstrak script Lua terbaru dari internal executable saat startup dan melakukan sinkronisasi otomatis dengan server GitHub jika file belum ada atau masih versi lama.\n- Pembaruan Script Embedded Fallback: Script bawaan di dalam tools diperbarui 100% selaras dengan versi terbaru (Zero Micro-Freeze, Non-Blocking HTTP, & Fast Loading Adopt Me).\n- Fitur Lengkap: Auto-Accept Trade Request, Auto-Accept Negotiation, Auto-Confirm Trade, Multi-Bot Dynamic Scaling, & Auto-Kick aktif sempurna."
+    "changelog": "v2.1.9 Update:\n- Fitur Pembersih Otomatis Ikon Hantu (Auto-Clean Ghost Tray Icons): Mengatasi tuntas ikon Roblox yang menumpuk berjejer di taskbar Windows / system tray pojok kanan.\n- Windows System Tray Auto-Refresh: Tools secara otomatis mengirim sinyal refresh ke Windows Taskbar setiap kali Roblox ditutup / rotasi dan berkala di background, sehingga seluruh ikon hantu Roblox langsung lenyap seketika tanpa perlu diusap pakai mouse secara manual.\n- Auto-Killer RobloxCrashHandler.exe: Otomatis membasmi proses crash handler yang menggantung di RAM dan menahan ikon di taskbar.\n- Integrasi tombol Bersihkan Cache: Ditambahkan auto-clean ghost tray icons saat pengguna mengklik tombol Bersihkan Cache di GUI.\n- Fitur v2.1.8 (Auto-Delivery & Cloud Sync Auto_Close_Kick.lua) tetap aktif penuh."
 }
