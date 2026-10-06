@@ -1,7 +1,7 @@
 {
-    "version": "2.3.0",
-    "release_date": "2026-10-06",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.0/Dika_Rejoin_All_In_One.exe",
+    "version": "2.3.1",
+    "release_date": "2026-10-07",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.1/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.3.0 System Tray Auto-Sweep & Main Account Auto-Privacy (Error 524 Permanent Fix):\n- Auto-Clean Ghost Tray Icons: Pembersihan otomatis dan seketika untuk sisa icon tray Roblox (--launch-to-tray) yang telah ditutup di User Promoted Notification Area & Overflow Menu tanpa perlu hover mouse manual lagi.\n- Direct Win32 Toolbar Purge: Mengirimkan sinyal TB_DELETEBUTTON & direct WM_MOUSEMOVE ke ToolbarWindow32, dikombinasikan dengan hardware micro-sweep instan (18ms) yang 100% mulus tanpa mengganggu kursor pengguna.\n- Auto-Privacy Akun Main (Bypass Error 524): Preflight Tahap 2 kini secara otomatis menyetel privasi Server Pribadi ke 'Everyone' (AllUsers) dan Join ke 'Everyone' (All) pada SEMUA Akun Main/Target, membasmi Error Code 524 selamanya tanpa konfigurasi browser manual.\n- Sinkronisasi Eksekusi Anti-Collision: Penyempurnaan lock mutex pada tray sweeper dan preflight executor untuk mencegah bentrok thread pada multi-tab intensif."
+    "changelog": "v2.3.1 Auto-Detect Trade Selesai & Instant Auto-Disconnect (Event-Driven Rotation):\n- Auto-Detect Trade Aktif: Countdown timer Auto-Kick otomatis dijeda (paused) saat sesi trade berlangsung agar bot tidak kick di tengah-tengah transaksi trade.\n- Auto-Detect Trade Selesai: Mendeteksi penyelesaian trade secara instan (0ms) melalui penutupan TradeApp pasca-konfirmasi, event DescendantAdded banner adopt me ('The trade was successful!'), dan LogService console message.\n- Safe Sync Buffer (1.8s) & Instant Auto-DC: Menunggu jeda aman 1.8 detik untuk memastikan inventori tersimpan permanen di database server Adopt Me, lalu otomatis disconnect/keluar tanpa menunggu timer habis.\n- Zero-Delay Multi-Bot Rotation: Rotator langsung mendeteksi bot selesai, mereset target inventori, dan lanjut ke bot berikutnya seketika."
 }
