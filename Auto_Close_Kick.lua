@@ -19,6 +19,8 @@
 local AUTO_KICK_SECONDS = 80  -- Durasi dasar in-game sebelum auto-kick (detik)
 local CURRENT_TARGET_DURATION = AUTO_KICK_SECONDS
 local CURRENT_BOTS_DETECTED = 1
+local IS_IN_TRADE_ACTIVE = false
+local TRADE_COMPLETED_SUCCESS = false
 
 local my_pid = nil
 pcall(function()
@@ -153,7 +155,7 @@ local function notify_tool_and_exit(reason)
         userId = uId,
         reason = tostring(reason)
     })
-    task.wait(0.2)
+    task.wait(0.3)
     pcall(function()
         if type(killprocess) == "function" then
             killprocess()
@@ -165,6 +167,26 @@ local function notify_tool_and_exit(reason)
             game:Shutdown()
         end
     end)
+    task.wait(0.5)
+    pcall(function()
+        if lp and lp.Kick then
+            lp:Kick(string.format("[DIKA REJOIN] %s (Auto-DC)", tostring(reason)))
+        end
+    end)
+end
+
+-- Helper Fungsi Khusus: Trade Selesai Terkonfirmasi -> Jeda Aman 1.8s -> Auto-DC Instan
+local function handle_trade_completed_exit(source)
+    if TRADE_COMPLETED_SUCCESS then return end
+    TRADE_COMPLETED_SUCCESS = true
+    IS_IN_TRADE_ACTIVE = false
+
+    print(string.format("[DIKA REJOIN] 🎉 TRADE SELESAI TERKONFIRMASI (%s)!", tostring(source or "Success")))
+    print("[DIKA REJOIN] ⏳ Menunggu jeda aman 1.8 detik (memastikan inventori tersimpan di server Adopt Me)...")
+    task.wait(1.8)
+
+    print("[DIKA REJOIN] 🚪 Mengirim sinyal rotasi ke Dika Tools & Keluar Game...")
+    notify_tool_and_exit(string.format("Trade Selesai Terkonfirmasi (%s)", tostring(source or "Success")))
 end
 
 -- ------------------------------------------------------------------------------
@@ -312,6 +334,28 @@ task.spawn(function()
 
     print("[DIKA REJOIN] 🤝 Auto-Accept & Auto-Confirm Trade Engine Siap & Aktif (Multi-Hit 2-3x Retry & Continuous)!")
 
+    -- Event listener instan (0ms) untuk banner notifikasi baru di PlayerGui
+    pcall(function()
+        pGui.DescendantAdded:Connect(function(desc)
+            if TRADE_COMPLETED_SUCCESS then return end
+            if (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible then
+                local txt = string.lower(desc.Text or "")
+                if string.find(txt, "trade was successful") 
+                    or string.find(txt, "trade successful") 
+                    or string.find(txt, "the trade was successful")
+                    or string.find(txt, "trade completed") 
+                    or string.find(txt, "trade complete") 
+                    or string.find(txt, "you traded with")
+                    or string.find(txt, "pertukaran berhasil")
+                    or string.find(txt, "trade berhasil") then
+                    task.spawn(function()
+                        handle_trade_completed_exit("Notifikasi Instan GUI: " .. tostring(desc.Text))
+                    end)
+                end
+            end
+        end)
+    end)
+
     local is_in_trade = false
     local trade_has_confirmed = false
     local last_confirm_time = 0
@@ -394,6 +438,7 @@ task.spawn(function()
             -- ==========================================================
             if is_trade_open then
                 is_in_trade = true
+                IS_IN_TRADE_ACTIVE = true
 
                 -- 1. Panggil Remote Resmi Adopt Me (Direct API Layer)
                 if API then
@@ -409,6 +454,8 @@ task.spawn(function()
                         task.spawn(function()
                             safe_call_remote(confirmTrdRemote)
                         end)
+                        trade_has_confirmed = true
+                        last_confirm_time = tick()
                     end
                 end
 
@@ -446,6 +493,12 @@ task.spawn(function()
                             end
                         end
 
+                        -- Tahap 2 Indikator: Masuk ke tahap konfirmasi (teks countdown/waiting/peringatan)
+                        if string.find(txt, "waiting for") or string.find(txt, "menunggu") or string.find(txt, "safe trade") or string.find(txt, "unbalanced") then
+                            trade_has_confirmed = true
+                            last_confirm_time = tick()
+                        end
+
                         -- Pop-up Peringatan Unbalanced Trade
                         if string.find(txt, "understand") or string.find(txt, "trade anyway") or string.find(txt, "proceed") or string.find(txt, "paham") then
                             local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
@@ -459,14 +512,68 @@ task.spawn(function()
                 -- Jika jendela TradeApp baru saja tertutup (Trade telah usai / selesai)
                 if is_in_trade then
                     is_in_trade = false
-                    if trade_has_confirmed and (tick() - last_confirm_time < 10) then
-                        print("[DIKA REJOIN] 🎉 Trade Selesai Terkonfirmasi! Tetap aktif in-game sampai timer selesai.")
+                    IS_IN_TRADE_ACTIVE = false
+                    -- Jika trade tadi telah terkonfirmasi sukses, langsung jalankan auto-exit & rotasi!
+                    if trade_has_confirmed and (tick() - last_confirm_time < 20) then
+                        task.spawn(function()
+                            handle_trade_completed_exit("TradeApp Ditutup Pasca-Konfirmasi")
+                        end)
                     end
                     trade_has_confirmed = false
                 end
             end
+
+            -- C. TAHAP 3: DETEKSI BANNER NOTIFIKASI SUKSES TRADE (Adopt Me System Banner)
+            if not TRADE_COMPLETED_SUCCESS then
+                for _, name in ipairs({"NotificationsApp", "NotificationApp", "DialogApp", "HintsApp"}) do
+                    local app = pGui:FindFirstChild(name)
+                    if app and app.Enabled then
+                        for _, desc in ipairs(app:GetDescendants()) do
+                            if desc:IsA("TextLabel") and desc.Visible then
+                                local txt = string.lower(desc.Text or "")
+                                if string.find(txt, "trade was successful") 
+                                    or string.find(txt, "trade successful") 
+                                    or string.find(txt, "the trade was successful")
+                                    or string.find(txt, "trade completed") 
+                                    or string.find(txt, "trade complete") 
+                                    or string.find(txt, "you traded with")
+                                    or string.find(txt, "pertukaran berhasil")
+                                    or string.find(txt, "trade berhasil") then
+                                    task.spawn(function()
+                                        handle_trade_completed_exit("Notifikasi: " .. tostring(desc.Text))
+                                    end)
+                                    break
+                                end
+                            end
+                        end
+                    end
+                end
+            end
         end)
     end
+end)
+
+-- Deteksi log pesan Trade Selesai dari Console / LogService (Zeke Hub / Adopt Me Engine)
+local LogService = game:GetService("LogService")
+pcall(function()
+    LogService.MessageOut:Connect(function(msg, msgType)
+        if TRADE_COMPLETED_SUCCESS then return end
+        if not msg or type(msg) ~= "string" then return end
+        local lower = string.lower(msg)
+        if string.find(lower, "trade was successful")
+            or string.find(lower, "trade successful")
+            or string.find(lower, "the trade was successful")
+            or string.find(lower, "trade completed") 
+            or string.find(lower, "trade complete") 
+            or string.find(lower, "all trades completed")
+            or string.find(lower, "successfully traded")
+            or string.find(lower, "pertukaran berhasil")
+            or string.find(lower, "trade berhasil") then
+            task.spawn(function()
+                handle_trade_completed_exit("Console Log: " .. tostring(msg))
+            end)
+        end
+    end)
 end)
 
 -- ------------------------------------------------------------------------------
@@ -645,22 +752,46 @@ task.spawn(function()
     end)
 
     local start_tick = tick()
-    while true do
-        local elapsed = math.floor(tick() - start_tick)
-        local remaining = CURRENT_TARGET_DURATION - elapsed
+    local paused_time = 0
+    local is_currently_paused = false
 
-        if remaining <= 0 then
+    while true do
+        -- 1. Jika trade telah selesai terkonfirmasi, hentikan countdown seketika!
+        if TRADE_COMPLETED_SUCCESS then
+            print("[DIKA REJOIN] 🛑 Countdown dihentikan: Trade telah berhasil diselesaikan!")
             break
         end
 
-        -- Cetak countdown berkala (setiap 5 detik atau saat mendekati akhir)
-        if remaining % 5 == 0 or remaining <= 3 then
-            local live_bots = get_other_players_count()
-            local bot_info = live_bots >= 2 and string.format(" [%d Bot - %dx Durasi]", live_bots, CURRENT_BOTS_DETECTED) or ""
-            print(string.format("[DIKA REJOIN] ⏱️ Auto-Kick dalam: %d detik...%s", remaining, bot_info))
-        end
+        -- 2. Jika sedang berada dalam sesi Trade aktif, jeda (pause) countdown timer!
+        if IS_IN_TRADE_ACTIVE then
+            if not is_currently_paused then
+                print("[DIKA REJOIN] ⏸️ Sedang dalam sesi Trade aktif! Timer Auto-Kick dijeda (paused) agar tidak kick di tengah trade...")
+                is_currently_paused = true
+            end
+            task.wait(0.5)
+            paused_time = paused_time + 0.5
+        else
+            if is_currently_paused then
+                print("[DIKA REJOIN] ▶️ Sesi Trade selesai / jendela tertutup. Melanjutkan sisa waktu Auto-Kick...")
+                is_currently_paused = false
+            end
 
-        task.wait(1)
+            local elapsed = math.floor((tick() - start_tick) - paused_time)
+            local remaining = CURRENT_TARGET_DURATION - elapsed
+
+            if remaining <= 0 then
+                break
+            end
+
+            -- Cetak countdown berkala (setiap 5 detik atau saat mendekati akhir)
+            if remaining % 5 == 0 or remaining <= 3 then
+                local live_bots = get_other_players_count()
+                local bot_info = live_bots >= 2 and string.format(" [%d Bot - %dx Durasi]", live_bots, CURRENT_BOTS_DETECTED) or ""
+                print(string.format("[DIKA REJOIN] ⏱️ Auto-Kick dalam: %d detik...%s", remaining, bot_info))
+            end
+
+            task.wait(1)
+        end
     end
 
     pcall(function()
@@ -669,14 +800,17 @@ task.spawn(function()
         end
     end)
 
-    print(string.format("[DIKA REJOIN] 🚪 Waktu %d detik in-game (%d Bot) tercapai! Menjalankan Auto-Kick...", CURRENT_TARGET_DURATION, CURRENT_BOTS_DETECTED))
-    notify_tool_and_exit(string.format("Auto-Kick %ds (%d Bot) In-Game Selesai", CURRENT_TARGET_DURATION, CURRENT_BOTS_DETECTED))
+    -- HANYA jalankan timeout kick jika trade belum pernah selesai sebelumnya (Safety Fallback)
+    if not TRADE_COMPLETED_SUCCESS then
+        print(string.format("[DIKA REJOIN] 🚪 Waktu %d detik in-game (%d Bot) tercapai (Safety Timeout)! Menjalankan Auto-Kick...", CURRENT_TARGET_DURATION, CURRENT_BOTS_DETECTED))
+        notify_tool_and_exit(string.format("Auto-Kick %ds (%d Bot) In-Game Selesai", CURRENT_TARGET_DURATION, CURRENT_BOTS_DETECTED))
 
-    -- Beri jeda 0.5s agar Python menyelesaikan penutupan proses secara mulus tanpa menampilkan pop-up Disconnected
-    task.wait(0.5)
-    pcall(function()
-        lp:Kick(string.format("[DIKA REJOIN] Selesai Sesi Trade (Auto-Kick %ds - %d Bot)", CURRENT_TARGET_DURATION, CURRENT_BOTS_DETECTED))
-    end)
+        -- Beri jeda 0.5s agar Python menyelesaikan penutupan proses secara mulus tanpa menampilkan pop-up Disconnected
+        task.wait(0.5)
+        pcall(function()
+            lp:Kick(string.format("[DIKA REJOIN] Selesai Sesi Trade (Auto-Kick %ds - %d Bot)", CURRENT_TARGET_DURATION, CURRENT_BOTS_DETECTED))
+        end)
+    end
 end)
 
 print("[DIKA REJOIN] Auto-Detect Kick, Live Tab Sync, Auto-Accept & Auto-Confirm Trade Pro Aktif (Ultra-Fast 60FPS)!")
