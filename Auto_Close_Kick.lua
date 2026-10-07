@@ -360,6 +360,19 @@ task.spawn(function()
     local is_in_trade = false
     local trade_has_confirmed = false
     local last_confirm_time = 0
+    local initial_trade_history_count = nil
+
+    pcall(function()
+        local Fsys = require(ReplicatedStorage.Fsys).load
+        local ClientData = Fsys("ClientData")
+        if ClientData then
+            local h = ClientData.get("trade_history") or ClientData.get("trades") or ClientData.get("trade_records")
+            if h and type(h) == "table" then
+                initial_trade_history_count = #h
+                print("[DIKA REJOIN] 📜 Trade History awal tercatat: " .. tostring(initial_trade_history_count) .. " transaksi.")
+            end
+        end
+    end)
 
     -- Loop Auto-Trade Ultra-Responsif (0.25 detik)
     while task.wait(0.25) do
@@ -393,22 +406,75 @@ task.spawn(function()
                 end
             end
 
-            -- 2. Deteksi Presisi Jendela Trade: HANYA dianggap open jika Frame / Tombol Trade benar-benar VISIBLE di layar!
+            -- 2. Helper Deteksi Objek GUI Ter-Render Fisik di Layar (Bukan Hidden Parent / Off-Screen)
+            local function is_gui_physically_rendered(obj)
+                if not obj or not obj:IsA("GuiObject") then return false end
+                if not obj.Visible then return false end
+                if obj.AbsoluteSize.X < 10 or obj.AbsoluteSize.Y < 10 then return false end
+                local pos = obj.AbsolutePosition
+                if pos.X < -150 or pos.Y < -150 or pos.X > 4000 or pos.Y > 4000 then return false end
+                local p = obj.Parent
+                while p and p:IsA("GuiObject") do
+                    if not p.Visible then return false end
+                    p = p.Parent
+                end
+                if p and p:IsA("LayerCollector") and not p.Enabled then
+                    return false
+                end
+                return true
+            end
+
+            -- Helper Cek State Trade Resmi dari ClientData Adopt Me Engine (Fsys)
+            local function check_clientdata_trade_active()
+                local active = false
+                pcall(function()
+                    local Fsys = require(ReplicatedStorage.Fsys).load
+                    local ClientData = Fsys("ClientData")
+                    if ClientData then
+                        local trd = ClientData.get("trade") or ClientData.get("active_trade")
+                        if trd and type(trd) == "table" and (trd.sender or trd.recipient or trd.partner or trd.state or trd.items) then
+                            active = true
+                        end
+                    end
+                end)
+                return active
+            end
+
+            -- Deteksi Presisi Jendela Trade: HANYA dianggap open jika ClientData aktif atau GUI Modal benar-benar TERENDER FISIK di layar!
             local tradeApp = pGui:FindFirstChild("TradeApp")
             local function check_is_trade_actually_open()
-                if not tradeApp or not tradeApp.Enabled then return false end
-                local frame = tradeApp:FindFirstChild("Frame") or tradeApp:FindFirstChild("Window") or tradeApp:FindFirstChildWhichIsA("Frame")
-                if frame and frame.Visible then
+                -- 1. Cek State Internal Adopt Me Engine (Paling Akurat)
+                if check_clientdata_trade_active() then
                     return true
                 end
+
+                -- 2. Cek GUI Layer: Harus ada modal transaksi yang benar-benar aktif di layar
+                if not tradeApp or not tradeApp.Enabled then return false end
+
+                -- Cek tombol transaksi fisik di dalam TradeApp yang benar-benar ter-render di layar
                 for _, desc in ipairs(tradeApp:GetDescendants()) do
-                    if desc:IsA("GuiButton") and desc.Visible then
+                    if desc:IsA("GuiButton") and is_gui_physically_rendered(desc) then
                         local n = string.lower(desc.Name or "")
-                        if string.find(n, "accept") or string.find(n, "confirm") or string.find(n, "decline") or string.find(n, "action") then
+                        local txt = string.lower(desc:IsA("TextButton") and desc.Text or "")
+                        if string.find(n, "accept") or string.find(n, "confirm") or string.find(n, "decline")
+                            or string.find(txt, "accept") or string.find(txt, "confirm") or string.find(txt, "terima") or string.find(txt, "konfirmasi") then
                             return true
                         end
                     end
                 end
+
+                -- Cek label status transaksi spesifik yang ter-render di layar
+                for _, desc in ipairs(tradeApp:GetDescendants()) do
+                    if desc:IsA("TextLabel") and is_gui_physically_rendered(desc) then
+                        local txt = string.lower(desc.Text or "")
+                        if string.find(txt, "your offer") or string.find(txt, "their offer")
+                            or string.find(txt, "tawaran anda") or string.find(txt, "tawaran mereka")
+                            or string.find(txt, "safe trade") or string.find(txt, "unbalanced") then
+                            return true
+                        end
+                    end
+                end
+
                 return false
             end
             local is_trade_open = check_is_trade_actually_open()
@@ -606,7 +672,29 @@ task.spawn(function()
                             end
                         end
                     end
-                end
+            end
+
+            -- D. TAHAP 4: DETEKSI RESMI TRADE HISTORY (TRADING LICENSE / CLIENTDATA)
+            -- Memantau pertambahan riwayat transaksi di Adopt Me Engine (100% Bukti Transaksi Selesai)
+            if not TRADE_COMPLETED_SUCCESS then
+                pcall(function()
+                    local Fsys = require(ReplicatedStorage.Fsys).load
+                    local ClientData = Fsys("ClientData")
+                    if ClientData then
+                        local h = ClientData.get("trade_history") or ClientData.get("trades") or ClientData.get("trade_records")
+                        if h and type(h) == "table" then
+                            local cur_count = #h
+                            if initial_trade_history_count == nil then
+                                initial_trade_history_count = cur_count
+                            elseif cur_count > initial_trade_history_count then
+                                print(string.format("[DIKA REJOIN] 📜 Deteksi Transaksi Baru di Trade History (%d -> %d)! Sukses Terkonfirmasi.", initial_trade_history_count, cur_count))
+                                task.spawn(function()
+                                    handle_trade_completed_exit(string.format("Tercatat di Trade History (#%d)", cur_count))
+                                end)
+                            end
+                        end
+                    end
+                end)
             end
         end)
     end
