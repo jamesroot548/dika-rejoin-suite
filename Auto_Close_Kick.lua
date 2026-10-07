@@ -920,50 +920,53 @@ task.spawn(function()
                 end)
 
                 -- 2. GUI Layer: Traversal tombol di dalam TradeApp
-                for _, desc in ipairs(tradeApp:GetDescendants()) do
-                    if desc:IsA("GuiButton") and desc.Visible then
-                        local name = string.lower(desc.Name or "")
-                        if name == "acceptbutton" or name == "actionbutton" or name == "greenbutton" then
-                            force_click_button(desc)
-                        elseif name == "confirmbutton" then
-                            force_click_button(desc)
-                            trade_has_confirmed = true
-                            last_confirm_time = tick()
-                        elseif string.find(name, "checkbox") or string.find(name, "agree") or string.find(name, "understand") then
-                            force_click_button(desc)
-                        end
-                    elseif desc:IsA("TextLabel") or desc:IsA("TextButton") then
-                        local txt = string.lower(desc.Text or "")
-
-                        -- Tahap 1: Accept Negotiation (Tombol Accept)
-                        if string.find(txt, "accept") or string.find(txt, "terima") then
-                            local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
-                            if btn and btn.Visible then
-                                force_click_button(btn)
+                local currentTradeApp = pGui:FindFirstChild("TradeApp")
+                if currentTradeApp and currentTradeApp.Enabled then
+                    for _, desc in ipairs(currentTradeApp:GetDescendants()) do
+                        if desc:IsA("GuiButton") and desc.Visible then
+                            local name = string.lower(desc.Name or "")
+                            if name == "acceptbutton" or name == "actionbutton" or name == "greenbutton" then
+                                force_click_button(desc)
+                            elseif name == "confirmbutton" then
+                                force_click_button(desc)
+                                trade_has_confirmed = true
+                                last_confirm_time = tick()
+                            elseif string.find(name, "checkbox") or string.find(name, "agree") or string.find(name, "understand") then
+                                force_click_button(desc)
                             end
-                        end
+                        elseif desc:IsA("TextLabel") or desc:IsA("TextButton") then
+                            local txt = string.lower(desc.Text or "")
 
-                        -- Tahap 2: Confirm Trade (Tombol Confirm - tunggu countdown selesai)
-                        if (string.find(txt, "confirm") or string.find(txt, "konfirmasi")) and not string.find(txt, "wait") then
-                            local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
-                            if btn and btn.Visible then
-                                force_click_button(btn)
+                            -- Tahap 1: Accept Negotiation (Tombol Accept)
+                            if string.find(txt, "accept") or string.find(txt, "terima") then
+                                local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
+                                if btn and btn.Visible then
+                                    force_click_button(btn)
+                                end
+                            end
+
+                            -- Tahap 2: Confirm Trade (Tombol Confirm - tunggu countdown selesai)
+                            if (string.find(txt, "confirm") or string.find(txt, "konfirmasi")) and not string.find(txt, "wait") then
+                                local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
+                                if btn and btn.Visible then
+                                    force_click_button(btn)
+                                    trade_has_confirmed = true
+                                    last_confirm_time = tick()
+                                end
+                            end
+
+                            -- Tahap 2 Indikator: Masuk ke tahap konfirmasi (teks countdown/waiting/peringatan)
+                            if string.find(txt, "waiting for") or string.find(txt, "menunggu") or string.find(txt, "safe trade") or string.find(txt, "unbalanced") then
                                 trade_has_confirmed = true
                                 last_confirm_time = tick()
                             end
-                        end
 
-                        -- Tahap 2 Indikator: Masuk ke tahap konfirmasi (teks countdown/waiting/peringatan)
-                        if string.find(txt, "waiting for") or string.find(txt, "menunggu") or string.find(txt, "safe trade") or string.find(txt, "unbalanced") then
-                            trade_has_confirmed = true
-                            last_confirm_time = tick()
-                        end
-
-                        -- Pop-up Peringatan Unbalanced Trade
-                        if string.find(txt, "understand") or string.find(txt, "trade anyway") or string.find(txt, "proceed") or string.find(txt, "paham") then
-                            local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
-                            if btn and btn.Visible then
-                                force_click_button(btn)
+                            -- Pop-up Peringatan Unbalanced Trade
+                            if string.find(txt, "understand") or string.find(txt, "trade anyway") or string.find(txt, "proceed") or string.find(txt, "paham") then
+                                local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
+                                if btn and btn.Visible then
+                                    force_click_button(btn)
+                                end
                             end
                         end
                     end
