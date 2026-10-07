@@ -193,17 +193,38 @@ end
 -- ------------------------------------------------------------------------------
 -- 1. ENGINE AUTO-TRADE PRO: INSTAN & ZERO CPU LAG
 -- ------------------------------------------------------------------------------
+
+-- Helper mencari elemen tombol yang dapat diklik dari GuiObject apa pun
+local function resolve_gui_button(obj)
+    if not obj then return nil end
+    if obj:IsA("GuiButton") then return obj end
+    local p = obj:FindFirstAncestorWhichIsA("GuiButton")
+    if p then return p end
+    local c = obj:FindFirstChildWhichIsA("GuiButton", true)
+    if c then return c end
+    return obj
+end
+
 local function force_click_button(btn)
-    if not btn or not btn:IsA("GuiButton") then return false end
+    if not btn then return false end
+    local target = resolve_gui_button(btn)
+    if not target then return false end
+
     local clicked = false
 
     -- A. Firesignal jika didukung executor (instan 0 ms)
     pcall(function()
         if firesignal then
-            firesignal(btn.Activated)
-            firesignal(btn.MouseButton1Click)
-            firesignal(btn.MouseButton1Down)
-            firesignal(btn.MouseButton1Up)
+            if target:IsA("GuiButton") then
+                firesignal(target.Activated)
+                firesignal(target.MouseButton1Click)
+                firesignal(target.MouseButton1Down)
+                firesignal(target.MouseButton1Up)
+            end
+            if btn ~= target and btn:IsA("GuiObject") then
+                pcall(function() firesignal(btn.Activated) end)
+                pcall(function() firesignal(btn.MouseButton1Click) end)
+            end
             clicked = true
         end
     end)
@@ -211,22 +232,36 @@ local function force_click_button(btn)
     -- B. getconnections (sangat andal di berbagai executor)
     pcall(function()
         if getconnections then
-            for _, conn in ipairs(getconnections(btn.MouseButton1Click)) do
-                pcall(function() conn:Fire() end)
-                clicked = true
+            local function fire_conns(sig)
+                for _, conn in ipairs(getconnections(sig)) do
+                    pcall(function() conn:Fire() end)
+                    pcall(function()
+                        if conn.Function and type(conn.Function) == "function" then
+                            conn.Function()
+                        end
+                    end)
+                    clicked = true
+                end
             end
-            for _, conn in ipairs(getconnections(btn.Activated)) do
-                pcall(function() conn:Fire() end)
-                clicked = true
+            if target:IsA("GuiButton") then
+                fire_conns(target.MouseButton1Click)
+                fire_conns(target.Activated)
+                fire_conns(target.MouseButton1Down)
+                fire_conns(target.MouseButton1Up)
+            end
+            if btn ~= target and btn:IsA("GuiObject") then
+                pcall(function() fire_conns(btn.MouseButton1Click) end)
+                pcall(function() fire_conns(btn.Activated) end)
             end
         end
     end)
 
     -- C. Virtual Input Asli Roblox Engine (Sintetik Mouse Click)
     pcall(function()
-        if btn.AbsolutePosition and btn.AbsoluteSize then
-            local cx = btn.AbsolutePosition.X + (btn.AbsoluteSize.X / 2)
-            local cy = btn.AbsolutePosition.Y + (btn.AbsoluteSize.Y / 2)
+        local obj_for_pos = (target:IsA("GuiObject") and target) or (btn:IsA("GuiObject") and btn)
+        if obj_for_pos and obj_for_pos.AbsolutePosition and obj_for_pos.AbsoluteSize then
+            local cx = obj_for_pos.AbsolutePosition.X + (obj_for_pos.AbsoluteSize.X / 2)
+            local cy = obj_for_pos.AbsolutePosition.Y + (obj_for_pos.AbsoluteSize.Y / 2)
             if VirtualInputManager then
                 VirtualInputManager:SendMouseButtonEvent(cx, cy, 0, true, game, 0)
                 task.wait(0.02)
@@ -272,24 +307,30 @@ local function call_router_client(name, ...)
     return ok, res
 end
 
--- Helper broadcast auto-accept trade request ke semua pemain lain di server
-local function fire_accept_trade_request_to_players()
+-- Helper broadcast auto-accept trade request ke pemain target atau semua pemain lain di server
+local function fire_accept_trade_request_to_players(target_player)
     local lp = Players.LocalPlayer
     if not lp then return end
 
-    local other_players = {}
-    for _, p in ipairs(Players:GetPlayers()) do
-        if p ~= lp then
-            table.insert(other_players, p)
+    local targets = {}
+    if target_player and typeof(target_player) == "Instance" and target_player:IsA("Player") then
+        table.insert(targets, target_player)
+    else
+        for _, p in ipairs(Players:GetPlayers()) do
+            if p ~= lp then
+                table.insert(targets, p)
+            end
         end
     end
-    if #other_players == 0 then return end
+    if #targets == 0 then return end
 
     -- 1. Panggil RouterClient resmi Adopt Me
-    for _, p in ipairs(other_players) do
+    for _, p in ipairs(targets) do
         task.spawn(function()
             call_router_client("TradeAPI/AcceptOrDeclineTradeRequest", p, true)
+            call_router_client("TradeAPI/AcceptOrDeclineTradeRequest", p.Name, true)
             call_router_client("TradeAPI/AcceptTradeRequest", p, true)
+            call_router_client("TradeAPI/AcceptTradeRequest", p.Name, true)
         end)
     end
 
@@ -300,9 +341,10 @@ local function fire_accept_trade_request_to_players()
             local reqRemote = API:FindFirstChild("TradeAPI/AcceptOrDeclineTradeRequest")
                 or (API:FindFirstChild("TradeAPI") and API.TradeAPI:FindFirstChild("AcceptOrDeclineTradeRequest"))
             if reqRemote then
-                for _, p in ipairs(other_players) do
+                for _, p in ipairs(targets) do
                     task.spawn(function()
                         safe_call_remote(reqRemote, p, true)
+                        safe_call_remote(reqRemote, p.Name, true)
                     end)
                 end
             end
@@ -333,47 +375,86 @@ end
 local function is_decline_button(b)
     if not b then return true end
     local n = string.lower(b.Name or "")
-    local t = string.lower(b:IsA("TextButton") and b.Text or "")
-    local label = b:FindFirstChildWhichIsA("TextLabel", true)
-    local lt = string.lower(label and label.Text or "")
+    local all_texts = {}
+    if b:IsA("TextButton") and b.Text then table.insert(all_texts, string.lower(b.Text)) end
+    if b:IsA("TextLabel") and b.Text then table.insert(all_texts, string.lower(b.Text)) end
+    for _, d in ipairs(b:GetDescendants()) do
+        if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Text then
+            table.insert(all_texts, string.lower(d.Text))
+        end
+    end
+    local combined = table.concat(all_texts, " ")
+
     if string.find(n, "decline") or string.find(n, "cancel") or string.find(n, "reject") or string.find(n, "batal") or string.find(n, "tolak")
-        or string.find(t, "decline") or string.find(t, "cancel") or string.find(t, "reject") or string.find(t, "batal") or string.find(t, "tolak")
-        or string.find(lt, "decline") or string.find(lt, "cancel") or string.find(lt, "reject") or string.find(lt, "batal") or string.find(lt, "tolak")
-        or (t == "x") or (lt == "x") or (n == "x") or (n == "closebutton") or (n == "nobutton") then
+        or string.find(combined, "decline") or string.find(combined, "cancel") or string.find(combined, "reject") or string.find(combined, "batal") or string.find(combined, "tolak")
+        or (combined == "x") or (n == "x") or (n == "closebutton") or (n == "nobutton") then
         return true
     end
+
+    -- Cek warna merah pada tombol atau anaknya
+    local function is_color_red(c)
+        return c and (c.R > 0.55 and c.R > (c.G * 1.4) and c.R > (c.B * 1.4))
+    end
+    if b:IsA("GuiObject") and is_color_red(b.BackgroundColor3) then return true end
+    if b:IsA("ImageButton") and is_color_red(b.ImageColor3) then return true end
+    for _, d in ipairs(b:GetDescendants()) do
+        if d:IsA("GuiObject") and is_color_red(d.BackgroundColor3) then return true end
+        if d:IsA("ImageButton") and is_color_red(d.ImageColor3) then return true end
+    end
+
     return false
 end
 
 -- Helper mengenali tombol Accept / Terima / Ya
 local function is_accept_button(b)
-    if not b or not b:IsA("GuiButton") or not b.Visible then return false end
+    if not b then return false end
     if is_decline_button(b) then return false end
 
     local n = string.lower(b.Name or "")
-    local t = string.lower(b:IsA("TextButton") and b.Text or "")
-    local label = b:FindFirstChildWhichIsA("TextLabel", true)
-    local lt = string.lower(label and label.Text or "")
-
-    -- Cek nama
-    if string.find(n, "accept") or string.find(n, "green") or string.find(n, "yes") or string.find(n, "trade") or string.find(n, "agree") or string.find(n, "check") or string.find(n, "confirm") or string.find(n, "action") then
-        return true
-    end
-
-    -- Cek teks
-    if string.find(t, "accept") or string.find(t, "trade") or string.find(t, "terima") or string.find(t, "yes") or string.find(t, "ya") or string.find(t, "ok") or string.find(t, "setuju") or (t == "✓") or (t == "✔") then
-        return true
-    end
-    if string.find(lt, "accept") or string.find(lt, "trade") or string.find(lt, "terima") or string.find(lt, "yes") or string.find(lt, "ya") or string.find(lt, "ok") or string.find(lt, "setuju") or (lt == "✓") or (lt == "✔") then
-        return true
-    end
-
-    -- Cek warna tombol (hijau)
-    if b.BackgroundColor3 then
-        local c = b.BackgroundColor3
-        if c.G > 0.45 and c.G > c.R and c.G > c.B then
-            return true
+    local all_texts = {}
+    if b:IsA("TextButton") and b.Text then table.insert(all_texts, string.lower(b.Text)) end
+    if b:IsA("TextLabel") and b.Text then table.insert(all_texts, string.lower(b.Text)) end
+    for _, d in ipairs(b:GetDescendants()) do
+        if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Text then
+            table.insert(all_texts, string.lower(d.Text))
         end
+    end
+    local combined = table.concat(all_texts, " ")
+
+    -- 1. Cek kecocokan teks
+    if string.find(combined, "accept")
+        or string.find(combined, "terima")
+        or string.find(combined, "yes")
+        or string.find(combined, "ya")
+        or string.find(combined, "trade")
+        or string.find(combined, "ok")
+        or string.find(combined, "setuju")
+        or string.find(combined, "✓")
+        or string.find(combined, "✔") then
+        return true
+    end
+
+    -- 2. Cek nama
+    if string.find(n, "accept")
+        or string.find(n, "green")
+        or string.find(n, "yes")
+        or string.find(n, "trade")
+        or string.find(n, "agree")
+        or string.find(n, "confirm")
+        or string.find(n, "action")
+        or string.find(n, "right") then
+        return true
+    end
+
+    -- 3. Cek warna hijau pada tombol atau anak-anaknya
+    local function is_color_green(c)
+        return c and (c.G > 0.4 and c.G > (c.R * 1.1) and c.G > (c.B * 1.1))
+    end
+    if b:IsA("GuiObject") and is_color_green(b.BackgroundColor3) then return true end
+    if b:IsA("ImageButton") and is_color_green(b.ImageColor3) then return true end
+    for _, d in ipairs(b:GetDescendants()) do
+        if d:IsA("GuiObject") and is_color_green(d.BackgroundColor3) then return true end
+        if d:IsA("ImageButton") and is_color_green(d.ImageColor3) then return true end
     end
 
     return false
@@ -386,47 +467,121 @@ local function find_trade_request_accept_buttons(pGui)
     if not pGui then return buttons end
 
     local function add_btn(b)
-        if b and b:IsA("GuiButton") and b.Visible and not seen[b] then
-            seen[b] = true
-            table.insert(buttons, b)
+        if not b then return end
+        local target = resolve_gui_button(b)
+        if target and target:IsA("GuiObject") and target.Visible and not seen[target] and not is_decline_button(target) then
+            seen[target] = true
+            table.insert(buttons, target)
         end
     end
 
-    for _, child in ipairs(pGui:GetChildren()) do
-        if child:IsA("ScreenGui") and child.Enabled and child.Name ~= "TradeApp" and child.Name ~= "NewsApp" and child.Name ~= "RoleChooserApp" then
-            -- Cari kartu/dialog yang mengandung teks trade request
-            for _, desc in ipairs(child:GetDescendants()) do
-                if (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible then
-                    local txt = desc.Text or ""
-                    if is_trade_request_text(txt) then
-                        local card = desc:FindFirstAncestorWhichIsA("GuiObject")
-                        if card then
-                            local topCard = card:FindFirstAncestorWhichIsA("GuiObject") or card
-                            for _, sub in ipairs(topCard:GetDescendants()) do
-                                if sub:IsA("GuiButton") and sub.Visible and is_accept_button(sub) then
-                                    add_btn(sub)
-                                end
-                            end
-                        end
-                    end
+    -- Strategi 1: Cari Dialog / Kartu Sticky Note permintaan trade
+    for _, desc in ipairs(pGui:GetDescendants()) do
+        if (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible and is_trade_request_text(desc.Text) then
+            -- Cari kontainer root paling atas dari dialog ini
+            local container = desc
+            while container.Parent and container.Parent:IsA("GuiObject") do
+                container = container.Parent
+            end
+            -- Cari tombol Accept di seluruh kontainer dialog
+            for _, sub in ipairs(container:GetDescendants()) do
+                if (sub:IsA("GuiButton") or sub:IsA("TextLabel")) and sub.Visible and is_accept_button(sub) then
+                    add_btn(sub)
                 end
             end
 
-            -- Juga scan langsung tombol accept yang ter-render di dalam ScreenGui dialog/notifikasi
+            -- Ekstrak nama pemain pengirim trade jika ada (e.g. 'alia_lacker sent you a trade request')
+            local full_txt = string.lower(desc.Text or "")
+            for _, p in ipairs(Players:GetPlayers()) do
+                if p ~= Players.LocalPlayer then
+                    local pname = string.lower(p.Name)
+                    local dname = string.lower(p.DisplayName)
+                    if string.find(full_txt, pname, 1, true) or string.find(full_txt, dname, 1, true) then
+                        task.spawn(function()
+                            fire_accept_trade_request_to_players(p)
+                        end)
+                    end
+                end
+            end
+        end
+    end
+
+    -- Strategi 2: Cari TextLabel berlabel "Accept" / "Terima" di seluruh PlayerGui
+    for _, desc in ipairs(pGui:GetDescendants()) do
+        if desc:IsA("TextLabel") and desc.Visible then
+            local t = string.lower(desc.Text or "")
+            if (t == "accept" or t == "terima" or string.find(t, "accept")) and not is_decline_button(desc) then
+                add_btn(desc)
+            end
+        end
+    end
+
+    -- Strategi 3: Scan semua GuiButton di PlayerGui (kecuali TradeApp)
+    for _, child in ipairs(pGui:GetChildren()) do
+        if child:IsA("ScreenGui") and child.Enabled and child.Name ~= "TradeApp" then
             for _, desc in ipairs(child:GetDescendants()) do
                 if desc:IsA("GuiButton") and desc.Visible and is_accept_button(desc) then
-                    local n = string.lower(desc.Name or "")
-                    local t = string.lower(desc:IsA("TextButton") and desc.Text or "")
-                    if string.find(n, "accept") or string.find(n, "trade") or string.find(n, "yes")
-                        or string.find(t, "accept") or string.find(t, "trade") or string.find(t, "terima") or string.find(t, "yes") then
-                        add_btn(desc)
-                    end
+                    add_btn(desc)
                 end
             end
         end
     end
 
     return buttons
+end
+
+-- Helper otomatis menutup welcome screen (NewsApp / Play!) & RoleChooserApp (Babies)
+local function auto_dismiss_welcome_screens(pGui)
+    if not pGui then return end
+
+    -- 1. NewsApp (Play! Button)
+    local newsApp = pGui:FindFirstChild("NewsApp")
+    if newsApp and newsApp.Enabled then
+        for _, desc in ipairs(newsApp:GetDescendants()) do
+            if (desc:IsA("GuiButton") or desc:IsA("TextLabel")) and desc.Visible then
+                local txt = string.lower((desc:IsA("TextButton") and desc.Text) or (desc:IsA("TextLabel") and desc.Text) or desc.Name or "")
+                for _, lbl in ipairs(desc:GetDescendants()) do
+                    if lbl:IsA("TextLabel") and lbl.Text then
+                        txt = txt .. " " .. string.lower(lbl.Text)
+                    end
+                end
+                if string.find(txt, "play") then
+                    local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
+                    if btn and btn.Visible then
+                        force_click_button(btn)
+                    end
+                end
+            end
+        end
+    end
+
+    -- 2. RoleChooserApp (Parent / Baby)
+    local roleChooser = pGui:FindFirstChild("RoleChooserApp")
+    if roleChooser and roleChooser.Enabled then
+        call_router_client("TeamAPI/ChooseTeam", "Babies")
+        pcall(function()
+            local API = ReplicatedStorage:FindFirstChild("API")
+            if API and API:FindFirstChild("TeamAPI/ChooseTeam") then
+                safe_call_remote(API["TeamAPI/ChooseTeam"], "Babies")
+            end
+        end)
+        for _, desc in ipairs(roleChooser:GetDescendants()) do
+            if (desc:IsA("GuiButton") or desc:IsA("TextLabel")) and desc.Visible then
+                local txt = string.lower((desc:IsA("TextButton") and desc.Text) or (desc:IsA("TextLabel") and desc.Text) or desc.Name or "")
+                for _, lbl in ipairs(desc:GetDescendants()) do
+                    if lbl:IsA("TextLabel") and lbl.Text then
+                        txt = txt .. " " .. string.lower(lbl.Text)
+                    end
+                end
+                if string.find(txt, "baby") or string.find(txt, "parent") then
+                    local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
+                    if btn and btn.Visible then
+                        force_click_button(btn)
+                    end
+                end
+            end
+        end
+    end
 end
 
 task.spawn(function()
@@ -440,20 +595,24 @@ task.spawn(function()
     local pGui = lp:WaitForChild("PlayerGui", 25)
     if not pGui then return end
 
-    -- Beri jeda 3 detik agar game stabil
-    task.wait(3)
-
-    print("[DIKA REJOIN] 🤝 Auto-Accept & Auto-Confirm Trade Engine Siap & Aktif (Multi-Hit 2-3x Retry & Continuous)!")
-
-    -- Event listener instan (0ms) untuk trade request dan banner notifikasi baru di PlayerGui
+    -- LANGSUNG PASANG EVENT LISTENER 0ms TANPA MENUNGGU JEDA!
     pcall(function()
         pGui.DescendantAdded:Connect(function(desc)
             if TRADE_COMPLETED_SUCCESS then return end
 
             -- Deteksi instan trade request masuk (0ms trigger)
-            if not IS_IN_TRADE_ACTIVE and (desc:IsA("TextLabel") or desc:IsA("TextButton") or desc:IsA("GuiButton")) then
-                local t = string.lower(desc:IsA("TextLabel") and desc.Text or (desc:IsA("TextButton") and desc.Text or desc.Name or ""))
-                if is_trade_request_text(t) or is_accept_button(desc) then
+            if not IS_IN_TRADE_ACTIVE then
+                local should_check = false
+                if desc:IsA("TextLabel") or desc:IsA("TextButton") or desc:IsA("GuiButton") then
+                    local t = string.lower(desc:IsA("TextLabel") and desc.Text or (desc:IsA("TextButton") and desc.Text or desc.Name or ""))
+                    if is_trade_request_text(t) or is_accept_button(desc) then
+                        should_check = true
+                    end
+                elseif desc:IsA("GuiObject") and (desc.Name == "Dialog" or desc.Name == "Notification" or string.find(string.lower(desc.Name), "trade")) then
+                    should_check = true
+                end
+
+                if should_check then
                     task.spawn(function()
                         fire_accept_trade_request_to_players()
                         for _, b in ipairs(find_trade_request_accept_buttons(pGui)) do
@@ -482,6 +641,21 @@ task.spawn(function()
         end)
     end)
 
+    -- EKSEKUSI ULTRA CEPAT SAAT MULAI (STARTUP ACCELERATOR 0ms - 3s):
+    -- Menangani jika saat bot baru spawn, sudah ada welcome screen (NewsApp) & trade request masuk!
+    task.spawn(function()
+        for i = 1, 15 do
+            auto_dismiss_welcome_screens(pGui)
+            fire_accept_trade_request_to_players()
+            for _, b in ipairs(find_trade_request_accept_buttons(pGui)) do
+                force_click_button(b)
+            end
+            task.wait(0.2)
+        end
+    end)
+
+    print("[DIKA REJOIN] 🤝 Auto-Accept & Auto-Confirm Trade Engine Siap & Aktif (Multi-Hit 2-3x Retry & Continuous)!")
+
     local is_in_trade = false
     local trade_has_confirmed = false
     local last_confirm_time = 0
@@ -504,32 +678,8 @@ task.spawn(function()
         pcall(function()
             local API = ReplicatedStorage:FindFirstChild("API")
 
-            -- 1. Auto-Dismiss NewsApp (Welcome Screen Adopt Me) & Role Chooser agar akun langsung masuk in-game!
-            local newsApp = pGui:FindFirstChild("NewsApp")
-            if newsApp and newsApp.Enabled then
-                for _, desc in ipairs(newsApp:GetDescendants()) do
-                    if desc:IsA("GuiButton") and desc.Visible then
-                        local txt = string.lower((desc:IsA("TextButton") and desc.Text) or desc.Name or "")
-                        if string.find(txt, "play") then
-                            force_click_button(desc)
-                            break
-                        end
-                    end
-                end
-            end
-
-            local roleChooser = pGui:FindFirstChild("RoleChooserApp")
-            if roleChooser and roleChooser.Enabled then
-                for _, desc in ipairs(roleChooser:GetDescendants()) do
-                    if desc:IsA("GuiButton") and desc.Visible then
-                        local txt = string.lower((desc:IsA("TextButton") and desc.Text) or desc.Name or "")
-                        if string.find(txt, "parent") or string.find(txt, "baby") then
-                            force_click_button(desc)
-                            break
-                        end
-                    end
-                end
-            end
+            -- 1. Auto-Dismiss Welcome Screens (NewsApp & RoleChooserApp)
+            auto_dismiss_welcome_screens(pGui)
 
             -- 2. Helper Deteksi Objek GUI Ter-Render Fisik di Layar (Bukan Hidden Parent / Off-Screen)
             local function is_gui_physically_rendered(obj)
@@ -606,7 +756,7 @@ task.spawn(function()
 
             -- ==========================================================
             -- A. TAHAP 0: AUTO-ACCEPT PERMINTAAN TRADE MASUK (REQUEST)
-            -- Bekerja sepanjang sesi game (bukan hanya di awal)
+            -- Bekerja sepanjang sesi game (termasuk detik awal startup)
             -- Multi-hit retry 2-3x jika terdeteksi request belum ter-accept
             -- ==========================================================
             if not is_trade_open then
@@ -615,18 +765,10 @@ task.spawn(function()
 
                 -- Cek juga apakah ada indikasi notifikasi teks trade request di ScreenGui aktif
                 if not has_request then
-                    for _, child in ipairs(pGui:GetChildren()) do
-                        if child:IsA("ScreenGui") and child.Enabled and child.Name ~= "TradeApp" and child.Name ~= "NewsApp" and child.Name ~= "RoleChooserApp" then
-                            for _, desc in ipairs(child:GetDescendants()) do
-                                if (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible then
-                                    local txt = desc.Text or ""
-                                    if is_trade_request_text(txt) then
-                                        has_request = true
-                                        break
-                                    end
-                                end
-                            end
-                            if has_request then break end
+                    for _, desc in ipairs(pGui:GetDescendants()) do
+                        if (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible and is_trade_request_text(desc.Text) then
+                            has_request = true
+                            break
                         end
                     end
                 end
