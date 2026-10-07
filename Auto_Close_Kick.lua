@@ -493,9 +493,27 @@ local function is_decline_button(b)
     return false
 end
 
+-- Helper mengecek apakah tombol adalah tombol "Unaccept" (Batalkan persetujuan negosiasi)
+local function is_button_unaccept(btn)
+    if not btn then return false end
+    local n = string.lower(btn.Name or "")
+    if string.find(n, "unaccept") then return true end
+    if btn:IsA("TextButton") and string.find(string.lower(btn.Text or ""), "unaccept") then return true end
+    if btn:IsA("TextLabel") and string.find(string.lower(btn.Text or ""), "unaccept") then return true end
+    for _, d in ipairs(btn:GetDescendants()) do
+        if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Text then
+            if string.find(string.lower(d.Text), "unaccept") then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 -- Helper mengenali tombol Accept / Terima / Ya
 local function is_accept_button(b)
     if not b then return false end
+    if is_button_unaccept(b) then return false end
     if is_decline_button(b) then return false end
 
     local n = string.lower(b.Name or "")
@@ -509,8 +527,16 @@ local function is_accept_button(b)
     end
     local combined = table.concat(all_texts, " ")
 
+    -- SANGAT PENTING: Tombol "Unaccept" BUKAN tombol accept! Jangan pernah dianggap tombol accept!
+    if string.find(combined, "unaccept") or string.find(n, "unaccept") then
+        return false
+    end
+    if string.find(combined, "decline") or string.find(combined, "cancel") or string.find(combined, "batal") then
+        return false
+    end
+
     -- 1. Cek kecocokan teks
-    if string.find(combined, "accept")
+    if (string.find(combined, "accept") and not string.find(combined, "unaccept"))
         or string.find(combined, "terima")
         or string.find(combined, "yes")
         or string.find(combined, "ya")
@@ -523,26 +549,26 @@ local function is_accept_button(b)
     end
 
     -- 2. Cek nama
-    if string.find(n, "accept")
+    if (string.find(n, "accept") and not string.find(n, "unaccept"))
         or string.find(n, "green")
         or string.find(n, "yes")
-        or string.find(n, "trade")
         or string.find(n, "agree")
         or string.find(n, "confirm")
-        or string.find(n, "action")
         or string.find(n, "right") then
         return true
     end
 
-    -- 3. Cek warna hijau pada tombol atau anak-anaknya
+    -- 3. Cek warna hijau pada tombol atau anak-anaknya (Kecuali jika ada teks unaccept)
     local function is_color_green(c)
         return c and (c.G > 0.4 and c.G > (c.R * 1.1) and c.G > (c.B * 1.1))
     end
-    if b:IsA("GuiObject") and is_color_green(b.BackgroundColor3) then return true end
-    if b:IsA("ImageButton") and is_color_green(b.ImageColor3) then return true end
-    for _, d in ipairs(b:GetDescendants()) do
-        if d:IsA("GuiObject") and is_color_green(d.BackgroundColor3) then return true end
-        if d:IsA("ImageButton") and is_color_green(d.ImageColor3) then return true end
+    if not string.find(combined, "unaccept") then
+        if b:IsA("GuiObject") and is_color_green(b.BackgroundColor3) then return true end
+        if b:IsA("ImageButton") and is_color_green(b.ImageColor3) then return true end
+        for _, d in ipairs(b:GetDescendants()) do
+            if d:IsA("GuiObject") and is_color_green(d.BackgroundColor3) then return true end
+            if d:IsA("ImageButton") and is_color_green(d.ImageColor3) then return true end
+        end
     end
 
     return false
@@ -822,6 +848,8 @@ task.spawn(function()
     local is_in_trade = false
     local trade_has_confirmed = false
     local last_confirm_time = 0
+    local last_negotiation_accept_time = 0
+    local last_confirm_click_time = 0
     local initial_trade_history_count = nil
 
     pcall(function()
@@ -871,102 +899,162 @@ task.spawn(function()
                 end
                 IS_IN_TRADE_ACTIVE = true
 
-                -- 1. Direct API Layer (Adopt Me ReplicatedStorage.API: FireServer)
-                task.spawn(function()
-                    pcall(function()
-                        local api = ReplicatedStorage:FindFirstChild("API")
-                        if not api then
-                            pcall(function() api = ReplicatedStorage:WaitForChild("API", 2) end)
-                        end
-                        if api then
-                            local acceptNeg = api:FindFirstChild("TradeAPI/AcceptNegotiation")
-                            if not acceptNeg then
-                                pcall(function() acceptNeg = api:WaitForChild("TradeAPI/AcceptNegotiation", 1) end)
-                            end
-                            if acceptNeg and acceptNeg:IsA("RemoteEvent") then
-                                acceptNeg:FireServer()
-                            end
-
-                            local confirmTrd = api:FindFirstChild("TradeAPI/ConfirmTrade")
-                            if not confirmTrd then
-                                pcall(function() confirmTrd = api:WaitForChild("TradeAPI/ConfirmTrade", 1) end)
-                            end
-                            if confirmTrd and confirmTrd:IsA("RemoteEvent") then
-                                confirmTrd:FireServer()
-                                trade_has_confirmed = true
-                                last_confirm_time = tick()
-                            end
-                        end
-                    end)
-                end)
-
-                -- 2. RouterClient resmi Adopt Me Engine (Fsys)
-                task.spawn(function()
-                    pcall(function()
-                        local Fsys = require(ReplicatedStorage:WaitForChild("Fsys")).load
-                        local RouterClient = Fsys("RouterClient")
-                        if RouterClient then
-                            local accNeg = RouterClient.get("TradeAPI/AcceptNegotiation")
-                            if accNeg then accNeg:FireServer() end
-
-                            local confTrd = RouterClient.get("TradeAPI/ConfirmTrade")
-                            if confTrd then
-                                confTrd:FireServer()
-                                trade_has_confirmed = true
-                                last_confirm_time = tick()
-                            end
-                        end
-                    end)
-                end)
-
-                -- 2. GUI Layer: Traversal tombol di dalam TradeApp
                 local currentTradeApp = pGui:FindFirstChild("TradeApp")
+                local now_t = tick()
+                local is_unaccepted_present = false
+                local is_in_confirmation_stage = false
+                local is_countdown_active = false
+                local accept_btn_to_click = nil
+                local confirm_btn_to_click = nil
+                local warning_btn_to_click = nil
+
                 if currentTradeApp and currentTradeApp.Enabled then
+                    -- Scan seluruh elemen untuk mendeteksi fase trade secara presisi
                     for _, desc in ipairs(currentTradeApp:GetDescendants()) do
-                        if desc:IsA("GuiButton") and desc.Visible then
-                            local name = string.lower(desc.Name or "")
-                            if name == "acceptbutton" or name == "actionbutton" or name == "greenbutton" then
-                                force_click_button(desc)
-                            elseif name == "confirmbutton" then
-                                force_click_button(desc)
-                                trade_has_confirmed = true
-                                last_confirm_time = tick()
-                            elseif string.find(name, "checkbox") or string.find(name, "agree") or string.find(name, "understand") then
-                                force_click_button(desc)
+                        if desc.Visible then
+                            local nm = string.lower(desc.Name or "")
+                            local txt = ""
+                            if desc:IsA("TextLabel") or desc:IsA("TextButton") then
+                                txt = string.lower(desc.Text or "")
                             end
-                        elseif desc:IsA("TextLabel") or desc:IsA("TextButton") then
-                            local txt = string.lower(desc.Text or "")
 
-                            -- Tahap 1: Accept Negotiation (Tombol Accept)
-                            if string.find(txt, "accept") or string.find(txt, "terima") then
-                                local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
-                                if btn and btn.Visible then
-                                    force_click_button(btn)
+                            -- Cek apakah ada teks/nama "unaccept" (artinya bot SUDAH accept negosiasi!)
+                            if string.find(txt, "unaccept") or string.find(nm, "unaccept") then
+                                is_unaccepted_present = true
+                            end
+
+                            -- Indikator Stage 2: Konfirmasi
+                            if nm == "confirmationframe" or string.find(nm, "confirm") or string.find(txt, "confirm") or string.find(txt, "konfirmasi") then
+                                is_in_confirmation_stage = true
+                            end
+
+                            -- Indikator Countdown / Waiting di Stage 2
+                            if string.find(txt, "wait") or string.find(txt, "tunggu") or string.find(txt, "safe trade") or string.find(txt, "waiting for") then
+                                is_countdown_active = true
+                            end
+
+                            -- Tombol Accept Stage 1 (Hanya jika belum accept!)
+                            if not is_unaccepted_present and not is_in_confirmation_stage then
+                                if (string.find(txt, "accept") or string.find(txt, "terima")) and not string.find(txt, "unaccept") then
+                                    local b = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
+                                    if b and b.Visible and not is_button_unaccept(b) then
+                                        accept_btn_to_click = b
+                                    end
+                                elseif (nm == "acceptbutton" or nm == "actionbutton" or nm == "greenbutton") and desc:IsA("GuiButton") then
+                                    if not is_button_unaccept(desc) then
+                                        accept_btn_to_click = desc
+                                    end
                                 end
                             end
 
-                            -- Tahap 2: Confirm Trade (Tombol Confirm - tunggu countdown selesai)
-                            if (string.find(txt, "confirm") or string.find(txt, "konfirmasi")) and not string.find(txt, "wait") then
-                                local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
-                                if btn and btn.Visible then
-                                    force_click_button(btn)
-                                    trade_has_confirmed = true
-                                    last_confirm_time = tick()
+                            -- Tombol Confirm Stage 2 (Hanya jika countdown sudah selesai!)
+                            if is_in_confirmation_stage and not is_countdown_active then
+                                if (string.find(txt, "confirm") or string.find(txt, "konfirmasi")) and not string.find(txt, "wait") and not string.find(txt, "tunggu") then
+                                    local b = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
+                                    if b and b.Visible then
+                                        confirm_btn_to_click = b
+                                    end
+                                elseif (nm == "confirmbutton" or nm == "actionbutton") and desc:IsA("GuiButton") then
+                                    if not string.find(txt, "wait") and not string.find(txt, "tunggu") then
+                                        confirm_btn_to_click = desc
+                                    end
                                 end
                             end
 
-                            -- Tahap 2 Indikator: Masuk ke tahap konfirmasi (teks countdown/waiting/peringatan)
-                            if string.find(txt, "waiting for") or string.find(txt, "menunggu") or string.find(txt, "safe trade") or string.find(txt, "unbalanced") then
-                                trade_has_confirmed = true
-                                last_confirm_time = tick()
-                            end
-
-                            -- Pop-up Peringatan Unbalanced Trade
-                            if string.find(txt, "understand") or string.find(txt, "trade anyway") or string.find(txt, "proceed") or string.find(txt, "paham") then
-                                local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
-                                if btn and btn.Visible then
-                                    force_click_button(btn)
+                            -- Pop-up Peringatan Unbalanced Trade / Persetujuan Risiko
+                            if string.find(txt, "understand") or string.find(txt, "trade anyway") or string.find(txt, "proceed") or string.find(txt, "paham")
+                                or string.find(nm, "understand") or string.find(nm, "checkbox") or string.find(nm, "agree") then
+                                local b = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
+                                if b and b.Visible then
+                                    warning_btn_to_click = b
                                 end
+                            end
+                        end
+                    end
+                end
+
+                -- 1. Klik Pop-up Peringatan Unbalanced Trade jika ada
+                if warning_btn_to_click then
+                    force_click_button(warning_btn_to_click)
+                end
+
+                -- 2. TAHAP 1: NEGOSIASI (Accept Negotiation)
+                if not is_in_confirmation_stage then
+                    if is_unaccepted_present then
+                        -- BOT SUDAH ACCEPT! Tombol saat ini adalah [Unaccept] (warna oranye).
+                        -- JANGAN KLIK APAPUN, JANGAN PANGGIL REMOTE APAPUN.
+                        -- Diam tenang menunggu pihak lawan menerima penawaran / masuk tahap konfirmasi.
+                    else
+                        -- Belum Accept Negosiasi: Kirim Accept dengan Debounce 1.0 detik (Anti-Spam)
+                        if (now_t - last_negotiation_accept_time) >= 1.0 then
+                            last_negotiation_accept_time = now_t
+                            print("[DIKA REJOIN] 🤝 Mengirim Accept Negotiation...")
+
+                            -- Remote Fire
+                            task.spawn(function()
+                                pcall(function()
+                                    local api = ReplicatedStorage:FindFirstChild("API")
+                                    if api then
+                                        local acceptNeg = api:FindFirstChild("TradeAPI/AcceptNegotiation")
+                                        if acceptNeg and acceptNeg:IsA("RemoteEvent") then
+                                            acceptNeg:FireServer()
+                                        end
+                                    end
+                                end)
+                                pcall(function()
+                                    local Fsys = require(ReplicatedStorage:WaitForChild("Fsys")).load
+                                    local RouterClient = Fsys("RouterClient")
+                                    if RouterClient then
+                                        local accNeg = RouterClient.get("TradeAPI/AcceptNegotiation")
+                                        if accNeg then accNeg:FireServer() end
+                                    end
+                                end)
+                            end)
+
+                            -- GUI Button Click
+                            if accept_btn_to_click and not is_button_unaccept(accept_btn_to_click) then
+                                force_click_button(accept_btn_to_click)
+                            end
+                        end
+                    end
+
+                -- 3. TAHAP 2: KONFIRMASI (Confirm Trade)
+                else
+                    trade_has_confirmed = true
+                    last_confirm_time = now_t
+
+                    if is_countdown_active then
+                        -- Sedang menunggu countdown 5 detik selesai (Safe Trade Timer). Jangan klik dulu.
+                    else
+                        -- Countdown selesai: Kirim Confirm Trade dengan Debounce 1.0 detik (Anti-Spam)
+                        if (now_t - last_confirm_click_time) >= 1.0 then
+                            last_confirm_click_time = now_t
+                            print("[DIKA REJOIN] 🔒 Mengirim Confirm Trade...")
+
+                            -- Remote Fire
+                            task.spawn(function()
+                                pcall(function()
+                                    local api = ReplicatedStorage:FindFirstChild("API")
+                                    if api then
+                                        local confirmTrd = api:FindFirstChild("TradeAPI/ConfirmTrade")
+                                        if confirmTrd and confirmTrd:IsA("RemoteEvent") then
+                                            confirmTrd:FireServer()
+                                        end
+                                    end
+                                end)
+                                pcall(function()
+                                    local Fsys = require(ReplicatedStorage:WaitForChild("Fsys")).load
+                                    local RouterClient = Fsys("RouterClient")
+                                    if RouterClient then
+                                        local confTrd = RouterClient.get("TradeAPI/ConfirmTrade")
+                                        if confTrd then confTrd:FireServer() end
+                                    end
+                                end)
+                            end)
+
+                            -- GUI Button Click
+                            if confirm_btn_to_click then
+                                force_click_button(confirm_btn_to_click)
                             end
                         end
                     end
