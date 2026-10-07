@@ -1,7 +1,7 @@
 {
-    "version": "2.3.2",
+    "version": "2.3.3",
     "release_date": "2026-10-07",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.2/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.3/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.3.2 Ghost Tray Auto-Sweep Fix (Windows 11 Full-Width Physical Area Sweep):\n- Perbaikan Total Ghost Tray Icons: Mengaktifkan kembali logika Physical Cursor Area Sweep (v2.2.3/v2.2.5) yang menyisir seluruh area sisi kanan taskbar (Shell_TrayWnd & Shell_SecondaryTrayWnd selebar 850px) serta NotifyIconOverflowWindow.\n- Kompatibilitas Windows 11 XAML Island: Memaksa Windows Explorer mendeteksi hover hardware nyata pada seluruh barisan icon Roblox yang tersisa, melenyapkan seluruh ghost tray icon seketika tanpa perlu diarahkan mouse manual lagi.\n- Dual-Layer Memory & Cursor Purge: Menggabungkan direct memory deletion (TB_DELETEBUTTON & NIM_DELETE) dengan micro-sweep 25ms dan auto-restore posisi kursor pengguna seketika."
+    "changelog": "v2.3.3 Smart Event-Driven Auto-Kick & Trade Shield Pro:\n- 🛡️ Trade Active Shield (Anti-Close Protection): Deteksi real-time saat jendela trade Adopt Me terbuka (TradeApp aktif / negosiasi). Seluruh timer rotasi otomatis dibekukan (paused) dan proses Roblox DILARANG KERAS di-kill/ditutup saat trade sedang berlangsung.\n- ⚡ Instant Auto-DC Rotation (Zero Delay): Begitu trade selesai & Roblox DC/tutup sendiri dari script auto-kick (Auto_Close_Kick.lua), tools langsung mendeteksi DC dalam hitungan milidetik dan seketika rotasi ke akun/bot berikutnya tanpa membuang waktu menunggu timer habis.\n- ⏱️ Safety Watchdog Mode: Timer durasi dialihfungsikan menjadi watchdog pengaman anti-macet yang otomatis di-pause saat trade aktif, menjamin trade aman dari pemotongan dan rotasi super cepat."
 }
