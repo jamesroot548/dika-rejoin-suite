@@ -1,7 +1,7 @@
 {
-    "version": "2.3.6",
+    "version": "2.3.7",
     "release_date": "2026-10-07",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.6/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.7/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.3.6 Filter Eksklusif Akun IN-GAME (Sembunyikan Akun Offline & Online):\n- 🟢 Filter Eksklusif Akun IN-GAME: Tabel Pet Harvester & Antrean Rotator kini dilengkapi fitur '🟢 Hanya Akun IN-GAME' (aktif secara default). Akun yang berstatus OFFLINE dan ONLINE disembunyikan total, hanya akun yang benar-benar aktif in-game di Adopt Me yang ditampilkan.\n- ⚡ Rotator Anti-Stuck: Antrean rotasi target hanya mengambil bot yang terdeteksi aktif in-game via Roblox Presence, Zeke JobId, atau Lua Heartbeat, mencegah delay menunggu bot offline.\n- 📜 Trade History Auto-Detection: Mendeteksi riwayat transaksi Adopt Me (Trading License) dan verifikasi render fisik dialog trade untuk rotasi instan begitu trade sukses."
+    "changelog": "v2.3.7 Sinkronisasi Penuh Akun IN-GAME (800+ Bot) & Anti-Scan Log Offline:\n- 🎯 Sinkronisasi Antrean Rotator 100% dengan Tabel Tab 1: Menghapus filter buatan agar seluruh bot target pemilik pet/egg (termasuk Crystal Egg, Gemstone Egg, 2D Box) dan terkonfirmasi in-game masuk utuh ke antrean rotasi (~800+ bot), tanpa terpangkas menjadi 340.\n- 🚫 Sembunyikan Log Scan Offline: Script tidak lagi mencetak '[OFFLINE] Scan:' ke console log saat opsi 'Hanya Akun IN-GAME' aktif. Hanya bot in-game yang dipindai dan dilaporkan.\n- ⚡ Akselerasi RAM Presence Cache: Pencarian status in-game kini memeriksa memori _uname_to_presence secara instan (0 ms latency)."
 }
