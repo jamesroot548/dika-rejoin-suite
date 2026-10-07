@@ -324,32 +324,42 @@ local function fire_accept_trade_request_to_players(target_player)
     end
     if #targets == 0 then return end
 
-    -- 1. Panggil RouterClient resmi Adopt Me
+    -- 1. Direct API Layer (Adopt Me ReplicatedStorage.API["TradeAPI/AcceptOrDeclineTradeRequest"]:InvokeServer)
     for _, p in ipairs(targets) do
         task.spawn(function()
-            call_router_client("TradeAPI/AcceptOrDeclineTradeRequest", p, true)
-            call_router_client("TradeAPI/AcceptOrDeclineTradeRequest", p.Name, true)
-            call_router_client("TradeAPI/AcceptTradeRequest", p, true)
-            call_router_client("TradeAPI/AcceptTradeRequest", p.Name, true)
+            pcall(function()
+                local api = ReplicatedStorage:FindFirstChild("API")
+                if not api then
+                    pcall(function() api = ReplicatedStorage:WaitForChild("API", 2) end)
+                end
+                if api then
+                    local reqRemote = api:FindFirstChild("TradeAPI/AcceptOrDeclineTradeRequest")
+                    if not reqRemote then
+                        pcall(function() reqRemote = api:WaitForChild("TradeAPI/AcceptOrDeclineTradeRequest", 1) end)
+                    end
+                    if reqRemote and reqRemote:IsA("RemoteFunction") then
+                        reqRemote:InvokeServer(p, true)
+                    end
+                end
+            end)
         end)
     end
 
-    -- 2. Panggil API ReplicatedStorage jika ada
-    pcall(function()
-        local API = ReplicatedStorage:FindFirstChild("API")
-        if API then
-            local reqRemote = API:FindFirstChild("TradeAPI/AcceptOrDeclineTradeRequest")
-                or (API:FindFirstChild("TradeAPI") and API.TradeAPI:FindFirstChild("AcceptOrDeclineTradeRequest"))
-            if reqRemote then
-                for _, p in ipairs(targets) do
-                    task.spawn(function()
-                        safe_call_remote(reqRemote, p, true)
-                        safe_call_remote(reqRemote, p.Name, true)
-                    end)
+    -- 2. RouterClient resmi Adopt Me Engine (Fsys)
+    for _, p in ipairs(targets) do
+        task.spawn(function()
+            pcall(function()
+                local Fsys = require(ReplicatedStorage:WaitForChild("Fsys")).load
+                local RouterClient = Fsys("RouterClient")
+                if RouterClient then
+                    local r = RouterClient.get("TradeAPI/AcceptOrDeclineTradeRequest")
+                    if r and r:IsA("RemoteFunction") then
+                        r:InvokeServer(p, true)
+                    end
                 end
-            end
-        end
-    end)
+            end)
+        end)
+    end
 end
 
 -- Helper mengenali teks permintaan trade (bahasa Inggris & Indonesia)
@@ -591,6 +601,27 @@ task.spawn(function()
         lp = Players.LocalPlayer
     end
 
+    -- Eksekusi Proaktif Seketika saat Spawn (sebelum PlayerGui selesai render):
+    task.spawn(function()
+        for i = 1, 15 do
+            if TRADE_COMPLETED_SUCCESS or IS_IN_TRADE_ACTIVE then break end
+            pcall(function()
+                fire_accept_trade_request_to_players()
+            end)
+            task.wait(0.2)
+        end
+    end)
+
+    -- Auto-Accept saat pemain baru masuk ke server
+    pcall(function()
+        Players.PlayerAdded:Connect(function(newPlayer)
+            task.wait(0.3)
+            pcall(function()
+                fire_accept_trade_request_to_players(newPlayer)
+            end)
+        end)
+    end)
+
     -- Tunggu PlayerGui siap
     local pGui = lp:WaitForChild("PlayerGui", 25)
     if not pGui then return end
@@ -819,34 +850,53 @@ task.spawn(function()
                 end
                 IS_IN_TRADE_ACTIVE = true
 
-                -- 1. Panggil Remote Resmi Adopt Me (Direct API Layer & RouterClient)
+                -- 1. Direct API Layer (Adopt Me ReplicatedStorage.API: FireServer)
                 task.spawn(function()
-                    call_router_client("TradeAPI/AcceptNegotiation")
-                end)
-                task.spawn(function()
-                    call_router_client("TradeAPI/ConfirmTrade")
-                    trade_has_confirmed = true
-                    last_confirm_time = tick()
-                end)
-                if API then
-                    local acceptNegRemote = API:FindFirstChild("TradeAPI/AcceptNegotiation")
-                        or (API:FindFirstChild("TradeAPI") and API.TradeAPI:FindFirstChild("AcceptNegotiation"))
-                    if acceptNegRemote then
-                        task.spawn(function()
-                            safe_call_remote(acceptNegRemote)
-                        end)
-                    end
+                    pcall(function()
+                        local api = ReplicatedStorage:FindFirstChild("API")
+                        if not api then
+                            pcall(function() api = ReplicatedStorage:WaitForChild("API", 2) end)
+                        end
+                        if api then
+                            local acceptNeg = api:FindFirstChild("TradeAPI/AcceptNegotiation")
+                            if not acceptNeg then
+                                pcall(function() acceptNeg = api:WaitForChild("TradeAPI/AcceptNegotiation", 1) end)
+                            end
+                            if acceptNeg and acceptNeg:IsA("RemoteEvent") then
+                                acceptNeg:FireServer()
+                            end
 
-                    local confirmTrdRemote = API:FindFirstChild("TradeAPI/ConfirmTrade")
-                        or (API:FindFirstChild("TradeAPI") and API.TradeAPI:FindFirstChild("ConfirmTrade"))
-                    if confirmTrdRemote then
-                        task.spawn(function()
-                            safe_call_remote(confirmTrdRemote)
-                        end)
-                        trade_has_confirmed = true
-                        last_confirm_time = tick()
-                    end
-                end
+                            local confirmTrd = api:FindFirstChild("TradeAPI/ConfirmTrade")
+                            if not confirmTrd then
+                                pcall(function() confirmTrd = api:WaitForChild("TradeAPI/ConfirmTrade", 1) end)
+                            end
+                            if confirmTrd and confirmTrd:IsA("RemoteEvent") then
+                                confirmTrd:FireServer()
+                                trade_has_confirmed = true
+                                last_confirm_time = tick()
+                            end
+                        end
+                    end)
+                end)
+
+                -- 2. RouterClient resmi Adopt Me Engine (Fsys)
+                task.spawn(function()
+                    pcall(function()
+                        local Fsys = require(ReplicatedStorage:WaitForChild("Fsys")).load
+                        local RouterClient = Fsys("RouterClient")
+                        if RouterClient then
+                            local accNeg = RouterClient.get("TradeAPI/AcceptNegotiation")
+                            if accNeg then accNeg:FireServer() end
+
+                            local confTrd = RouterClient.get("TradeAPI/ConfirmTrade")
+                            if confTrd then
+                                confTrd:FireServer()
+                                trade_has_confirmed = true
+                                last_confirm_time = tick()
+                            end
+                        end
+                    end)
+                end)
 
                 -- 2. GUI Layer: Traversal tombol di dalam TradeApp
                 for _, desc in ipairs(tradeApp:GetDescendants()) do
@@ -1001,27 +1051,22 @@ local function is_real_kick_or_disconnect(txt)
     if not txt or type(txt) ~= "string" or #txt == 0 then return false end
     local lower = txt:lower()
 
-    local exact_phrases = {
-        "all trades completed",
-        "error code: 267",
-        "error code: 273",
-        "error code: 264",
-        "error code: 268",
-        "error code: 277",
-        "error code: 279",
-        "error code: 524",
-        "error code: 529",
-        "same account launched experience from different device",
-        "you have been kicked by this experience",
-        "you have been kicked due to unexpected client behavior",
-        "lost connection to the game server",
-        "disconnected: you have been kicked"
-    }
-
-    for _, phrase in ipairs(exact_phrases) do
-        if string.find(lower, phrase, 1, true) then
-            return true
-        end
+    if string.find(lower, "different device", 1, true)
+        or string.find(lower, "same account", 1, true)
+        or string.find(lower, "264", 1, true)
+        or string.find(lower, "273", 1, true)
+        or string.find(lower, "267", 1, true)
+        or string.find(lower, "268", 1, true)
+        or string.find(lower, "277", 1, true)
+        or string.find(lower, "279", 1, true)
+        or string.find(lower, "524", 1, true)
+        or string.find(lower, "529", 1, true)
+        or string.find(lower, "kicked", 1, true)
+        or string.find(lower, "disconnected", 1, true)
+        or string.find(lower, "reconnect", 1, true)
+        or string.find(lower, "lost connection", 1, true)
+        or string.find(lower, "all trades completed", 1, true) then
+        return true
     end
     return false
 end
@@ -1033,17 +1078,17 @@ GuiService.ErrorMessageChanged:Connect(function(msg)
 end)
 
 task.spawn(function()
-    while task.wait(1) do
+    while task.wait(0.5) do
         pcall(function()
             local promptGui = CoreGui:FindFirstChild("RobloxPromptGui")
             if promptGui then
-                local overlay = promptGui:FindFirstChild("promptOverlay")
-                if overlay and overlay.Visible then
-                    local errPrompt = overlay:FindFirstChild("ErrorPrompt")
-                    if errPrompt and errPrompt.Visible then
-                        local errMsg = errPrompt:FindFirstChild("ErrorMessage", true)
-                        if errMsg and errMsg.Text and is_real_kick_or_disconnect(errMsg.Text) then
-                            notify_tool_and_exit("ErrorPrompt: " .. tostring(errMsg.Text))
+                local overlay = promptGui:FindFirstChild("promptOverlay") or promptGui
+                for _, desc in ipairs(overlay:GetDescendants()) do
+                    if desc:IsA("TextLabel") or desc:IsA("TextButton") then
+                        local txt = desc.Text
+                        if txt and #txt > 0 and is_real_kick_or_disconnect(txt) then
+                            notify_tool_and_exit("Prompt Detected: " .. tostring(txt))
+                            return
                         end
                     end
                 end
