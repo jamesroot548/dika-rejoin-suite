@@ -194,7 +194,7 @@ end
 -- 1. ENGINE AUTO-TRADE PRO: INSTAN & ZERO CPU LAG
 -- ------------------------------------------------------------------------------
 local function force_click_button(btn)
-    if not btn then return false end
+    if not btn or not btn:IsA("GuiButton") then return false end
     local clicked = false
 
     -- A. Firesignal jika didukung executor (instan 0 ms)
@@ -202,21 +202,39 @@ local function force_click_button(btn)
         if firesignal then
             firesignal(btn.Activated)
             firesignal(btn.MouseButton1Click)
+            firesignal(btn.MouseButton1Down)
+            firesignal(btn.MouseButton1Up)
             clicked = true
         end
     end)
 
-    -- B. Virtual Input Asli Roblox Engine (Sintetik Mouse Click)
+    -- B. getconnections (sangat andal di berbagai executor)
+    pcall(function()
+        if getconnections then
+            for _, conn in ipairs(getconnections(btn.MouseButton1Click)) do
+                pcall(function() conn:Fire() end)
+                clicked = true
+            end
+            for _, conn in ipairs(getconnections(btn.Activated)) do
+                pcall(function() conn:Fire() end)
+                clicked = true
+            end
+        end
+    end)
+
+    -- C. Virtual Input Asli Roblox Engine (Sintetik Mouse Click)
     pcall(function()
         if btn.AbsolutePosition and btn.AbsoluteSize then
             local cx = btn.AbsolutePosition.X + (btn.AbsoluteSize.X / 2)
             local cy = btn.AbsolutePosition.Y + (btn.AbsoluteSize.Y / 2)
             if VirtualInputManager then
                 VirtualInputManager:SendMouseButtonEvent(cx, cy, 0, true, game, 0)
+                task.wait(0.02)
                 VirtualInputManager:SendMouseButtonEvent(cx, cy, 0, false, game, 0)
                 clicked = true
             elseif VirtualUser then
                 VirtualUser:Button1Down(Vector2.new(cx, cy))
+                task.wait(0.02)
                 VirtualUser:Button1Up(Vector2.new(cx, cy))
                 clicked = true
             end
@@ -238,6 +256,129 @@ local function safe_call_remote(remote, ...)
     return ok, res
 end
 
+-- Helper memanggil remote internal Adopt Me via RouterClient (Engine Resmi)
+local function call_router_client(name, ...)
+    local ok, res = false, nil
+    pcall(function(...)
+        local Fsys = require(ReplicatedStorage.Fsys).load
+        local RouterClient = Fsys("RouterClient")
+        if RouterClient then
+            local r = RouterClient.get(name)
+            if r then
+                ok, res = safe_call_remote(r, ...)
+            end
+        end
+    end, ...)
+    return ok, res
+end
+
+-- Helper broadcast auto-accept trade request ke semua pemain lain di server
+local function fire_accept_trade_request_to_players()
+    local lp = Players.LocalPlayer
+    if not lp then return end
+
+    local other_players = {}
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= lp then
+            table.insert(other_players, p)
+        end
+    end
+    if #other_players == 0 then return end
+
+    -- 1. Panggil RouterClient resmi Adopt Me
+    for _, p in ipairs(other_players) do
+        task.spawn(function()
+            call_router_client("TradeAPI/AcceptOrDeclineTradeRequest", p, true)
+            call_router_client("TradeAPI/AcceptTradeRequest", p, true)
+        end)
+    end
+
+    -- 2. Panggil API ReplicatedStorage jika ada
+    pcall(function()
+        local API = ReplicatedStorage:FindFirstChild("API")
+        if API then
+            local reqRemote = API:FindFirstChild("TradeAPI/AcceptOrDeclineTradeRequest")
+                or (API:FindFirstChild("TradeAPI") and API.TradeAPI:FindFirstChild("AcceptOrDeclineTradeRequest"))
+            if reqRemote then
+                for _, p in ipairs(other_players) do
+                    task.spawn(function()
+                        safe_call_remote(reqRemote, p, true)
+                    end)
+                end
+            end
+        end
+    end)
+end
+
+-- Helper mengenali teks permintaan trade (bahasa Inggris & Indonesia)
+local function is_trade_request_text(txt)
+    if not txt or type(txt) ~= "string" then return false end
+    local l = string.lower(txt)
+    if string.find(l, "trade request")
+        or string.find(l, "sent you a trade")
+        or string.find(l, "wants to trade")
+        or string.find(l, "trade invitation")
+        or string.find(l, "trade with")
+        or string.find(l, "sent a trade")
+        or string.find(l, "pertukaran")
+        or string.find(l, "ingin bertukar")
+        or string.find(l, "permintaan")
+        or (string.find(l, "trade") and (string.find(l, "with") or string.find(l, "req") or string.find(l, "?") or string.find(l, "invit"))) then
+        return true
+    end
+    return false
+end
+
+-- Helper mengenali tombol Decline / Cancel / Tolak
+local function is_decline_button(b)
+    if not b then return true end
+    local n = string.lower(b.Name or "")
+    local t = string.lower(b:IsA("TextButton") and b.Text or "")
+    local label = b:FindFirstChildWhichIsA("TextLabel", true)
+    local lt = string.lower(label and label.Text or "")
+    if string.find(n, "decline") or string.find(n, "cancel") or string.find(n, "reject") or string.find(n, "batal") or string.find(n, "tolak")
+        or string.find(t, "decline") or string.find(t, "cancel") or string.find(t, "reject") or string.find(t, "batal") or string.find(t, "tolak")
+        or string.find(lt, "decline") or string.find(lt, "cancel") or string.find(lt, "reject") or string.find(lt, "batal") or string.find(lt, "tolak")
+        or (t == "x") or (lt == "x") or (n == "x") or (n == "closebutton") or (n == "nobutton") then
+        return true
+    end
+    return false
+end
+
+-- Helper mengenali tombol Accept / Terima / Ya
+local function is_accept_button(b)
+    if not b or not b:IsA("GuiButton") or not b.Visible then return false end
+    if is_decline_button(b) then return false end
+
+    local n = string.lower(b.Name or "")
+    local t = string.lower(b:IsA("TextButton") and b.Text or "")
+    local label = b:FindFirstChildWhichIsA("TextLabel", true)
+    local lt = string.lower(label and label.Text or "")
+
+    -- Cek nama
+    if string.find(n, "accept") or string.find(n, "green") or string.find(n, "yes") or string.find(n, "trade") or string.find(n, "agree") or string.find(n, "check") or string.find(n, "confirm") or string.find(n, "action") then
+        return true
+    end
+
+    -- Cek teks
+    if string.find(t, "accept") or string.find(t, "trade") or string.find(t, "terima") or string.find(t, "yes") or string.find(t, "ya") or string.find(t, "ok") or string.find(t, "setuju") or (t == "✓") or (t == "✔") then
+        return true
+    end
+    if string.find(lt, "accept") or string.find(lt, "trade") or string.find(lt, "terima") or string.find(lt, "yes") or string.find(lt, "ya") or string.find(lt, "ok") or string.find(lt, "setuju") or (lt == "✓") or (lt == "✔") then
+        return true
+    end
+
+    -- Cek warna tombol (hijau)
+    if b.BackgroundColor3 then
+        local c = b.BackgroundColor3
+        if c.G > 0.45 and c.G > c.R and c.G > c.B then
+            return true
+        end
+    end
+
+    return false
+end
+
 -- Helper deteksi tombol Accept pada pop-up notifikasi atau dialog permintaan trade masuk
 local function find_trade_request_accept_buttons(pGui)
     local buttons = {}
@@ -251,30 +392,18 @@ local function find_trade_request_accept_buttons(pGui)
         end
     end
 
-    -- Kumpulkan container dialog & notifikasi yang sedang aktif di PlayerGui
-    local candidate_containers = {}
-    for _, name in ipairs({"NotificationsApp", "NotificationApp", "DialogApp", "HintsApp"}) do
-        local app = pGui:FindFirstChild(name)
-        if app and app.Enabled then
-            table.insert(candidate_containers, app)
-        end
-    end
-
-    for _, container in ipairs(candidate_containers) do
-        -- Cek jika ada kartu khusus bertuliskan "trade request" atau "sent you a trade" (sticky note Adopt Me)
-        for _, desc in ipairs(container:GetDescendants()) do
-            if desc:IsA("TextLabel") and desc.Visible then
-                local txt = string.lower(desc.Text or "")
-                if string.find(txt, "trade request") or string.find(txt, "sent you a trade") then
-                    local card = desc:FindFirstAncestorWhichIsA("GuiObject")
-                    if card then
-                        local topCard = card:FindFirstAncestorWhichIsA("GuiObject") or card
-                        for _, sub in ipairs(topCard:GetDescendants()) do
-                            if sub:IsA("GuiButton") and sub.Visible then
-                                local subname = string.lower(sub.Name or "")
-                                local subtext = sub:IsA("TextButton") and string.lower(sub.Text or "") or ""
-                                local is_decline = string.find(subname, "decline") or string.find(subname, "cancel") or string.find(subname, "no") or string.find(subname, "red") or string.find(subtext, "decline") or string.find(subtext, "cancel")
-                                if not is_decline then
+    for _, child in ipairs(pGui:GetChildren()) do
+        if child:IsA("ScreenGui") and child.Enabled and child.Name ~= "TradeApp" and child.Name ~= "NewsApp" and child.Name ~= "RoleChooserApp" then
+            -- Cari kartu/dialog yang mengandung teks trade request
+            for _, desc in ipairs(child:GetDescendants()) do
+                if (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible then
+                    local txt = desc.Text or ""
+                    if is_trade_request_text(txt) then
+                        local card = desc:FindFirstAncestorWhichIsA("GuiObject")
+                        if card then
+                            local topCard = card:FindFirstAncestorWhichIsA("GuiObject") or card
+                            for _, sub in ipairs(topCard:GetDescendants()) do
+                                if sub:IsA("GuiButton") and sub.Visible and is_accept_button(sub) then
                                     add_btn(sub)
                                 end
                             end
@@ -282,34 +411,15 @@ local function find_trade_request_accept_buttons(pGui)
                     end
                 end
             end
-        end
 
-        -- Cari tombol accept berdasarkan nama atau teks di dalam container
-        for _, desc in ipairs(container:GetDescendants()) do
-            if desc:IsA("GuiButton") and desc.Visible then
-                local name = string.lower(desc.Name or "")
-                if name == "acceptbutton" or name == "greenbutton" or name == "yesbutton" or name == "accept" then
-                    add_btn(desc)
-                elseif desc:IsA("TextButton") then
-                    local txt = string.lower(desc.Text or "")
-                    if string.find(txt, "accept") or string.find(txt, "terima") or string.find(txt, "yes") then
+            -- Juga scan langsung tombol accept yang ter-render di dalam ScreenGui dialog/notifikasi
+            for _, desc in ipairs(child:GetDescendants()) do
+                if desc:IsA("GuiButton") and desc.Visible and is_accept_button(desc) then
+                    local n = string.lower(desc.Name or "")
+                    local t = string.lower(desc:IsA("TextButton") and desc.Text or "")
+                    if string.find(n, "accept") or string.find(n, "trade") or string.find(n, "yes")
+                        or string.find(t, "accept") or string.find(t, "trade") or string.find(t, "terima") or string.find(t, "yes") then
                         add_btn(desc)
-                    end
-                else
-                    local label = desc:FindFirstChildWhichIsA("TextLabel", true)
-                    if label and label.Visible then
-                        local ltxt = string.lower(label.Text or "")
-                        if string.find(ltxt, "accept") or string.find(ltxt, "terima") or string.find(ltxt, "yes") then
-                            add_btn(desc)
-                        end
-                    end
-                end
-            elseif (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible then
-                local txt = string.lower(desc.Text or "")
-                if string.find(txt, "accept") or string.find(txt, "terima") or string.find(txt, "yes") then
-                    local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
-                    if btn and btn.Visible then
-                        add_btn(btn)
                     end
                 end
             end
@@ -335,10 +445,25 @@ task.spawn(function()
 
     print("[DIKA REJOIN] 🤝 Auto-Accept & Auto-Confirm Trade Engine Siap & Aktif (Multi-Hit 2-3x Retry & Continuous)!")
 
-    -- Event listener instan (0ms) untuk banner notifikasi baru di PlayerGui
+    -- Event listener instan (0ms) untuk trade request dan banner notifikasi baru di PlayerGui
     pcall(function()
         pGui.DescendantAdded:Connect(function(desc)
             if TRADE_COMPLETED_SUCCESS then return end
+
+            -- Deteksi instan trade request masuk (0ms trigger)
+            if not IS_IN_TRADE_ACTIVE and (desc:IsA("TextLabel") or desc:IsA("TextButton") or desc:IsA("GuiButton")) then
+                local t = string.lower(desc:IsA("TextLabel") and desc.Text or (desc:IsA("TextButton") and desc.Text or desc.Name or ""))
+                if is_trade_request_text(t) or is_accept_button(desc) then
+                    task.spawn(function()
+                        fire_accept_trade_request_to_players()
+                        for _, b in ipairs(find_trade_request_accept_buttons(pGui)) do
+                            force_click_button(b)
+                        end
+                    end)
+                end
+            end
+
+            -- Deteksi instan notifikasi trade sukses
             if (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible then
                 local txt = string.lower(desc.Text or "")
                 if string.find(txt, "trade was successful") 
@@ -490,13 +615,12 @@ task.spawn(function()
 
                 -- Cek juga apakah ada indikasi notifikasi teks trade request di ScreenGui aktif
                 if not has_request then
-                    for _, name in ipairs({"NotificationsApp", "NotificationApp", "DialogApp", "HintsApp"}) do
-                        local app = pGui:FindFirstChild(name)
-                        if app and app.Enabled then
-                            for _, desc in ipairs(app:GetDescendants()) do
-                                if desc:IsA("TextLabel") and desc.Visible then
-                                    local txt = string.lower(desc.Text or "")
-                                    if string.find(txt, "trade request") or string.find(txt, "sent you a trade") then
+                    for _, child in ipairs(pGui:GetChildren()) do
+                        if child:IsA("ScreenGui") and child.Enabled and child.Name ~= "TradeApp" and child.Name ~= "NewsApp" and child.Name ~= "RoleChooserApp" then
+                            for _, desc in ipairs(child:GetDescendants()) do
+                                if (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible then
+                                    local txt = desc.Text or ""
+                                    if is_trade_request_text(txt) then
                                         has_request = true
                                         break
                                     end
@@ -507,6 +631,11 @@ task.spawn(function()
                     end
                 end
 
+                -- Jika ada pemain lain di server, jalankan proactive accept remote ke semua player
+                if #Players:GetPlayers() > 1 then
+                    fire_accept_trade_request_to_players()
+                end
+
                 if has_request then
                     -- Jalankan 2-3x multi-hit accept secara berurutan sampai ter-accept
                     for attempt = 1, 3 do
@@ -514,19 +643,8 @@ task.spawn(function()
                             break
                         end
 
-                        -- 1. Panggil Remote Resmi Adopt Me ke semua pemain lain
-                        if API then
-                            local reqRemote = API:FindFirstChild("TradeAPI/AcceptOrDeclineTradeRequest")
-                            if reqRemote then
-                                for _, player in ipairs(Players:GetPlayers()) do
-                                    if player ~= lp then
-                                        task.spawn(function()
-                                            safe_call_remote(reqRemote, player, true)
-                                        end)
-                                    end
-                                end
-                            end
-                        end
+                        -- 1. Panggil Remote Resmi Adopt Me ke semua pemain lain (RouterClient + Direct API)
+                        fire_accept_trade_request_to_players()
 
                         -- 2. Klik semua tombol Accept yang terdeteksi
                         local btns_to_click = find_trade_request_accept_buttons(pGui)
@@ -534,9 +652,9 @@ task.spawn(function()
                             force_click_button(btn)
                         end
 
-                        -- 3. Jeda singkat 120ms sebelum retry berikutnya (jika belum ke-accept)
+                        -- 3. Jeda singkat 100ms sebelum retry berikutnya (jika belum ke-accept)
                         if attempt < 3 then
-                            task.wait(0.12)
+                            task.wait(0.1)
                         end
                     end
                 end
@@ -559,9 +677,18 @@ task.spawn(function()
                 end
                 IS_IN_TRADE_ACTIVE = true
 
-                -- 1. Panggil Remote Resmi Adopt Me (Direct API Layer)
+                -- 1. Panggil Remote Resmi Adopt Me (Direct API Layer & RouterClient)
+                task.spawn(function()
+                    call_router_client("TradeAPI/AcceptNegotiation")
+                end)
+                task.spawn(function()
+                    call_router_client("TradeAPI/ConfirmTrade")
+                    trade_has_confirmed = true
+                    last_confirm_time = tick()
+                end)
                 if API then
                     local acceptNegRemote = API:FindFirstChild("TradeAPI/AcceptNegotiation")
+                        or (API:FindFirstChild("TradeAPI") and API.TradeAPI:FindFirstChild("AcceptNegotiation"))
                     if acceptNegRemote then
                         task.spawn(function()
                             safe_call_remote(acceptNegRemote)
@@ -569,6 +696,7 @@ task.spawn(function()
                     end
 
                     local confirmTrdRemote = API:FindFirstChild("TradeAPI/ConfirmTrade")
+                        or (API:FindFirstChild("TradeAPI") and API.TradeAPI:FindFirstChild("ConfirmTrade"))
                     if confirmTrdRemote then
                         task.spawn(function()
                             safe_call_remote(confirmTrdRemote)
