@@ -1,7 +1,7 @@
 {
-    "version": "2.4.1",
-    "release_date": "2026-10-07",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.4.1/Dika_Rejoin_All_In_One.exe",
+    "version": "2.4.2",
+    "release_date": "2026-10-08",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.4.2/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.4.1 Perbaikan Tuntas Distribusi Auto-Update Lua & Auto-Accept Trade Multi-Window (Background & Foreground):\n- 🔄 Distribusi Update Otomatis Terjamin (Semua Komputer Pengguna): Memperbaiki Update.exe (rekompilasi baru) dan sistem auto-sync internal tools agar file Auto_Close_Kick.lua di PC pengguna SELALU tertimpa versi terbaru dari GitHub & binary tanpa tertahan cache CDN atau guard lokal.\n- 🤝 Auto-Accept Trade Multi-Window & Background: Mendeteksi kartu/sticky note permintaan trade dengan membaca seluruh teks kontainer dialog dan langsung memanggil Remote resmi 'TradeAPI/AcceptOrDeclineTradeRequest' (InvokeServer player, true). Berfungsi 100% instan baik di window aktif maupun background (multi-akun Roblox).\n- 🚀 Bypass Welcome Screen Instan (Startup Accelerator): Otomatis menutup NewsApp ('Play!'), RoleChooserApp ('Babies'), dan DailyLoginApp secara instan (Enabled = false) dalam 5 detik pertama agar bot langsung siap trade tanpa terhalang pop-up sambutan.\n- ⚡ 1-Line Loadstring CDN Cache-Buster: Menggunakan parameter timestamp '?t=os.time()' pada URL raw GitHub sehingga Autoexec di executor selalu mengunduh script versi teranyar."
+    "changelog": "v2.4.2 Presisi Auto-Accept Trade Request Adopt Me (RemoteSpy Exact & Anti-Spam):\n- 🤝 Deteksi & Accept Trade Request Presisi (Anti-Spam): Menghapus spamming remote di latar belakang yang memicu rate-limit/debounce Adopt Me. Auto-accept sekarang HANYA dieksekusi saat ada permintaan trade nyata di layar (terdeteksi dari kartu Sticky Note DialogApp/PlayerGui).\n- 🎯 Eksekusi Packet RemoteSpy Resmi: Memanggil remote resmi 'TradeAPI/AcceptOrDeclineTradeRequest':InvokeServer(sender, true) dengan pengirim yang diekstrak langsung dari username kartu dialog, disertai penekanan tombol fisik Accept.\n- 🚀 Performa Halus & Tanpa Tabrakan: Tidak ada tabrakan remote antar pemain dan bot siap menerima trade seketika pemain mengirimkan request."
 }
