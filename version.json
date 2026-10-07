@@ -1,7 +1,7 @@
 {
-    "version": "2.3.4",
+    "version": "2.3.5",
     "release_date": "2026-10-07",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.4/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.5/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.3.4 Fix False Trade Shield & Auto-Dismiss Welcome Play Screen:\n- 🛡️ Presisi Deteksi Trade (Anti-Stuck): Memperbaiki bug di mana TradeApp.Enabled di Adopt Me selalu aktif (true) sejak awal spawn yang membuat Trade Shield aktif palsu dan timer diam. Sekarang trade hanya dianggap aktif jika Frame/Tombol transaksi benar-benar terbuka dan visible di layar.\n- 🚀 Auto-Click 'Play' & Role Chooser: Otomatis menekan tombol hijau 'Play!' pada NewsApp Adopt Me dan memilih peran agar akun tidak tertahan diam di layar Welcome dan langsung spawn in-game.\n- ⏱️ Trade Shield Auto-Expire (85s) & Unblock Close: Menambahkan batas waktu perlindungan trade maksimal 85 detik agar watchdog rotasi tidak pernah membeku/macet jika ada anomali trade, dan proses roblox tertutup mulus saat rotasi."
+    "changelog": "v2.3.5 Trade History Auto-Detection & Physical Render Verification:\n- 📜 Deteksi Otomatis Trade History (Trading License): Otomatis membaca riwayat transaksi in-game Adopt Me. Begitu transaksi baru tercatat di Trade History (seperti riwayat di Trading License), script seketika mendeteksi transaksi sukses, memberi jeda aman 1.8s simpan inventori, lalu auto-DC & rotasi instan.\n- 🛡️ 100% Anti-False Shield: Deteksi modal trade fisik (is_gui_physically_rendered). Tidak akan pernah lagi mendeteksi trade aktif palsu saat akun hanya berdiri di rumah/lobby.\n- ⏱️ Watchdog Timer Presisi: Watchdog mengikuti tepat durasi pilihan pengguna (misal 80s) tanpa dipaksa menjadi 120s.\n- 🔒 Anti-Deadlock Trade Shield: Memperbaiki pencatatan timestamp trade di Python agar batas waktu maksimal trade shield (85s) bekerja akurat dan anti-stuck."
 }
