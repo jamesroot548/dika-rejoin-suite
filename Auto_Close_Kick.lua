@@ -493,30 +493,67 @@ local function find_trade_request_accept_buttons(pGui)
             while container.Parent and container.Parent:IsA("GuiObject") do
                 container = container.Parent
             end
-            -- Cari tombol Accept di seluruh kontainer dialog
+
+            -- Kumpulkan SEMUA teks di dalam seluruh kontainer dialog untuk matching nama pengirim
+            local container_texts = {}
             for _, sub in ipairs(container:GetDescendants()) do
+                if (sub:IsA("TextLabel") or sub:IsA("TextButton")) and sub.Text and #sub.Text > 0 then
+                    table.insert(container_texts, string.lower(sub.Text))
+                end
+                -- Cari tombol Accept di kontainer dialog
                 if (sub:IsA("GuiButton") or sub:IsA("TextLabel")) and sub.Visible and is_accept_button(sub) then
                     add_btn(sub)
                 end
             end
+            local combined_dialog = table.concat(container_texts, " ")
 
-            -- Ekstrak nama pemain pengirim trade jika ada (e.g. 'alia_lacker sent you a trade request')
-            local full_txt = string.lower(desc.Text or "")
+            -- Match pemain pengirim trade dari gabungan seluruh teks kartu dialog
+            local matched_sender = false
             for _, p in ipairs(Players:GetPlayers()) do
                 if p ~= Players.LocalPlayer then
                     local pname = string.lower(p.Name)
                     local dname = string.lower(p.DisplayName)
-                    if string.find(full_txt, pname, 1, true) or string.find(full_txt, dname, 1, true) then
+                    if string.find(combined_dialog, pname, 1, true) or string.find(combined_dialog, dname, 1, true) then
+                        matched_sender = true
+                        print("[DIKA REJOIN] 🎯 Terdeteksi Trade Request Masuk dari: " .. p.Name .. " (" .. p.DisplayName .. ")")
                         task.spawn(function()
                             fire_accept_trade_request_to_players(p)
                         end)
                     end
                 end
             end
+
+            -- Panggil remote accept (baik target spesifik maupun broadcast) agar langsung ter-accept di background
+            task.spawn(function()
+                fire_accept_trade_request_to_players()
+            end)
         end
     end
 
-    -- Strategi 2: Cari TextLabel berlabel "Accept" / "Terima" di seluruh PlayerGui
+    -- Strategi 2: Cari DialogApp / NotificationApp khusus Adopt Me
+    for _, app_name in ipairs({"DialogApp", "NotificationsApp", "NotificationApp", "HintApp"}) do
+        local app = pGui:FindFirstChild(app_name)
+        if app and app.Enabled then
+            for _, desc in ipairs(app:GetDescendants()) do
+                if (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible and is_trade_request_text(desc.Text) then
+                    local container = desc
+                    while container.Parent and container.Parent:IsA("GuiObject") do
+                        container = container.Parent
+                    end
+                    for _, sub in ipairs(container:GetDescendants()) do
+                        if (sub:IsA("GuiButton") or sub:IsA("TextLabel")) and sub.Visible and is_accept_button(sub) then
+                            add_btn(sub)
+                        end
+                    end
+                    task.spawn(function()
+                        fire_accept_trade_request_to_players()
+                    end)
+                end
+            end
+        end
+    end
+
+    -- Strategi 3: Cari TextLabel berlabel "Accept" / "Terima" di seluruh PlayerGui
     for _, desc in ipairs(pGui:GetDescendants()) do
         if desc:IsA("TextLabel") and desc.Visible then
             local t = string.lower(desc.Text or "")
@@ -526,7 +563,7 @@ local function find_trade_request_accept_buttons(pGui)
         end
     end
 
-    -- Strategi 3: Scan semua GuiButton di PlayerGui (kecuali TradeApp)
+    -- Strategi 4: Scan semua GuiButton di PlayerGui (kecuali TradeApp)
     for _, child in ipairs(pGui:GetChildren()) do
         if child:IsA("ScreenGui") and child.Enabled and child.Name ~= "TradeApp" then
             for _, desc in ipairs(child:GetDescendants()) do
@@ -563,6 +600,7 @@ local function auto_dismiss_welcome_screens(pGui)
                 end
             end
         end
+        pcall(function() newsApp.Enabled = false end)
     end
 
     -- 2. RoleChooserApp (Parent / Baby)
@@ -591,6 +629,24 @@ local function auto_dismiss_welcome_screens(pGui)
                 end
             end
         end
+        pcall(function() roleChooser.Enabled = false end)
+    end
+
+    -- 3. DailyLoginApp (Klaim Login Harian jika menghalangi)
+    local dailyApp = pGui:FindFirstChild("DailyLoginApp")
+    if dailyApp and dailyApp.Enabled then
+        for _, desc in ipairs(dailyApp:GetDescendants()) do
+            if (desc:IsA("GuiButton") or desc:IsA("TextLabel")) and desc.Visible then
+                local txt = string.lower((desc:IsA("TextButton") and desc.Text) or (desc:IsA("TextLabel") and desc.Text) or desc.Name or "")
+                if string.find(txt, "claim") or string.find(txt, "klaim") or string.find(txt, "ok") then
+                    local btn = desc:IsA("GuiButton") and desc or desc:FindFirstAncestorWhichIsA("GuiButton")
+                    if btn and btn.Visible then
+                        force_click_button(btn)
+                    end
+                end
+            end
+        end
+        pcall(function() dailyApp.Enabled = false end)
     end
 end
 
@@ -672,10 +728,11 @@ task.spawn(function()
         end)
     end)
 
-    -- EKSEKUSI ULTRA CEPAT SAAT MULAI (STARTUP ACCELERATOR 0ms - 3s):
+    -- EKSEKUSI ULTRA CEPAT SAAT MULAI (STARTUP ACCELERATOR 0ms - 5s):
     -- Menangani jika saat bot baru spawn, sudah ada welcome screen (NewsApp) & trade request masuk!
     task.spawn(function()
-        for i = 1, 15 do
+        for i = 1, 25 do
+            if TRADE_COMPLETED_SUCCESS or IS_IN_TRADE_ACTIVE then break end
             auto_dismiss_welcome_screens(pGui)
             fire_accept_trade_request_to_players()
             for _, b in ipairs(find_trade_request_accept_buttons(pGui)) do
