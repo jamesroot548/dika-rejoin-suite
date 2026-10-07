@@ -139,7 +139,8 @@ task.spawn(function()
     while task.wait(3) do
         send_webhook("tab_heartbeat", {
             username = lp.Name,
-            userId = tostring(lp.UserId)
+            userId = tostring(lp.UserId),
+            in_trade = IS_IN_TRADE_ACTIVE
         })
     end
 end)
@@ -437,7 +438,16 @@ task.spawn(function()
             -- HANYA jika TradeApp aktif
             -- ==========================================================
             if is_trade_open then
-                is_in_trade = true
+                if not is_in_trade then
+                    is_in_trade = true
+                    IS_IN_TRADE_ACTIVE = true
+                    print("[DIKA REJOIN] 🤝 Jendela Trade Terbuka! Mengirim sinyal Trade Active (Shield) ke tools...")
+                    send_webhook("trade_active", {
+                        username = lp.Name,
+                        userId = tostring(lp.UserId),
+                        in_trade = true
+                    })
+                end
                 IS_IN_TRADE_ACTIVE = true
 
                 -- 1. Panggil Remote Resmi Adopt Me (Direct API Layer)
@@ -513,6 +523,12 @@ task.spawn(function()
                 if is_in_trade then
                     is_in_trade = false
                     IS_IN_TRADE_ACTIVE = false
+                    print("[DIKA REJOIN] 🛡️ Sesi Trade Selesai / Jendela Tertutup. Mengirim status normal ke tools...")
+                    send_webhook("trade_active", {
+                        username = lp.Name,
+                        userId = tostring(lp.UserId),
+                        in_trade = false
+                    })
                     -- Jika trade tadi telah terkonfirmasi sukses, langsung jalankan auto-exit & rotasi!
                     if trade_has_confirmed and (tick() - last_confirm_time < 20) then
                         task.spawn(function()
