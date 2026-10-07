@@ -365,8 +365,53 @@ task.spawn(function()
     while task.wait(0.25) do
         pcall(function()
             local API = ReplicatedStorage:FindFirstChild("API")
+
+            -- 1. Auto-Dismiss NewsApp (Welcome Screen Adopt Me) & Role Chooser agar akun langsung masuk in-game!
+            local newsApp = pGui:FindFirstChild("NewsApp")
+            if newsApp and newsApp.Enabled then
+                for _, desc in ipairs(newsApp:GetDescendants()) do
+                    if desc:IsA("GuiButton") and desc.Visible then
+                        local txt = string.lower((desc:IsA("TextButton") and desc.Text) or desc.Name or "")
+                        if string.find(txt, "play") then
+                            force_click_button(desc)
+                            break
+                        end
+                    end
+                end
+            end
+
+            local roleChooser = pGui:FindFirstChild("RoleChooserApp")
+            if roleChooser and roleChooser.Enabled then
+                for _, desc in ipairs(roleChooser:GetDescendants()) do
+                    if desc:IsA("GuiButton") and desc.Visible then
+                        local txt = string.lower((desc:IsA("TextButton") and desc.Text) or desc.Name or "")
+                        if string.find(txt, "parent") or string.find(txt, "baby") then
+                            force_click_button(desc)
+                            break
+                        end
+                    end
+                end
+            end
+
+            -- 2. Deteksi Presisi Jendela Trade: HANYA dianggap open jika Frame / Tombol Trade benar-benar VISIBLE di layar!
             local tradeApp = pGui:FindFirstChild("TradeApp")
-            local is_trade_open = (tradeApp and tradeApp.Enabled)
+            local function check_is_trade_actually_open()
+                if not tradeApp or not tradeApp.Enabled then return false end
+                local frame = tradeApp:FindFirstChild("Frame") or tradeApp:FindFirstChild("Window") or tradeApp:FindFirstChildWhichIsA("Frame")
+                if frame and frame.Visible then
+                    return true
+                end
+                for _, desc in ipairs(tradeApp:GetDescendants()) do
+                    if desc:IsA("GuiButton") and desc.Visible then
+                        local n = string.lower(desc.Name or "")
+                        if string.find(n, "accept") or string.find(n, "confirm") or string.find(n, "decline") or string.find(n, "action") then
+                            return true
+                        end
+                    end
+                end
+                return false
+            end
+            local is_trade_open = check_is_trade_actually_open()
 
             -- ==========================================================
             -- A. TAHAP 0: AUTO-ACCEPT PERMINTAAN TRADE MASUK (REQUEST)
@@ -399,9 +444,7 @@ task.spawn(function()
                 if has_request then
                     -- Jalankan 2-3x multi-hit accept secara berurutan sampai ter-accept
                     for attempt = 1, 3 do
-                        -- Cek apakah sudah berhasil masuk ke TradeApp (artinya accept sukses)
-                        local curTradeApp = pGui:FindFirstChild("TradeApp")
-                        if curTradeApp and curTradeApp.Enabled then
+                        if check_is_trade_actually_open() then
                             break
                         end
 
