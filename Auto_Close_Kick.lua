@@ -676,16 +676,14 @@ local function find_active_trade_request(pGui)
         end
     end
 
-    -- 3. Fallback: Telusuri dari semua tombol Accept yang terlihat
-    for _, desc in ipairs(pGui:GetDescendants()) do
-        if desc:IsA("GuiButton") and desc.Visible and is_accept_button(desc) then
-            local inTradeApp = desc:FindFirstAncestor("TradeApp")
-            if not inTradeApp then
-                local anc = desc.Parent
-                while anc and anc ~= pGui and not anc:IsA("ScreenGui") do
-                    local p, b = inspect_dialog_container(anc)
+    -- 3. Fallback: Telusuri ScreenGui notifikasi yang relevan
+    for _, sgName in ipairs({"NotificationsApp", "NotificationApp", "HintsApp"}) do
+        local sg = pGui:FindFirstChild(sgName)
+        if sg and sg.Enabled then
+            for _, child in ipairs(sg:GetChildren()) do
+                if child:IsA("GuiObject") and child.Visible then
+                    local p, b = inspect_dialog_container(child)
                     if p or b then return p, b end
-                    anc = anc.Parent
                 end
             end
         end
@@ -706,6 +704,39 @@ local function check_and_accept_incoming_trade(pGui)
     return false
 end
 
+-- Helper cek apakah proses "LOADING SAVE..." Adopt Me sudah tuntas 100%
+local function is_save_loading_finished(pGui, lp)
+    if not pGui then return false end
+
+    -- Jika LoadingApp masih ada dan Enabled, berarti game masih di layar "LOADING SAVE..."
+    local loadingApp = pGui:FindFirstChild("LoadingApp")
+    if loadingApp and loadingApp.Enabled then
+        return false
+    end
+
+    -- Cek indikator game sudah masuk ke dalam dunia Adopt Me
+    local bottomBar = pGui:FindFirstChild("BottomBarApp")
+    local roleChooser = pGui:FindFirstChild("RoleChooserApp")
+    local houseApp = pGui:FindFirstChild("HouseApp")
+    local newsApp = pGui:FindFirstChild("NewsApp")
+    local dialogApp = pGui:FindFirstChild("DialogApp")
+
+    if (bottomBar and bottomBar.Enabled)
+        or (roleChooser and roleChooser.Enabled)
+        or (houseApp and houseApp.Enabled)
+        or (newsApp and newsApp.Enabled)
+        or (dialogApp and dialogApp.Enabled) then
+        return true
+    end
+
+    if lp and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+        return true
+    end
+
+    return false
+end
+
+local LAST_CHOOSE_TEAM_T = 0
 -- Helper otomatis menutup welcome screen (NewsApp / Play!) & RoleChooserApp (Babies)
 local function auto_dismiss_welcome_screens(pGui)
     if not pGui then return end
@@ -732,15 +763,19 @@ local function auto_dismiss_welcome_screens(pGui)
         pcall(function() newsApp.Enabled = false end)
     end
 
-    -- 2. RoleChooserApp (Parent / Baby)
+    -- 2. RoleChooserApp (Parent / Baby) - Dengan Debounce 2 detik agar tidak spam server
     local roleChooser = pGui:FindFirstChild("RoleChooserApp")
     if roleChooser and roleChooser.Enabled then
-        call_router_client("TeamAPI/ChooseTeam", "Babies")
-        pcall(function()
-            if API and API:FindFirstChild("TeamAPI/ChooseTeam") then
-                safe_call_remote(API["TeamAPI/ChooseTeam"], "Babies")
-            end
-        end)
+        local now_t = tick()
+        if (now_t - LAST_CHOOSE_TEAM_T) > 2.0 then
+            LAST_CHOOSE_TEAM_T = now_t
+            call_router_client("TeamAPI/ChooseTeam", "Babies")
+            pcall(function()
+                if API and API:FindFirstChild("TeamAPI/ChooseTeam") then
+                    safe_call_remote(API["TeamAPI/ChooseTeam"], "Babies")
+                end
+            end)
+        end
         for _, desc in ipairs(roleChooser:GetDescendants()) do
             if (desc:IsA("GuiButton") or desc:IsA("TextLabel")) and desc.Visible then
                 local txt = string.lower((desc:IsA("TextButton") and desc.Text) or (desc:IsA("TextLabel") and desc.Text) or desc.Name or "")
@@ -785,61 +820,46 @@ task.spawn(function()
         lp = Players.LocalPlayer
     end
 
+    -- 1. Tunggu game selesai loading oleh engine Roblox
+    if not game:IsLoaded() then
+        game.Loaded:Wait()
+    end
+
     -- Tunggu PlayerGui siap
-    local pGui = lp:WaitForChild("PlayerGui", 25)
+    local pGui = lp:WaitForChild("PlayerGui", 45)
     if not pGui then return end
 
-    -- LANGSUNG PASANG EVENT LISTENER 0ms TANPA MENUNGGU JEDA!
+    -- 2. TUNGGU HINGGA "LOADING SAVE..." ADOPT ME SELESAI TOTAL!
+    -- Selama "LOADING SAVE..." aktif, script WAJIB DIAM TOTAL (0 CPU, 0 Scans, 0 Remotes)
+    -- Ini memastikan Roblox memuat DataStore dan aset save secepat kilat (bebas freeze multi-bot)!
+    print("[DIKA REJOIN] ⏳ Menunggu proses Loading Save Adopt Me selesai...")
+    local wait_save = 0
+    while not is_save_loading_finished(pGui, lp) and wait_save < 120 do
+        task.wait(0.5)
+        wait_save = wait_save + 0.5
+    end
+    print("[DIKA REJOIN] 🎮 Loading Save Adopt Me Selesai! Mengaktifkan Engine Auto-Trade...")
+
+    -- 3. Pasang Event Listener Ringan KHUSUS di DialogApp (Bukan seluruh PlayerGui!)
     pcall(function()
-        pGui.DescendantAdded:Connect(function(desc)
-            if TRADE_COMPLETED_SUCCESS then return end
-
-            -- Deteksi instan trade request masuk (0ms trigger)
-            if not IS_IN_TRADE_ACTIVE then
-                local should_check = false
-                if desc:IsA("TextLabel") or desc:IsA("TextButton") or desc:IsA("GuiButton") then
-                    local t = string.lower(desc:IsA("TextLabel") and desc.Text or (desc:IsA("TextButton") and desc.Text or desc.Name or ""))
-                    if is_trade_request_text(t) or is_accept_button(desc) or is_decline_button(desc) then
-                        should_check = true
-                    end
-                elseif desc:IsA("GuiObject") and (desc.Name == "Dialog" or desc.Name == "Notification" or string.find(string.lower(desc.Name), "trade")) then
-                    should_check = true
-                end
-
-                if should_check then
-                    task.spawn(function()
-                        check_and_accept_incoming_trade(pGui)
-                    end)
-                end
-            end
-
-            -- Deteksi instan notifikasi trade sukses
-            if (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible then
-                local txt = string.lower(desc.Text or "")
-                if string.find(txt, "trade was successful") 
-                    or string.find(txt, "trade successful") 
-                    or string.find(txt, "the trade was successful")
-                    or string.find(txt, "trade completed") 
-                    or string.find(txt, "trade complete") 
-                    or string.find(txt, "you traded with")
-                    or string.find(txt, "pertukaran berhasil")
-                    or string.find(txt, "trade berhasil") then
-                    task.spawn(function()
-                        handle_trade_completed_exit("Notifikasi Instan GUI: " .. tostring(desc.Text))
-                    end)
-                end
-            end
-        end)
+        local dialogApp = pGui:WaitForChild("DialogApp", 5)
+        if dialogApp then
+            dialogApp.DescendantAdded:Connect(function(desc)
+                if TRADE_COMPLETED_SUCCESS or IS_IN_TRADE_ACTIVE then return end
+                task.spawn(function()
+                    check_and_accept_incoming_trade(pGui)
+                end)
+            end)
+        end
     end)
 
-    -- EKSEKUSI ULTRA CEPAT SAAT MULAI (STARTUP ACCELERATOR 0ms - 5s):
-    -- Menangani jika saat bot baru spawn, sudah ada welcome screen (NewsApp) & trade request masuk!
+    -- 4. Startup Accelerator: Tutup NewsApp & RoleChooserApp segera setelah Save siap
     task.spawn(function()
-        for i = 1, 25 do
+        for i = 1, 15 do
             if TRADE_COMPLETED_SUCCESS or IS_IN_TRADE_ACTIVE then break end
             auto_dismiss_welcome_screens(pGui)
             check_and_accept_incoming_trade(pGui)
-            task.wait(0.2)
+            task.wait(0.3)
         end
     end)
 
