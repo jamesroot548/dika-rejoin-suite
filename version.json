@@ -1,7 +1,7 @@
 {
-    "version": "2.3.7",
+    "version": "2.3.8",
     "release_date": "2026-10-07",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.7/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.8/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.3.7 Sinkronisasi Penuh Akun IN-GAME (800+ Bot) & Anti-Scan Log Offline:\n- 🎯 Sinkronisasi Antrean Rotator 100% dengan Tabel Tab 1: Menghapus filter buatan agar seluruh bot target pemilik pet/egg (termasuk Crystal Egg, Gemstone Egg, 2D Box) dan terkonfirmasi in-game masuk utuh ke antrean rotasi (~800+ bot), tanpa terpangkas menjadi 340.\n- 🚫 Sembunyikan Log Scan Offline: Script tidak lagi mencetak '[OFFLINE] Scan:' ke console log saat opsi 'Hanya Akun IN-GAME' aktif. Hanya bot in-game yang dipindai dan dilaporkan.\n- ⚡ Akselerasi RAM Presence Cache: Pencarian status in-game kini memeriksa memori _uname_to_presence secara instan (0 ms latency)."
+    "changelog": "v2.3.8 Perbaikan Auto-Accept Trade Request & Eksekusi Instan:\n- 🤝 RouterClient Trade Remote Engine: Memanggil remote internal Adopt Me (TradeAPI/AcceptOrDeclineTradeRequest & TradeAPI/AcceptTradeRequest) via RouterClient secara langsung tanpa tergantung tombol visual saja.\n- ⚡ Broadcast Accept Berkala & Instan: Otomatis memvalidasi dan menerima permintaan trade dari pemain lain di server secara proactive, memastikan trade langsung terbuka saat Main account mengirim trade.\n- 🎯 Pengenalan Tombol & Teks Trade Luas: Mendukung tombol 'Trade', 'Accept', 'Yes', ikon centang hijau (✓), serta pemindaian seluruh ScreenGui aktif.\n- ⏱️ Reaksi 0ms DescendantAdded: Saat dialog permintaan trade masuk muncul di PlayerGui, script langsung mengeksekusi accept seketika tanpa menunggu interval tick.\n- 🔄 Sinkronisasi Penuh Tahap Negosiasi & Konfirmasi: Memanggil TradeAPI/AcceptNegotiation dan TradeAPI/ConfirmTrade otomatis di tahap trade."
 }
