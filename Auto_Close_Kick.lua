@@ -307,59 +307,58 @@ local function call_router_client(name, ...)
     return ok, res
 end
 
--- Helper broadcast auto-accept trade request ke pemain target atau semua pemain lain di server
-local function fire_accept_trade_request_to_players(target_player)
-    local lp = Players.LocalPlayer
-    if not lp then return end
+-- Helper resmi eksekusi Accept Trade Request Adopt Me (Remote + GUI Click)
+local LAST_ACCEPTED_TRADE_T = 0
+local function accept_incoming_trade_request(sender, accept_btn)
+    local now_t = tick()
+    if (now_t - LAST_ACCEPTED_TRADE_T) < 0.3 then return end
+    LAST_ACCEPTED_TRADE_T = now_t
 
-    local targets = {}
-    if target_player and typeof(target_player) == "Instance" and target_player:IsA("Player") then
-        table.insert(targets, target_player)
-    else
-        for _, p in ipairs(Players:GetPlayers()) do
-            if p ~= lp then
-                table.insert(targets, p)
+    local sName = sender and (sender.Name .. " (" .. sender.DisplayName .. ")") or "Pengirim Terdeteksi (Tombol GUI)"
+    print(string.format("[DIKA REJOIN] 🤝 TERDETEKSI PERMINTAAN TRADE DARI: %s! Menjalankan Accept...", sName))
+
+    task.spawn(function()
+        for attempt = 1, 3 do
+            if check_is_trade_actually_open() or TRADE_COMPLETED_SUCCESS then break end
+
+            -- 1. Direct API Layer (Adopt Me ReplicatedStorage.API["TradeAPI/AcceptOrDeclineTradeRequest"]:InvokeServer)
+            -- Tepat sesuai packet Remote Spy: args = { [1] = Player, [2] = true }
+            if sender and typeof(sender) == "Instance" and sender:IsA("Player") then
+                pcall(function()
+                    local api = ReplicatedStorage:FindFirstChild("API")
+                    if not api then api = ReplicatedStorage:WaitForChild("API", 1) end
+                    if api then
+                        local reqRemote = api:FindFirstChild("TradeAPI/AcceptOrDeclineTradeRequest")
+                        if not reqRemote then reqRemote = api:WaitForChild("TradeAPI/AcceptOrDeclineTradeRequest", 1) end
+                        if reqRemote and reqRemote:IsA("RemoteFunction") then
+                            reqRemote:InvokeServer(sender, true)
+                        end
+                    end
+                end)
+            else
+                -- Fallback: jika sender belum teridentifikasi dari teks kartu tapi tombol Accept ada di layar
+                for _, p in ipairs(Players:GetPlayers()) do
+                    if p ~= Players.LocalPlayer then
+                        pcall(function()
+                            local api = ReplicatedStorage:FindFirstChild("API")
+                            if api and api:FindFirstChild("TradeAPI/AcceptOrDeclineTradeRequest") then
+                                api["TradeAPI/AcceptOrDeclineTradeRequest"]:InvokeServer(p, true)
+                            end
+                        end)
+                    end
+                end
+            end
+
+            -- 2. Klik Fisik Tombol Accept di GUI jika ditemukan
+            if accept_btn then
+                force_click_button(accept_btn)
+            end
+
+            if attempt < 3 then
+                task.wait(0.15)
             end
         end
-    end
-    if #targets == 0 then return end
-
-    -- 1. Direct API Layer (Adopt Me ReplicatedStorage.API["TradeAPI/AcceptOrDeclineTradeRequest"]:InvokeServer)
-    for _, p in ipairs(targets) do
-        task.spawn(function()
-            pcall(function()
-                local api = ReplicatedStorage:FindFirstChild("API")
-                if not api then
-                    pcall(function() api = ReplicatedStorage:WaitForChild("API", 2) end)
-                end
-                if api then
-                    local reqRemote = api:FindFirstChild("TradeAPI/AcceptOrDeclineTradeRequest")
-                    if not reqRemote then
-                        pcall(function() reqRemote = api:WaitForChild("TradeAPI/AcceptOrDeclineTradeRequest", 1) end)
-                    end
-                    if reqRemote and reqRemote:IsA("RemoteFunction") then
-                        reqRemote:InvokeServer(p, true)
-                    end
-                end
-            end)
-        end)
-    end
-
-    -- 2. RouterClient resmi Adopt Me Engine (Fsys)
-    for _, p in ipairs(targets) do
-        task.spawn(function()
-            pcall(function()
-                local Fsys = require(ReplicatedStorage:WaitForChild("Fsys")).load
-                local RouterClient = Fsys("RouterClient")
-                if RouterClient then
-                    local r = RouterClient.get("TradeAPI/AcceptOrDeclineTradeRequest")
-                    if r and r:IsA("RemoteFunction") then
-                        r:InvokeServer(p, true)
-                    end
-                end
-            end)
-        end)
-    end
+    end)
 end
 
 -- Helper mengenali teks permintaan trade (bahasa Inggris & Indonesia)
@@ -383,7 +382,7 @@ end
 
 -- Helper mengenali tombol Decline / Cancel / Tolak
 local function is_decline_button(b)
-    if not b then return true end
+    if not b then return false end
     local n = string.lower(b.Name or "")
     local all_texts = {}
     if b:IsA("TextButton") and b.Text then table.insert(all_texts, string.lower(b.Text)) end
@@ -470,111 +469,136 @@ local function is_accept_button(b)
     return false
 end
 
--- Helper deteksi tombol Accept pada pop-up notifikasi atau dialog permintaan trade masuk
-local function find_trade_request_accept_buttons(pGui)
-    local buttons = {}
-    local seen = {}
-    if not pGui then return buttons end
+-- Helper deteksi dialog kartu permintaan trade masuk (Sticky Note / Dialog / Notification)
+local function find_active_trade_request(pGui)
+    if not pGui then return nil, nil end
+    if check_is_trade_actually_open() then return nil, nil end
 
-    local function add_btn(b)
-        if not b then return end
-        local target = resolve_gui_button(b)
-        if target and target:IsA("GuiObject") and target.Visible and not seen[target] and not is_decline_button(target) then
-            seen[target] = true
-            table.insert(buttons, target)
+    local function inspect_dialog_container(container)
+        if not container or not container:IsA("GuiObject") then return nil, nil end
+        if not container.Visible then return nil, nil end
+
+        local texts = {}
+        local accept_btn = nil
+        local has_decline = false
+
+        for _, d in ipairs(container:GetDescendants()) do
+            if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Text and #d.Text > 0 then
+                table.insert(texts, string.lower(d.Text))
+            end
+            if (d:IsA("GuiButton") or d:IsA("TextLabel")) and d.Visible then
+                if is_decline_button(d) then
+                    has_decline = true
+                elseif is_accept_button(d) and not accept_btn then
+                    accept_btn = resolve_gui_button(d)
+                end
+            end
         end
-    end
 
-    -- Strategi 1: Cari Dialog / Kartu Sticky Note permintaan trade
-    for _, desc in ipairs(pGui:GetDescendants()) do
-        if (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible and is_trade_request_text(desc.Text) then
-            -- Cari kontainer root paling atas dari dialog ini
-            local container = desc
-            while container.Parent and container.Parent:IsA("GuiObject") do
-                container = container.Parent
-            end
+        local combined = table.concat(texts, " ")
+        local is_trade = string.find(combined, "trade") or string.find(combined, "pertukaran") or string.find(combined, "tukar")
 
-            -- Kumpulkan SEMUA teks di dalam seluruh kontainer dialog untuk matching nama pengirim
-            local container_texts = {}
-            for _, sub in ipairs(container:GetDescendants()) do
-                if (sub:IsA("TextLabel") or sub:IsA("TextButton")) and sub.Text and #sub.Text > 0 then
-                    table.insert(container_texts, string.lower(sub.Text))
-                end
-                -- Cari tombol Accept di kontainer dialog
-                if (sub:IsA("GuiButton") or sub:IsA("TextLabel")) and sub.Visible and is_accept_button(sub) then
-                    add_btn(sub)
-                end
-            end
-            local combined_dialog = table.concat(container_texts, " ")
+        -- Kartu permintaan trade valid jika: ada tombol Accept DAN (ada teks trade ATAU ada tombol Decline)
+        if accept_btn and (is_trade or (has_decline and (string.find(combined, "sent") or string.find(combined, "request")))) then
+            local matched_player = nil
 
-            -- Match pemain pengirim trade dari gabungan seluruh teks kartu dialog
-            local matched_sender = false
-            for _, p in ipairs(Players:GetPlayers()) do
-                if p ~= Players.LocalPlayer then
-                    local pname = string.lower(p.Name)
-                    local dname = string.lower(p.DisplayName)
-                    if string.find(combined_dialog, pname, 1, true) or string.find(combined_dialog, dname, 1, true) then
-                        matched_sender = true
-                        print("[DIKA REJOIN] 🎯 Terdeteksi Trade Request Masuk dari: " .. p.Name .. " (" .. p.DisplayName .. ")")
-                        task.spawn(function()
-                            fire_accept_trade_request_to_players(p)
-                        end)
+            -- Cara 1: Ekstrak username langsung dari teks kartu (misal: 'robert90 sent you a trade request')
+            local captured = string.match(combined, "([%w_]+)%s+sent") or string.match(combined, "([%w_]+)%s+wants")
+            if captured then
+                for _, p in ipairs(Players:GetPlayers()) do
+                    if p ~= Players.LocalPlayer and string.lower(p.Name) == string.lower(captured) then
+                        matched_player = p
+                        break
                     end
                 end
             end
 
-            -- Panggil remote accept (baik target spesifik maupun broadcast) agar langsung ter-accept di background
-            task.spawn(function()
-                fire_accept_trade_request_to_players()
-            end)
-        end
-    end
-
-    -- Strategi 2: Cari DialogApp / NotificationApp khusus Adopt Me
-    for _, app_name in ipairs({"DialogApp", "NotificationsApp", "NotificationApp", "HintApp"}) do
-        local app = pGui:FindFirstChild(app_name)
-        if app and app.Enabled then
-            for _, desc in ipairs(app:GetDescendants()) do
-                if (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible and is_trade_request_text(desc.Text) then
-                    local container = desc
-                    while container.Parent and container.Parent:IsA("GuiObject") do
-                        container = container.Parent
-                    end
-                    for _, sub in ipairs(container:GetDescendants()) do
-                        if (sub:IsA("GuiButton") or sub:IsA("TextLabel")) and sub.Visible and is_accept_button(sub) then
-                            add_btn(sub)
+            -- Cara 2: Cocokkan username atau display name seluruh pemain lain di server
+            if not matched_player then
+                for _, p in ipairs(Players:GetPlayers()) do
+                    if p ~= Players.LocalPlayer then
+                        local pName = string.lower(p.Name)
+                        local dName = string.lower(p.DisplayName)
+                        if string.find(combined, pName, 1, true) or string.find(combined, dName, 1, true) then
+                            matched_player = p
+                            break
                         end
                     end
-                    task.spawn(function()
-                        fire_accept_trade_request_to_players()
-                    end)
+                end
+            end
+
+            -- Cara 3: Jika di server hanya ada 1 pemain lain (1v1 trade / private server)
+            if not matched_player then
+                local others = {}
+                for _, p in ipairs(Players:GetPlayers()) do
+                    if p ~= Players.LocalPlayer then
+                        table.insert(others, p)
+                    end
+                end
+                if #others == 1 then
+                    matched_player = others[1]
+                end
+            end
+
+            return matched_player, accept_btn
+        end
+
+        return nil, nil
+    end
+
+    -- 1. Prioritas Utama: Periksa DialogApp (lokasi resmi Sticky Note Adopt Me)
+    local dialogApp = pGui:FindFirstChild("DialogApp")
+    if dialogApp and dialogApp.Enabled then
+        for _, child in ipairs(dialogApp:GetChildren()) do
+            if child:IsA("GuiObject") then
+                local p, b = inspect_dialog_container(child)
+                if p or b then return p, b end
+            end
+        end
+        local p, b = inspect_dialog_container(dialogApp)
+        if p or b then return p, b end
+    end
+
+    -- 2. Periksa ScreenGui lainnya di PlayerGui (di luar TradeApp)
+    for _, sg in ipairs(pGui:GetChildren()) do
+        if sg:IsA("ScreenGui") and sg.Enabled and sg.Name ~= "TradeApp" and sg.Name ~= "DialogApp" then
+            for _, child in ipairs(sg:GetChildren()) do
+                if child:IsA("GuiObject") and child.Visible then
+                    local p, b = inspect_dialog_container(child)
+                    if p or b then return p, b end
                 end
             end
         end
     end
 
-    -- Strategi 3: Cari TextLabel berlabel "Accept" / "Terima" di seluruh PlayerGui
+    -- 3. Fallback: Telusuri dari semua tombol Accept yang terlihat
     for _, desc in ipairs(pGui:GetDescendants()) do
-        if desc:IsA("TextLabel") and desc.Visible then
-            local t = string.lower(desc.Text or "")
-            if (t == "accept" or t == "terima" or string.find(t, "accept")) and not is_decline_button(desc) then
-                add_btn(desc)
-            end
-        end
-    end
-
-    -- Strategi 4: Scan semua GuiButton di PlayerGui (kecuali TradeApp)
-    for _, child in ipairs(pGui:GetChildren()) do
-        if child:IsA("ScreenGui") and child.Enabled and child.Name ~= "TradeApp" then
-            for _, desc in ipairs(child:GetDescendants()) do
-                if desc:IsA("GuiButton") and desc.Visible and is_accept_button(desc) then
-                    add_btn(desc)
+        if desc:IsA("GuiButton") and desc.Visible and is_accept_button(desc) then
+            local inTradeApp = desc:FindFirstAncestor("TradeApp")
+            if not inTradeApp then
+                local anc = desc.Parent
+                while anc and anc ~= pGui and not anc:IsA("ScreenGui") do
+                    local p, b = inspect_dialog_container(anc)
+                    if p or b then return p, b end
+                    anc = anc.Parent
                 end
             end
         end
     end
 
-    return buttons
+    return nil, nil
+end
+
+local function check_and_accept_incoming_trade(pGui)
+    if not pGui then return false end
+    if check_is_trade_actually_open() then return false end
+
+    local sender, btn = find_active_trade_request(pGui)
+    if sender or btn then
+        accept_incoming_trade_request(sender, btn)
+        return true
+    end
+    return false
 end
 
 -- Helper otomatis menutup welcome screen (NewsApp / Play!) & RoleChooserApp (Babies)
@@ -657,27 +681,6 @@ task.spawn(function()
         lp = Players.LocalPlayer
     end
 
-    -- Eksekusi Proaktif Seketika saat Spawn (sebelum PlayerGui selesai render):
-    task.spawn(function()
-        for i = 1, 15 do
-            if TRADE_COMPLETED_SUCCESS or IS_IN_TRADE_ACTIVE then break end
-            pcall(function()
-                fire_accept_trade_request_to_players()
-            end)
-            task.wait(0.2)
-        end
-    end)
-
-    -- Auto-Accept saat pemain baru masuk ke server
-    pcall(function()
-        Players.PlayerAdded:Connect(function(newPlayer)
-            task.wait(0.3)
-            pcall(function()
-                fire_accept_trade_request_to_players(newPlayer)
-            end)
-        end)
-    end)
-
     -- Tunggu PlayerGui siap
     local pGui = lp:WaitForChild("PlayerGui", 25)
     if not pGui then return end
@@ -692,7 +695,7 @@ task.spawn(function()
                 local should_check = false
                 if desc:IsA("TextLabel") or desc:IsA("TextButton") or desc:IsA("GuiButton") then
                     local t = string.lower(desc:IsA("TextLabel") and desc.Text or (desc:IsA("TextButton") and desc.Text or desc.Name or ""))
-                    if is_trade_request_text(t) or is_accept_button(desc) then
+                    if is_trade_request_text(t) or is_accept_button(desc) or is_decline_button(desc) then
                         should_check = true
                     end
                 elseif desc:IsA("GuiObject") and (desc.Name == "Dialog" or desc.Name == "Notification" or string.find(string.lower(desc.Name), "trade")) then
@@ -701,10 +704,7 @@ task.spawn(function()
 
                 if should_check then
                     task.spawn(function()
-                        fire_accept_trade_request_to_players()
-                        for _, b in ipairs(find_trade_request_accept_buttons(pGui)) do
-                            force_click_button(b)
-                        end
+                        check_and_accept_incoming_trade(pGui)
                     end)
                 end
             end
@@ -734,15 +734,12 @@ task.spawn(function()
         for i = 1, 25 do
             if TRADE_COMPLETED_SUCCESS or IS_IN_TRADE_ACTIVE then break end
             auto_dismiss_welcome_screens(pGui)
-            fire_accept_trade_request_to_players()
-            for _, b in ipairs(find_trade_request_accept_buttons(pGui)) do
-                force_click_button(b)
-            end
+            check_and_accept_incoming_trade(pGui)
             task.wait(0.2)
         end
     end)
 
-    print("[DIKA REJOIN] 🤝 Auto-Accept & Auto-Confirm Trade Engine Siap & Aktif (Multi-Hit 2-3x Retry & Continuous)!")
+    print("[DIKA REJOIN] 🤝 Auto-Accept & Auto-Confirm Trade Engine Siap & Aktif!")!")
 
     local is_in_trade = false
     local trade_has_confirmed = false
@@ -845,49 +842,10 @@ task.spawn(function()
             -- ==========================================================
             -- A. TAHAP 0: AUTO-ACCEPT PERMINTAAN TRADE MASUK (REQUEST)
             -- Bekerja sepanjang sesi game (termasuk detik awal startup)
-            -- Multi-hit retry 2-3x jika terdeteksi request belum ter-accept
+            -- Hanya menerima jika terdeteksi ada permintaan trade nyata di layar!
             -- ==========================================================
             if not is_trade_open then
-                local accept_buttons = find_trade_request_accept_buttons(pGui)
-                local has_request = (#accept_buttons > 0)
-
-                -- Cek juga apakah ada indikasi notifikasi teks trade request di ScreenGui aktif
-                if not has_request then
-                    for _, desc in ipairs(pGui:GetDescendants()) do
-                        if (desc:IsA("TextLabel") or desc:IsA("TextButton")) and desc.Visible and is_trade_request_text(desc.Text) then
-                            has_request = true
-                            break
-                        end
-                    end
-                end
-
-                -- Jika ada pemain lain di server, jalankan proactive accept remote ke semua player
-                if #Players:GetPlayers() > 1 then
-                    fire_accept_trade_request_to_players()
-                end
-
-                if has_request then
-                    -- Jalankan 2-3x multi-hit accept secara berurutan sampai ter-accept
-                    for attempt = 1, 3 do
-                        if check_is_trade_actually_open() then
-                            break
-                        end
-
-                        -- 1. Panggil Remote Resmi Adopt Me ke semua pemain lain (RouterClient + Direct API)
-                        fire_accept_trade_request_to_players()
-
-                        -- 2. Klik semua tombol Accept yang terdeteksi
-                        local btns_to_click = find_trade_request_accept_buttons(pGui)
-                        for _, btn in ipairs(btns_to_click) do
-                            force_click_button(btn)
-                        end
-
-                        -- 3. Jeda singkat 100ms sebelum retry berikutnya (jika belum ke-accept)
-                        if attempt < 3 then
-                            task.wait(0.1)
-                        end
-                    end
-                end
+                check_and_accept_incoming_trade(pGui)
             end
 
             -- ==========================================================
