@@ -1,7 +1,7 @@
 {
-    "version": "2.4.4",
+    "version": "2.4.5",
     "release_date": "2026-10-08",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.4.4/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.4.5/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.4.4 Zero Warning Luau & Perbaikan Bersih Temporary Directory Exit:\n- 🛡️ 100% Bebas Warning di Executor: Memperbaiki variabel lokal tradeApp pada penjelajahan GUI transaksi sehingga executor menampilkan 0 Problems / 0 Warning.\n- 🧹 Perbaikan Bersih Penutupan Aplikasi (Temp Directory): Menggunakan flag proses terpisah (Detached Process) pada pemanggilan Update.exe dan aplikasi utama untuk mencegah warning pop-up '_MEI temporary directory' saat aplikasi menutup.\n- 🤝 Auto-Accept Trade Tetap Presisi & Ringan: Menggunakan exact RemoteSpy packet InvokeServer(player, true) hanya saat kartu trade request muncul."
+    "changelog": "v2.4.5 Anti-Spam Click Trade & Proteksi Tombol Unaccept:\n- 🛡️ Anti-Spam Click & Anti-Unaccept: Memperbaiki logika deteksi tombol transaksi. Saat bot telah menekan Accept dan tombol berubah menjadi [Unaccept] oranye, bot TIDAK LAGI menekan tombol Unaccept secara berulang, melainkan diam dan menunggu lawan menyetujui transaksi.\n- ⏱️ Debounce & Pemisahan Tahap: Tahap Negosiasi (Stage 1) dan Konfirmasi (Stage 2) dipisahkan secara presisi dengan debounce 1 detik agar tidak terjadi spam click tombol maupun flood remote request.\n- 🔒 Safe Countdown Trade: Menunggu timer 5 detik Adopt Me selesai sebelum menekan tombol Confirm Trade."
 }
