@@ -1,7 +1,7 @@
 {
-    "version": "2.4.5",
+    "version": "2.4.6",
     "release_date": "2026-10-08",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.4.5/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.4.6/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.4.5 Anti-Spam Click Trade & Proteksi Tombol Unaccept:\n- 🛡️ Anti-Spam Click & Anti-Unaccept: Memperbaiki logika deteksi tombol transaksi. Saat bot telah menekan Accept dan tombol berubah menjadi [Unaccept] oranye, bot TIDAK LAGI menekan tombol Unaccept secara berulang, melainkan diam dan menunggu lawan menyetujui transaksi.\n- ⏱️ Debounce & Pemisahan Tahap: Tahap Negosiasi (Stage 1) dan Konfirmasi (Stage 2) dipisahkan secara presisi dengan debounce 1 detik agar tidak terjadi spam click tombol maupun flood remote request.\n- 🔒 Safe Countdown Trade: Menunggu timer 5 detik Adopt Me selesai sebelum menekan tombol Confirm Trade."
+    "changelog": "v2.4.6 Fix Loading Save Hang & Auto-Sync Script Multi-Bot:\n- Perbaikan Loading Save Adopt Me: Menambahkan proteksi is_save_loading_finished. Script diam total (0 CPU, 0 Scan) saat game masih di layar 'LOADING SAVE...' sehingga DataStore memuat secepat kilat tanpa freeze pada multi-bot.\n- Eliminasi Overhead Traversal: Menghentikan scan massal pGui:GetDescendants() saat game baru spawn.\n- Sinkronisasi Penuh Script Pengguna Lain: Memastikan file Auto_Close_Kick.lua dan executable langsung tertimpa ke versi terbaru tanpa tertinggal di versi lama 2500 line.\n- Tombol Update Paksa / Reinstall pada Update.exe."
 }
