@@ -1,7 +1,7 @@
 {
-    "version": "2.3.3",
+    "version": "2.3.4",
     "release_date": "2026-10-07",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.3/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.4/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.3.3 Smart Event-Driven Auto-Kick & Trade Shield Pro:\n- 🛡️ Trade Active Shield (Anti-Close Protection): Deteksi real-time saat jendela trade Adopt Me terbuka (TradeApp aktif / negosiasi). Seluruh timer rotasi otomatis dibekukan (paused) dan proses Roblox DILARANG KERAS di-kill/ditutup saat trade sedang berlangsung.\n- ⚡ Instant Auto-DC Rotation (Zero Delay): Begitu trade selesai & Roblox DC/tutup sendiri dari script auto-kick (Auto_Close_Kick.lua), tools langsung mendeteksi DC dalam hitungan milidetik dan seketika rotasi ke akun/bot berikutnya tanpa membuang waktu menunggu timer habis.\n- ⏱️ Safety Watchdog Mode: Timer durasi dialihfungsikan menjadi watchdog pengaman anti-macet yang otomatis di-pause saat trade aktif, menjamin trade aman dari pemotongan dan rotasi super cepat."
+    "changelog": "v2.3.4 Fix False Trade Shield & Auto-Dismiss Welcome Play Screen:\n- 🛡️ Presisi Deteksi Trade (Anti-Stuck): Memperbaiki bug di mana TradeApp.Enabled di Adopt Me selalu aktif (true) sejak awal spawn yang membuat Trade Shield aktif palsu dan timer diam. Sekarang trade hanya dianggap aktif jika Frame/Tombol transaksi benar-benar terbuka dan visible di layar.\n- 🚀 Auto-Click 'Play' & Role Chooser: Otomatis menekan tombol hijau 'Play!' pada NewsApp Adopt Me dan memilih peran agar akun tidak tertahan diam di layar Welcome dan langsung spawn in-game.\n- ⏱️ Trade Shield Auto-Expire (85s) & Unblock Close: Menambahkan batas waktu perlindungan trade maksimal 85 detik agar watchdog rotasi tidak pernah membeku/macet jika ada anomali trade, dan proses roblox tertutup mulus saat rotasi."
 }
