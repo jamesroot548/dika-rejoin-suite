@@ -1,7 +1,7 @@
 {
-    "version": "2.3.5",
+    "version": "2.3.6",
     "release_date": "2026-10-07",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.5/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.3.6/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.3.5 Trade History Auto-Detection & Physical Render Verification:\n- 📜 Deteksi Otomatis Trade History (Trading License): Otomatis membaca riwayat transaksi in-game Adopt Me. Begitu transaksi baru tercatat di Trade History (seperti riwayat di Trading License), script seketika mendeteksi transaksi sukses, memberi jeda aman 1.8s simpan inventori, lalu auto-DC & rotasi instan.\n- 🛡️ 100% Anti-False Shield: Deteksi modal trade fisik (is_gui_physically_rendered). Tidak akan pernah lagi mendeteksi trade aktif palsu saat akun hanya berdiri di rumah/lobby.\n- ⏱️ Watchdog Timer Presisi: Watchdog mengikuti tepat durasi pilihan pengguna (misal 80s) tanpa dipaksa menjadi 120s.\n- 🔒 Anti-Deadlock Trade Shield: Memperbaiki pencatatan timestamp trade di Python agar batas waktu maksimal trade shield (85s) bekerja akurat dan anti-stuck."
+    "changelog": "v2.3.6 Filter Eksklusif Akun IN-GAME (Sembunyikan Akun Offline & Online):\n- 🟢 Filter Eksklusif Akun IN-GAME: Tabel Pet Harvester & Antrean Rotator kini dilengkapi fitur '🟢 Hanya Akun IN-GAME' (aktif secara default). Akun yang berstatus OFFLINE dan ONLINE disembunyikan total, hanya akun yang benar-benar aktif in-game di Adopt Me yang ditampilkan.\n- ⚡ Rotator Anti-Stuck: Antrean rotasi target hanya mengambil bot yang terdeteksi aktif in-game via Roblox Presence, Zeke JobId, atau Lua Heartbeat, mencegah delay menunggu bot offline.\n- 📜 Trade History Auto-Detection: Mendeteksi riwayat transaksi Adopt Me (Trading License) dan verifikasi render fisik dialog trade untuk rotasi instan begitu trade sukses."
 }
