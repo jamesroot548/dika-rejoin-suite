@@ -1,28 +1,105 @@
 [
   {
+    "keyword": "skelicorn",
+    "name": "🍓 Skelicorn",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "frostbite bear",
+    "name": "🍓 Frostbite Bear",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": true
+  },
+  {
     "keyword": "strawberry tortle",
     "name": "🍓 Strawberry Tortle",
     "enabled": true,
     "neon_only": false,
-    "fullgrown_only": false
+    "fullgrown_only": true
   },
   {
-    "keyword": "dragonfruit",
+    "keyword": "dragonfruit fox",
     "name": "🦊 Dragonfruit Fox",
     "enabled": true,
     "neon_only": false,
-    "fullgrown_only": false
+    "fullgrown_only": true
   },
   {
-    "keyword": "dango",
+    "keyword": "dango penguins",
     "name": "🍡 Dango Penguins",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": true
+  },
+  {
+    "keyword": "gemstone egg",
+    "name": "Gemstone Egg",
     "enabled": true,
     "neon_only": false,
     "fullgrown_only": false
   },
   {
-    "keyword": "huntsman robin",
-    "name": "🏹 Huntsman Robin",
+    "keyword": "crystal egg",
+    "name": "Crystal Egg",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "jumpscare",
+    "name": "Jumpscare",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": true
+  },
+  {
+    "keyword": "mummy spider",
+    "name": "Mummy Spider",
+    "enabled": true,
+    "neon_only": true,
+    "fullgrown_only": true
+  },
+  {
+    "keyword": "velocirooster",
+    "name": "🍓 Velocirooster",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": true
+  },
+  {
+    "keyword": "sushi penguin",
+    "name": "🐧 Sushi Penguin",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": true
+  },
+  {
+    "keyword": "kiwi kiwi",
+    "name": "🥝 Kiwi Kiwi",
+    "enabled": true,
+    "neon_only": false,
+    "fullgrown_only": false
+  },
+  {
+    "keyword": "little lamb",
+    "name": "🐑 Little Lamb",
+    "enabled": true,
+    "neon_only": true,
+    "fullgrown_only": true
+  },
+  {
+    "keyword": "crimson cape",
+    "name": "🐑 Crimson Cape",
+    "enabled": true,
+    "neon_only": true,
+    "fullgrown_only": true
+  },
+  {
+    "keyword": "pain au chat",
+    "name": "🐑 Pain Au Chat",
     "enabled": true,
     "neon_only": false,
     "fullgrown_only": false
@@ -32,21 +109,14 @@
     "name": "🐭 Three Blind Mice",
     "enabled": true,
     "neon_only": false,
-    "fullgrown_only": false
+    "fullgrown_only": true
   },
   {
-    "keyword": "sushi penguin",
-    "name": "🐧 Sushi Penguin",
+    "keyword": "huntsman robin",
+    "name": "🏹 Huntsman Robin",
     "enabled": true,
     "neon_only": false,
-    "fullgrown_only": false
-  },
-  {
-    "keyword": "kiwi",
-    "name": "🥝 Kiwi Kiwi",
-    "enabled": true,
-    "neon_only": false,
-    "fullgrown_only": false
+    "fullgrown_only": true
   },
   {
     "keyword": "chihuahua",
@@ -56,18 +126,11 @@
     "fullgrown_only": false
   },
   {
-    "keyword": "little lamb",
-    "name": "🐑 Little Lamb",
-    "enabled": true,
-    "neon_only": false,
-    "fullgrown_only": false
-  },
-  {
     "keyword": "purrowl",
     "name": "🐱 Purrowl",
     "enabled": true,
     "neon_only": false,
-    "fullgrown_only": false
+    "fullgrown_only": true
   },
   {
     "keyword": "2d box",
@@ -77,8 +140,8 @@
     "fullgrown_only": false
   },
   {
-    "keyword": "aberdeen",
-    "name": "🐄 Aberdeen Angus Box",
+    "keyword": "admin abuse egg",
+    "name": "Admin Abuse Egg",
     "enabled": true,
     "neon_only": false,
     "fullgrown_only": false
@@ -91,7 +154,7 @@
     "fullgrown_only": false
   },
   {
-    "keyword": "gorilla",
+    "keyword": "silverback gorilla",
     "name": "🦍 Silverback Gorilla",
     "enabled": true,
     "neon_only": false,
