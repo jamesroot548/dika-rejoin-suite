@@ -1,7 +1,7 @@
 {
-    "version": "2.4.6",
-    "release_date": "2026-10-08",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.4.6/Dika_Rejoin_All_In_One.exe",
+    "version": "2.4.7",
+    "release_date": "2026-10-09",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.4.7/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.4.6 Fix Loading Save Hang & Auto-Sync Script Multi-Bot:\n- Perbaikan Loading Save Adopt Me: Menambahkan proteksi is_save_loading_finished. Script diam total (0 CPU, 0 Scan) saat game masih di layar 'LOADING SAVE...' sehingga DataStore memuat secepat kilat tanpa freeze pada multi-bot.\n- Eliminasi Overhead Traversal: Menghentikan scan massal pGui:GetDescendants() saat game baru spawn.\n- Sinkronisasi Penuh Script Pengguna Lain: Memastikan file Auto_Close_Kick.lua dan executable langsung tertimpa ke versi terbaru tanpa tertinggal di versi lama 2500 line.\n- Tombol Update Paksa / Reinstall pada Update.exe."
+    "changelog": "v2.4.7 Update Target Pet Suite & Auto-Sync Multi-User:\n- Penambahan 23 Target Pet Baru (Skelicorn, Frostbite Bear, Velocirooster, dll.) langsung aktif di filter dan tabel.\n- Auto-Repair JSON Typos: Sistem otomatis memperbaiki kesalahan ketik sintaks (tanda petik ganda, koma berlebih) pada target_pets.json sehingga daftar pet tidak akan pernah hilang atau rusak.\n- Tombol Reload Notepad: Tombol 'MUAT ULANG DARI FILE' pada menu Kelola Target Pet untuk memuat ulang hasil edit Notepad seketika tanpa restart aplikasi.\n- Stem Aliasing: Pencocokan otomatis nama pet tunggal/jamak (dango penguins, kiwi kiwi, gorilla, dragonfruit fox).\n- Cloud Auto-Sync: Update.exe kini otomatis menyinkronkan target_pets.json dan Detect_Target_Pets.lua ke semua pengguna."
 }
