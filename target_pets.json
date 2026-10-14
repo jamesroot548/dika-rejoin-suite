@@ -4,7 +4,7 @@
     "name": "🍓 Skelicorn",
     "enabled": true,
     "neon_only": false,
-    "fullgrown_only": false
+    "fullgrown_only": true
   },
   {
     "keyword": "frostbite bear",
