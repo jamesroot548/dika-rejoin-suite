@@ -1,7 +1,7 @@
 {
-    "version": "2.4.7",
-    "release_date": "2026-10-09",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.4.7/Dika_Rejoin_All_In_One.exe",
+    "version": "2.4.8",
+    "release_date": "2026-10-14",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.4.8/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.4.7 Update Target Pet Suite & Auto-Sync Multi-User:\n- Penambahan 23 Target Pet Baru (Skelicorn, Frostbite Bear, Velocirooster, dll.) langsung aktif di filter dan tabel.\n- Auto-Repair JSON Typos: Sistem otomatis memperbaiki kesalahan ketik sintaks (tanda petik ganda, koma berlebih) pada target_pets.json sehingga daftar pet tidak akan pernah hilang atau rusak.\n- Tombol Reload Notepad: Tombol 'MUAT ULANG DARI FILE' pada menu Kelola Target Pet untuk memuat ulang hasil edit Notepad seketika tanpa restart aplikasi.\n- Stem Aliasing: Pencocokan otomatis nama pet tunggal/jamak (dango penguins, kiwi kiwi, gorilla, dragonfruit fox).\n- Cloud Auto-Sync: Update.exe kini otomatis menyinkronkan target_pets.json dan Detect_Target_Pets.lua ke semua pengguna."
+    "changelog": "v2.4.8 Auto-Load Device Accounts & Stability Update:\n- Auto-Load Akun Device: Saat aplikasi baru dibuka, sistem secara otomatis langsung memuat seluruh akun dari Device/Grup yang dipilih ke dalam antrean tanpa harus klik tombol Impor Device.\n- Silent Background Loading: Pemuatan otomatis berjalan hening di latar belakang tanpa pop-up pesan.\n- Optimal Startup Synchronization: Penyesuaian sinkronisasi awal antara AccountOps dan Zeke Hub WebSocket agar tabel langsung menampilkan akun secara cepat dan akurat."
 }
