@@ -1,7 +1,7 @@
 {
-    "version": "2.4.9",
+    "version": "2.5.0",
     "release_date": "2026-11-06",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.4.9/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.0/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.4.9 Weblauncher Anti-Stuck & Dual-Check Group Update:\n- Anti-Stuck Weblauncher: Otomatis mem-bypass online update check dan mendeteksi binary Roblox lokal sehingga launcher tidak lagi hang atau 'Not Responding' saat membuka tab Roblox.\n- Auto-Kill Zombie Launcher: Membasmi proses weblauncher yang menggantung atau macet sebelum dan sesudah peluncuran untuk mencegah tabrakan singleton lock.\n- Dual-Check Group Match: Mendukung pencocokan grup cerdas lintas Zeke Hub dan AccountOps (akun DIKA SERVER FARMING otomatis terdeteksi penuh).\n- Smart Watchdog Recovery: Watchdog aktif mendeteksi jendela launcher macet dan memulihkan antrean peluncuran secara otomatis tanpa ada akun yang terlewati."
+    "changelog": "v2.5.0 Auto-Detect Server Full (35/35) & Fast-Skip Update:\n- Auto-Detect Server Penuh: Mendeteksi server publik bot yang sudah mencapai batas maksimal 35/35 pemain secara instan lewat Watchdog Dialog & Sensor Lua Heartbeat (20 detik).\n- Fast-Skip & Auto-Retry: Menutup tab Main seketika saat server terdeteksi penuh, menunda bot sementara (cooldown 90s), dan langsung loncat mengambil pet dari bot berikutnya tanpa buang waktu.\n- Anti-Arkose Social Safety: Mempertahankan 100% metode join public follow bebas Captcha tanpa mengubah alur rotator atau trade logic yang sudah ada."
 }
