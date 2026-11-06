@@ -1,7 +1,7 @@
 {
-    "version": "2.5.0",
+    "version": "2.5.1",
     "release_date": "2026-11-06",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.0/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.1/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.5.0 Auto-Detect Server Full (35/35) & Fast-Skip Update:\n- Auto-Detect Server Penuh: Mendeteksi server publik bot yang sudah mencapai batas maksimal 35/35 pemain secara instan lewat Watchdog Dialog & Sensor Lua Heartbeat (20 detik).\n- Fast-Skip & Auto-Retry: Menutup tab Main seketika saat server terdeteksi penuh, menunda bot sementara (cooldown 90s), dan langsung loncat mengambil pet dari bot berikutnya tanpa buang waktu.\n- Anti-Arkose Social Safety: Mempertahankan 100% metode join public follow bebas Captcha tanpa mengubah alur rotator atau trade logic yang sudah ada."
+    "changelog": "v2.5.1 Adopt Me In-Game Loading Protection & Precision Fast-Skip Update:\n- Smart Loading Sensor (Anti-Premature Close): Membedakan secara akurat antara server penuh (terdampar di Home/Game Details tombol Play) vs akun yang berhasil masuk dan sedang memuat item (LOADING SERVER... [6] Waiting for initial items). Akun yang sedang loading Adopt Me tidak akan lagi ter-close sebelum selesai!\n- Real-Time HUD Status: Menampilkan status 'MEMUAT ADOPT ME (Xs)' secara dinamis di antarmuka rotator saat aset game sedang diunduh.\n- Precision Fast-Skip (35/35): Tetap melakukan fast-skip instan jika server bot benar-benar penuh (popup error/tertolak masuk), memberi cooldown 90s, dan langsung memproses bot berpet berikutnya tanpa jeda."
 }
