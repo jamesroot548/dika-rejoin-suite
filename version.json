@@ -1,7 +1,7 @@
 {
-    "version": "2.5.3",
+    "version": "2.5.4",
     "release_date": "2026-11-08",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.3/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.4/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.5.3 Auto-Stop & Auto-Preflight Ulang Update:\n- Auto-Stop Rotator Bersih: Ketika seluruh bot target telah selesai dikunjungi, jika Standby & Sleep dinonaktifkan, rotator otomatis berhenti total, menutup semua tab Roblox, dan mengembalikan tombol UI ke status IDLE / SELESAI.\n- Proteksi Anti-Stuck Siklus: Bot yang terkena fast-skip (server 35/35 penuh) atau bot offline tidak akan lagi membuat rotator macet menggantung di 'MENCARI BOT IN-GAME'. Sistem otomatis menyelesaikan siklus setelah semua bot aktif diproses.\n- Auto Preflight Ulang Otomatis: Saat siklus selesai dan bersiap memulai siklus baru (Standby & Sleep atau Continuous Loop), sistem otomatis menjalankan Master Preflight ulang (sinkronisasi pertemanan, age group, bahasa, dan privasi server) untuk seluruh bot target baru."
+    "changelog": "v2.5.4 Strict Preflight Synchronization Update:\n- Gerbang Sinkronisasi Preflight Ulang: Mengunci seluruh worker Main Account selama Master Preflight Ulang berlangsung. Worker tidak akan mengklaim bot, tidak akan mengambil ticket, dan tidak akan meluncurkan Roblox sebelum Preflight selesai 100%.\n- Urutan Siklus Tuntas: Antrean target bot baru hanya dibuka ke worker setelah tahap Age Group, Privacy Everyone, Smart Friendlist Clean, dan verifikasi mutual friendship selesai secara menyeluruh."
 }
