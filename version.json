@@ -1,7 +1,7 @@
 {
-    "version": "2.5.2",
+    "version": "2.5.3",
     "release_date": "2026-11-08",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.2/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.3/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.5.2 Accurate In-Game Countdown Timing Update:\n- Sinkronisasi Timer Selesai Loading: Timer hitung mundur in-game sekarang HANYA dimulai setelah proses Loading Server dan Loading Save Adopt Me selesai 100% (terkonfirmasi lewat webhook player_ingame_ready).\n- Visual Status Loading Transparan: Selama akun masih memuat data Adopt Me, status di antarmuka menampilkan 'MEMUAT SERVER (Xs)' atau 'MEMUAT SAVE (Xs)' tanpa mengurangi jatah durasi in-game sama sekali.\n- Real-Time Countdown: Setelah karakter spawn dan siap trade, status menampilkan sisa waktu nyata 'IN-GAME (Sisa Xs)'."
+    "changelog": "v2.5.3 Auto-Stop & Auto-Preflight Ulang Update:\n- Auto-Stop Rotator Bersih: Ketika seluruh bot target telah selesai dikunjungi, jika Standby & Sleep dinonaktifkan, rotator otomatis berhenti total, menutup semua tab Roblox, dan mengembalikan tombol UI ke status IDLE / SELESAI.\n- Proteksi Anti-Stuck Siklus: Bot yang terkena fast-skip (server 35/35 penuh) atau bot offline tidak akan lagi membuat rotator macet menggantung di 'MENCARI BOT IN-GAME'. Sistem otomatis menyelesaikan siklus setelah semua bot aktif diproses.\n- Auto Preflight Ulang Otomatis: Saat siklus selesai dan bersiap memulai siklus baru (Standby & Sleep atau Continuous Loop), sistem otomatis menjalankan Master Preflight ulang (sinkronisasi pertemanan, age group, bahasa, dan privasi server) untuk seluruh bot target baru."
 }
