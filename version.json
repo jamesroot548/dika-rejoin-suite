@@ -1,7 +1,7 @@
 {
-    "version": "2.5.1",
-    "release_date": "2026-11-06",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.1/Dika_Rejoin_All_In_One.exe",
+    "version": "2.5.2",
+    "release_date": "2026-11-08",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.2/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.5.1 Adopt Me In-Game Loading Protection & Precision Fast-Skip Update:\n- Smart Loading Sensor (Anti-Premature Close): Membedakan secara akurat antara server penuh (terdampar di Home/Game Details tombol Play) vs akun yang berhasil masuk dan sedang memuat item (LOADING SERVER... [6] Waiting for initial items). Akun yang sedang loading Adopt Me tidak akan lagi ter-close sebelum selesai!\n- Real-Time HUD Status: Menampilkan status 'MEMUAT ADOPT ME (Xs)' secara dinamis di antarmuka rotator saat aset game sedang diunduh.\n- Precision Fast-Skip (35/35): Tetap melakukan fast-skip instan jika server bot benar-benar penuh (popup error/tertolak masuk), memberi cooldown 90s, dan langsung memproses bot berpet berikutnya tanpa jeda."
+    "changelog": "v2.5.2 Accurate In-Game Countdown Timing Update:\n- Sinkronisasi Timer Selesai Loading: Timer hitung mundur in-game sekarang HANYA dimulai setelah proses Loading Server dan Loading Save Adopt Me selesai 100% (terkonfirmasi lewat webhook player_ingame_ready).\n- Visual Status Loading Transparan: Selama akun masih memuat data Adopt Me, status di antarmuka menampilkan 'MEMUAT SERVER (Xs)' atau 'MEMUAT SAVE (Xs)' tanpa mengurangi jatah durasi in-game sama sekali.\n- Real-Time Countdown: Setelah karakter spawn dan siap trade, status menampilkan sisa waktu nyata 'IN-GAME (Sisa Xs)'."
 }
