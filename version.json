@@ -1,7 +1,7 @@
 {
-    "version": "2.5.5",
-    "release_date": "2026-11-09",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.5/Dika_Rejoin_All_In_One.exe",
+    "version": "2.5.6",
+    "release_date": "2026-11-11",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.6/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.5.5 Step 3 Friendlist Optimization Update:\n- Multi-Threading Paralel Akun Main: Tahap 3 (Smart Clean Friendlist) sekarang memproses seluruh Akun Main secara paralel bersamaan (hingga 4 worker sekaligus), memotong waktu tunggu dari ~40 detik menjadi ~4-6 detik saja.\n- Smart Cache TTL (15 Menit): Pada Siklus #2, #3, dan seterusnya, akun Main yang baru saja terverifikasi bersih tidak lagi dipindai ulang secara berulang, melainkan langsung dilewati secara instan (0 detik)."
+    "changelog": "v2.5.6 Anti-Crash & Ghost Tray Clean Update:\n- Perbaikan BSOD Kernel (Stop code 0x0000001E / 0xC000010A STATUS_PROCESS_IS_TERMINATING): Eliminasi race-condition force kill dan pemutusan handle proses Roblox secara aman.\n- Dynamic System Tray Micro-Sweep: Pembersihan menyeluruh icon hantu (ghost tray icons) pada taskbar hingga ke ujung tanpa batasan lebar, multi-pass otomatis saat rotasi akun.\n- Optimasi stabilitas memori & sinkronisasi keluar-masuk server."
 }
