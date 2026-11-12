@@ -1,7 +1,7 @@
 {
-    "version": "2.5.6",
-    "release_date": "2026-11-11",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.6/Dika_Rejoin_All_In_One.exe",
+    "version": "2.5.7",
+    "release_date": "2026-11-12",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.7/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.5.6 Anti-Crash & Ghost Tray Clean Update:\n- Perbaikan BSOD Kernel (Stop code 0x0000001E / 0xC000010A STATUS_PROCESS_IS_TERMINATING): Eliminasi race-condition force kill dan pemutusan handle proses Roblox secara aman.\n- Dynamic System Tray Micro-Sweep: Pembersihan menyeluruh icon hantu (ghost tray icons) pada taskbar hingga ke ujung tanpa batasan lebar, multi-pass otomatis saat rotasi akun.\n- Optimasi stabilitas memori & sinkronisasi keluar-masuk server."
+    "changelog": "v2.5.7 Ghost Tray Micro-Hover & Stability Release:\n- Targeted Win32 Tray Micro-Hover: Pembersihan instan icon hantu (ghost tray icons) pada System Tray & Overflow Menu tanpa penumpukan dengan mengarahkan hover presisi sekejap (15ms) ke icon proses yang mati.\n- Background Tray Guard Daemon: Pengawasan otomatis real-time setiap 1.5 detik agar tray selalu bersih dari icon Roblox mati.\n- Clean Process Shutdown: Penanganan exit tanpa pesan warning temp directory PyInstaller.\n- Stabilitas kernel anti-BSOD saat rotasi intensif puluhan akun Adopt Me."
 }
