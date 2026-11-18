@@ -1,7 +1,7 @@
 {
-    "version": "2.5.7",
+    "version": "2.5.8",
     "release_date": "2026-11-12",
-    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.7/Dika_Rejoin_All_In_One.exe",
+    "download_url": "https://github.com/jamesroot548/dika-rejoin-suite/releases/download/v2.5.8/Dika_Rejoin_All_In_One.exe",
     "mandatory": true,
-    "changelog": "v2.5.7 Ghost Tray Micro-Hover & Stability Release:\n- Targeted Win32 Tray Micro-Hover: Pembersihan instan icon hantu (ghost tray icons) pada System Tray & Overflow Menu tanpa penumpukan dengan mengarahkan hover presisi sekejap (15ms) ke icon proses yang mati.\n- Background Tray Guard Daemon: Pengawasan otomatis real-time setiap 1.5 detik agar tray selalu bersih dari icon Roblox mati.\n- Clean Process Shutdown: Penanganan exit tanpa pesan warning temp directory PyInstaller.\n- Stabilitas kernel anti-BSOD saat rotasi intensif puluhan akun Adopt Me."
+    "changelog": "v2.5.8 Embedded Tray Guard & System Startup Release:\n- Embedded UI Controls: Fitur pembersih ghost tray Roblox kini resmi tertanam di antarmuka Dika Rejoin PRO dengan opsi Checkbox 'Auto-Clean Ghost Tray Roblox' dan Tombol 'Bersihkan Tray'.\n- Real-time Console Logging: Log otomatis di konsol GUI saat modul aktif [TRAY GUARD] dan saat icon hantu Roblox dilenyapkan dari taskbar.\n- Standalone TrayGuard.exe & Windows Startup: Perlindungan otomatis aktif sejak Windows menyala (setelah restart PC), menjaga System Tray tetap bersih meski Dika Rejoin belum dibuka atau saat menjalankan Roblox Account Manager (RAM).\n- Targeted Win32 Tray Micro-Hover: Melenyapkan tumpukan belasan/puluhan icon Roblox mati seketika (15ms) tanpa mengganggu aktivitas mouse pengguna."
 }
